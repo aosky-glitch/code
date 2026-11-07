@@ -2,12 +2,162 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=math/">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>初中数学学习小程序</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#eef2ff">
+<meta name="description" content="初中学习中心：数学、英语、物理、化学、历史，选择学科开始学习。">
+<title>初中学习中心 · 选择学科</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234F6BFF'/%3E%3Cpath d='M13 20h17v26H13z' fill='white' opacity='.92'/%3E%3Cpath d='M34 20h17v26H34z' fill='white' opacity='.62'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg1:#eef2ff; --bg2:#f8f9fd; --bg3:#e9f7f5;
+  --card:#fff; --ink:#1B2440; --sub:#7A86A6; --faint:#A8B1C8;
+  --line:#EDF0F7; --shadow:0 10px 30px rgba(31,45,90,.08);
+  --shadow-h:0 20px 44px rgba(31,45,90,.16);
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg1:#161c33; --bg2:#101527; --bg3:#12262a;
+    --card:#1c2340; --ink:#eef1ff; --sub:#98a3c2; --faint:#7782a5;
+    --line:#2b3356; --shadow:0 10px 30px rgba(0,0,0,.28);
+    --shadow-h:0 20px 44px rgba(0,0,0,.45);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);color:var(--ink);background:linear-gradient(155deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%);background-attachment:fixed;-webkit-font-smoothing:antialiased;padding-bottom:36px}
+.glow{position:fixed;border-radius:50%;filter:blur(90px);opacity:.45;pointer-events:none;z-index:0}
+.glow-a{width:430px;height:430px;background:#c3d0ff;top:-160px;left:-130px}
+.glow-b{width:380px;height:380px;background:#a9e9dd;bottom:-160px;right:-120px}
+@media (prefers-color-scheme: dark){.glow{opacity:.16}}
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:46px 22px 20px}
+.brand{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;letter-spacing:.13em;color:#4F6BFF;background:rgba(79,107,255,.1);border:1px solid rgba(79,107,255,.18);padding:7px 13px;border-radius:999px}
+.brand svg{width:15px;height:15px}
+h1{font-size:clamp(26px,5vw,38px);margin:20px 0 10px;letter-spacing:-.02em;line-height:1.25}
+.sub{margin:0;color:var(--sub);font-size:14.5px;line-height:1.75}
+.meta{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:12px;color:var(--faint);font-weight:600}
+.meta i{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.55}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:34px}
+.subject{grid-column:span 2}
+.subject:nth-child(4),.subject:nth-child(5){grid-column:span 3}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}.subject,.subject:nth-child(4),.subject:nth-child(5){grid-column:auto}}
+@media(max-width:560px){.wrap{padding-top:30px}.grid{grid-template-columns:1fr;gap:13px;margin-top:26px}}
+.subject{position:relative;display:flex;align-items:center;gap:15px;padding:20px 18px;background:var(--card);border:1px solid var(--line);border-radius:20px;text-decoration:none;color:inherit;box-shadow:var(--shadow);overflow:hidden;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s;
+  animation:rise .5s both;animation-delay:calc(var(--i)*.07s)}
+.subject::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--c1),var(--c2));opacity:0;transition:opacity .25s}
+.subject:hover,.subject:focus-visible{transform:translateY(-5px);box-shadow:var(--shadow-h);border-color:transparent;outline:none}
+.subject:hover::before,.subject:focus-visible::before{opacity:1}
+.subject:hover .arrow{transform:translateX(3px);color:var(--c1)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.subject{animation:none}}
+.ic{flex:0 0 54px;width:54px;height:54px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 9px 20px -7px var(--c1)}
+.ic svg{width:29px;height:29px;color:#fff}
+.txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.ttl{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:17px;font-weight:800;line-height:1.2}
+.ttl em{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.1em;color:var(--faint)}
+.badge{display:none;font-size:10px;font-weight:700;color:var(--c1);border:1px solid var(--c1);padding:2px 7px;border-radius:999px}
+.subject.recent .badge{display:inline-block}
+.desc{font-size:12.5px;color:var(--sub);line-height:1.5}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tags b{font-size:10.5px;font-weight:600;color:var(--c1);background:color-mix(in srgb,var(--c1) 11%,var(--card));padding:3px 8px;border-radius:6px}
+.arrow{flex:0 0 auto;width:20px;height:20px;color:var(--faint);transition:.25s}
+.arrow svg{width:100%;height:100%;display:block}
+footer{margin-top:34px;text-align:center;color:var(--faint);font-size:11.5px;line-height:1.95}
+footer p{margin:0}
+</style>
 </head>
-<body style="font-family:system-ui,-apple-system,sans-serif;padding:48px;text-align:center;color:#333">
-<h2>初中数学学习小程序</h2>
-<p>正在进入 <a href="math/">math 应用</a>…</p>
+<body>
+<div class="glow glow-a"></div><div class="glow glow-b"></div>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5 12 12l9-4.5L12 3z"/><path d="M5 10.5V16c0 1.6 3.1 3 7 3s7-1.4 7-3v-5.5"/></svg>
+      初中学习中心 · STUDY HUB
+    </div>
+    <h1>今天想学哪一科？</h1>
+    <p class="sub">五个学科，随时切换。点开就能学，进度自动保存在本机。</p>
+    <div class="meta"><span>5 个学科</span><i></i><span>无需登录</span><i></i><span>打开即用</span></div>
+  </header>
+
+  <main class="grid">
+
+    <a class="subject" href="math/" data-key="math" style="--i:0;--c1:#5B6BF0;--c2:#8C6BF6">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M5 15c2.6 0 3.4-8 6-8s3.4 8 6 8"/><circle cx="9" cy="9.6" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <span class="txt">
+        <span class="ttl">数学 <em>MATH</em><span class="badge">最近学习</span></span>
+        <span class="desc">知识点精讲、公式速查、刷题与错题本</span>
+        <span class="tags"><b>函数</b><b>几何</b><b>方程</b></span>
+      </span>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="subject" href="english/" data-key="english" style="--i:1;--c1:#4F6BFF;--c2:#7B8CFF">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 4.8 7.2 4.5 4 5.2v13c3.2-.7 6-.4 8 1.3 2-1.7 4.8-2 8-1.3v-13c-3.2-.7-6-.4-8 1.3z"/><path d="M12 6.5v13"/><path d="M6.5 9.4h2.4M15.1 9.4h2.4"/></svg></span>
+      <span class="txt">
+        <span class="ttl">英语 <em>ENGLISH</em><span class="badge">最近学习</span></span>
+        <span class="desc">分层词库、语法精讲、阅读完形与打卡积分</span>
+        <span class="tags"><b>词汇</b><b>语法</b><b>阅读</b></span>
+      </span>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="subject" href="physics/" data-key="physics" style="--i:2;--c1:#4F46E5;--c2:#7C3AED">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><ellipse cx="12" cy="12" rx="9" ry="3.8"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/></svg></span>
+      <span class="txt">
+        <span class="ttl">物理 <em>PHYSICS</em><span class="badge">最近学习</span></span>
+        <span class="desc">知识图谱、公式速查、互动实验与刷题</span>
+        <span class="tags"><b>力学</b><b>电学</b><b>实验</b></span>
+      </span>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="subject" href="huaxue/" data-key="huaxue" style="--i:3;--c1:#12B8A6;--c2:#0A988A">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v7l-4.6 8.1A2 2 0 0 0 7.1 21h9.8a2 2 0 0 0 1.7-2.9L14 10V3"/><path d="M7.6 16h8.8"/><circle cx="11" cy="18.3" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="17.8" r=".7" fill="currentColor" stroke="none"/></svg></span>
+      <span class="txt">
+        <span class="ttl">化学 <em>CHEMISTRY</em><span class="badge">最近学习</span></span>
+        <span class="desc">物质与反应、方程式配平、实验与真题训练</span>
+        <span class="tags"><b>物质</b><b>方程式</b><b>实验</b></span>
+      </span>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="subject" href="histiry/" data-key="histiry" style="--i:4;--c1:#C39A3C;--c2:#AD3A2C">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12"/><path d="M8 3c0 4.2 4 4.6 4 9s-4 4.8-4 9"/><path d="M16 3c0 4.2-4 4.6-4 9s4 4.8 4 9"/><path d="M9.6 6.6h4.8"/></svg></span>
+      <span class="txt">
+        <span class="ttl">历史 <em>HISTORY</em><span class="badge">最近学习</span></span>
+        <span class="desc">朝代时间轴、史海拾贝、考点记忆与练习</span>
+        <span class="tags"><b>朝代</b><b>事件</b><b>人物</b></span>
+      </span>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+  </main>
+
+  <footer>
+    <p>学习进度保存在当前浏览器的本地存储中，换设备不会同步。</p>
+    <p>进入学科后，点击浏览器「返回」即可回到本页。</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KEY='jhs_study_last_subject';
+  var cards=document.querySelectorAll('.subject');
+  try{
+    var last=localStorage.getItem(KEY);
+    if(last){
+      var hit=document.querySelector('.subject[data-key="'+last+'"]');
+      if(hit) hit.classList.add('recent');
+    }
+  }catch(e){}
+  for(var i=0;i<cards.length;i++){
+    cards[i].addEventListener('click',function(){
+      try{ localStorage.setItem(KEY,this.getAttribute('data-key')); }catch(e){}
+    });
+  }
+})();
+</script>
 </body>
 </html>
