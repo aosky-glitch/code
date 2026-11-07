@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="初中物理学习小程序：知识图谱、公式速查、互动实验、刷题与错题本">
+<title>物理小课 · 初中物理学习</title>
+<style>
+/* ===== 物理小课 · 基础主题 ===== */
+:root{
+  --primary:#4F46E5;
+  --primary-deep:#4338CA;
+  --primary-soft:#EEF0FF;
+  --violet:#7C3AED;
+  --accent:#F59E0B;
+  --accent-soft:#FFF6E5;
+  --cyan:#06B6D4;
+  --green:#10B981;
+  --green-soft:#E8F8F1;
+  --red:#EF4444;
+  --red-soft:#FEECEC;
+  --bg:#F5F6FB;
+  --card:#FFFFFF;
+  --text:#1E2333;
+  --text-2:#4A5166;
+  --muted:#939AAD;
+  --line:#ECEEF6;
+  --shadow:0 6px 22px rgba(38,44,90,.07);
+  --shadow-lg:0 14px 40px rgba(38,44,90,.14);
+  --radius:18px;
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--font);
+  color:var(--text);
+  background:#E9ECF7;
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+  line-height:1.6;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+svg{display:block}
+
+/* ===== 桌面端的手机外框 ===== */
+.desktop-bg{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(124,58,237,.16),transparent 42%),
+    radial-gradient(circle at 82% 78%,rgba(6,182,212,.16),transparent 42%),
+    linear-gradient(135deg,#EEF0FB 0%,#E5E9F7 100%);
+}
+.phone{
+  position:relative;
+  width:414px;height:min(864px,calc(100vh - 48px));
+  background:var(--bg);
+  border-radius:38px;
+  box-shadow:var(--shadow-lg),0 0 0 9px rgba(255,255,255,.55),0 0 0 10px rgba(60,66,110,.08);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.statusbar{
+  height:36px;flex:none;padding:0 22px 0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;font-weight:700;letter-spacing:.2px;
+  background:var(--card);color:var(--text);
+}
+.sb-icons{display:flex;align-items:center;gap:5px}
+.sb-battery{width:22px;height:11px;border:1.4px solid currentColor;border-radius:3px;position:relative;display:inline-block;padding:1.4px}
+.sb-battery:after{content:"";position:absolute;right:-3.5px;top:3px;width:2px;height:5px;background:currentColor;border-radius:0 2px 2px 0}
+.sb-battery span{display:block;height:100%;width:78%;background:currentColor;border-radius:1px}
+
+.appbar{
+  height:50px;flex:none;background:var(--card);
+  display:flex;align-items:center;padding:0 14px;gap:6px;
+  border-bottom:1px solid rgba(236,238,246,.7);
+  position:relative;z-index:5;
+}
+.appbar-back{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex:none}
+.appbar-back:active{background:var(--bg)}
+.appbar-back svg{width:20px;height:20px}
+.appbar-title{position:absolute;left:0;right:0;text-align:center;font-size:16px;font-weight:700;letter-spacing:.3px;pointer-events:none}
+.capsule{
+  width:78px;height:30px;flex:none;border:1px solid var(--line);border-radius:16px;
+  display:flex;align-items:center;justify-content:space-evenly;color:#5B6175;
+  margin-left:auto;position:relative;z-index:1;background:var(--card);
+}
+.appbar-back{position:relative;z-index:1}
+.cap-dots{font-size:13px;letter-spacing:1px;line-height:1}
+.cap-split{width:1px;height:16px;background:var(--line)}
+.cap-circle{width:14px;height:14px;border:1.6px solid currentColor;border-radius:50%;position:relative}
+.cap-circle:after{content:"";position:absolute;width:5px;height:5px;background:currentColor;border-radius:50%;top:3px;left:3px}
+
+.view{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;padding:16px 16px 28px}
+.view::-webkit-scrollbar{width:0}
+.tabbar{
+  flex:none;height:62px;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;align-items:stretch;padding-bottom:env(safe-area-inset-bottom);
+  z-index:5;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:#A2A8BB;font-size:10.5px;font-weight:600;transition:color .18s;position:relative;
+}
+.tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab.active{color:var(--primary)}
+.tab.active:before{content:"";position:absolute;top:0;width:22px;height:3px;border-radius:0 0 3px 3px;background:var(--primary)}
+
+/* ===== 通用组件 ===== */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 11px;font-size:16px;font-weight:700}
+.section-title:first-child{margin-top:4px}
+.section-title .st-left{display:flex;align-items:center;gap:8px}
+.section-title .st-left:before{content:"";width:4px;height:16px;border-radius:3px;background:linear-gradient(180deg,var(--primary),var(--violet));flex:none}
+.section-more{font-size:12px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:2px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.row{display:flex;align-items:center;gap:10px}
+.spread{display:flex;align-items:center;justify-content:space-between}
+.grow{flex:1;min-width:0}
+.divider{height:1px;background:var(--line);margin:12px 0}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
+.badge.easy{background:var(--green-soft);color:#059669}
+.badge.mid{background:var(--accent-soft);color:#D97706}
+.badge.hard{background:var(--red-soft);color:#DC2626}
+.badge.gray{background:#F1F3F9;color:#7A8198}
+.tag{display:inline-block;padding:3px 9px;border-radius:8px;background:var(--primary-soft);color:var(--primary);font-size:11.5px;font-weight:600}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:42px;padding:0 20px;border-radius:13px;font-size:14.5px;font-weight:700;
+  background:var(--primary);color:#fff;box-shadow:0 6px 16px rgba(79,70,229,.24);
+  transition:transform .12s,opacity .12s;
+}
+.btn:active{transform:scale(.975);opacity:.9}
+.btn.block{width:100%}
+.btn.ghost{background:var(--primary-soft);color:var(--primary);box-shadow:none}
+.btn.gray{background:#F1F3F9;color:var(--text-2);box-shadow:none}
+.btn.outline{background:#fff;color:var(--primary);border:1.5px solid var(--primary);box-shadow:none}
+.btn:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
+.btn.sm{height:34px;padding:0 14px;font-size:12.5px;border-radius:10px}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty svg{width:56px;height:56px;margin:0 auto 12px;opacity:.5}
+.empty p{margin:0 0 16px;font-size:13.5px}
+
+/* ===== 首页 ===== */
+.hero{
+  border-radius:22px;padding:20px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(125deg,#5B54E8 0%,#6D4BE0 48%,#8B5CF6 100%);
+  box-shadow:0 12px 26px rgba(91,84,232,.28);margin-bottom:16px;
+}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-60px;top:-80px;background:rgba(255,255,255,.10)}
+.hero:before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:20px;bottom:-70px;background:rgba(255,255,255,.08)}
+.hero-in{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.hero-txt{flex:1;min-width:0}
+.hero-hi{font-size:12px;opacity:.82;margin-bottom:4px}
+.hero-title{font-size:20px;font-weight:800;letter-spacing:.5px;margin:0 0 6px}
+.hero-sub{font-size:12px;opacity:.88;line-height:1.5}
+.ring{width:76px;height:76px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:17px;font-weight:800;line-height:1.1}
+.ring-txt small{font-size:9px;font-weight:500;opacity:.8;margin-top:2px}
+.hero-stats{position:relative;z-index:1;display:flex;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22)}
+.hero-stats div{flex:1;text-align:center}
+.hero-stats div+div{border-left:1px solid rgba(255,255,255,.2)}
+.hero-stats b{display:block;font-size:17px;font-weight:800}
+.hero-stats span{font-size:10.5px;opacity:.82}
+
+.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.module-card{
+  background:var(--card);border-radius:16px;padding:14px 8px 12px;text-align:center;
+  box-shadow:var(--shadow);transition:transform .14s;position:relative;overflow:hidden;
+}
+.module-card:active{transform:scale(.96)}
+.module-icon{
+  width:44px;height:44px;margin:0 auto 8px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+}
+.module-icon svg{width:24px;height:24px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.module-name{font-size:13px;font-weight:700}
+.module-count{font-size:10.5px;color:var(--muted);margin-top:2px}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.quick-item{
+  background:var(--card);border-radius:15px;padding:13px 14px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:10px;transition:transform .14s;
+}
+.quick-item:active{transform:scale(.97)}
+.quick-ic{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:none}
+.quick-ic svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.quick-t b{display:block;font-size:13.5px}
+.quick-t span{font-size:10.5px;color:var(--muted)}
+.daily{
+  background:linear-gradient(120deg,#FFF8E9,#FFFDF7);border:1px solid #FDECC9;
+  border-radius:18px;padding:16px;box-shadow:var(--shadow);
+}
+.daily .q-stem{font-size:14px;font-weight:600;line-height:1.65;margin:10px 0 12px}
+.daily-opts{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.daily-opt{
+  display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #F3E7D2;
+  border-radius:11px;padding:9px 11px;font-size:12.5px;transition:all .15s;
+}
+.daily-opt .k{width:20px;height:20px;border-radius:6px;background:#F6F4EE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;color:#8A846F}
+.daily-opt.ok{background:var(--green-soft);border-color:#A7E7C9;color:#047857;font-weight:600}
+.daily-opt.ok .k{background:#10B981;color:#fff}
+.daily-opt.no{background:var(--red-soft);border-color:#F7BDBD;color:#B91C1C;font-weight:600}
+.daily-opt.no .k{background:var(--red);color:#fff}
+.daily-exp{font-size:12px;color:var(--text-2);background:#fff;border-radius:10px;padding:10px 12px;line-height:1.6;display:none;border:1px solid #F3E7D2}
+.daily-exp.show{display:block}
+
+/* ===== 搜索 & 分段 ===== */
+.search-box{
+  display:flex;align-items:center;gap:8px;background:#fff;border-radius:13px;
+  padding:0 13px;height:42px;box-shadow:var(--shadow);margin-bottom:12px;
+}
+.search-box svg{width:17px;height:17px;stroke:var(--muted);fill:none;stroke-width:2;flex:none}
+.search-box input{border:none;outline:none;flex:1;font-size:13.5px;background:transparent;color:var(--text);min-width:0}
+.search-box input::placeholder{color:#B4B9C9}
+.search-clear{color:var(--muted);font-size:18px;line-height:1;padding:0 2px;display:none}
+.segmented{display:flex;background:#EAECF5;border-radius:12px;padding:3px;margin-bottom:14px}
+.segmented button{flex:1;height:34px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);transition:all .18s}
+.segmented button.on{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(50,56,100,.10)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;margin:0 -16px;padding-left:16px;padding-right:16px}
+.chips::-webkit-scrollbar{height:0}
+.chip{
+  flex:none;padding:7px 15px;border-radius:20px;background:#fff;border:1px solid var(--line);
+  font-size:12.5px;font-weight:600;color:var(--text-2);transition:all .16s;
+}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.25)}
+
+/* ===== 列表 ===== */
+.topic-item{
+  display:flex;align-items:flex-start;gap:12px;background:#fff;border-radius:15px;
+  padding:14px;margin-bottom:10px;box-shadow:var(--shadow);transition:transform .14s;
+}
+.topic-item:active{transform:scale(.985)}
+.topic-idx{
+  width:29px;height:29px;border-radius:9px;background:var(--primary-soft);color:var(--primary);
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;
+}
+.topic-item.done .topic-idx{background:var(--green-soft);color:#059669}
+.topic-tt{font-size:14px;font-weight:700;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.topic-ss{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.topic-arrow{width:16px;height:16px;color:#C7CBD9;flex:none;margin-top:6px}
+
+.formula-card{background:#fff;border-radius:15px;padding:14px 15px;margin-bottom:10px;box-shadow:var(--shadow)}
+.fc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.fc-name{font-size:13.5px;font-weight:700}
+.fc-expr{
+  margin:10px 0 8px;padding:11px 13px;background:linear-gradient(100deg,#F4F5FF,#FAFAFF);
+  border-left:3px solid var(--primary);border-radius:0 10px 10px 0;
+  font-family:"Times New Roman",Georgia,serif;font-size:19px;font-weight:700;
+  color:var(--primary-deep);letter-spacing:.4px;overflow-x:auto;white-space:nowrap;
+}
+.fc-meta{font-size:11.5px;color:var(--muted);line-height:1.6}
+.fc-note{font-size:12px;color:var(--text-2);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.6;display:none}
+.formula-card.open .fc-note{display:block}
+.fc-unit{color:var(--primary);font-weight:600}
+
+/* ===== 详情页 ===== */
+.detail-head{
+  background:linear-gradient(125deg,#5B54E8,#8B5CF6);border-radius:20px;padding:18px;color:#fff;
+  margin-bottom:14px;box-shadow:0 10px 22px rgba(91,84,232,.24);position:relative;overflow:hidden;
+}
+.detail-head:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-50px;top:-70px;background:rgba(255,255,255,.10)}
+.dh-tag{font-size:11px;opacity:.85;display:inline-block;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:20px;margin-bottom:9px}
+.dh-title{font-size:19px;font-weight:800;margin:0 0 7px;position:relative;z-index:1}
+.dh-sum{font-size:12.5px;opacity:.92;line-height:1.65;position:relative;z-index:1}
+.dh-actions{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1}
+.dh-actions button{
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);color:#fff;
+  border-radius:10px;padding:6px 12px;font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:5px;
+}
+.dh-actions button.on{background:#fff;color:var(--primary)}
+.dh-actions svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.d-sec{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.d-h{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin:0 0 12px}
+.d-h .dot{width:7px;height:7px;border-radius:50%;background:var(--primary)}
+.d-h .dot.orange{background:var(--accent)}
+.d-h .dot.green{background:var(--green)}
+.point-list{margin:0;padding:0;list-style:none}
+.point-list li{position:relative;padding-left:20px;font-size:13px;line-height:1.75;color:var(--text-2);margin-bottom:9px}
+.point-list li:last-child{margin-bottom:0}
+.point-list li:before{content:"";position:absolute;left:5px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--primary);opacity:.55}
+.point-list li b{color:var(--text)}
+.expr-line{
+  font-family:"Times New Roman",Georgia,serif;font-size:18px;font-weight:700;color:var(--primary-deep);
+  background:#F5F6FF;border-radius:10px;padding:10px 13px;margin-bottom:8px;overflow-x:auto;white-space:nowrap;
+}
+.expr-note{font-size:11.5px;color:var(--muted);margin:-3px 0 10px}
+.callout{border-radius:12px;padding:12px 13px;font-size:12.5px;line-height:1.7}
+.callout.warn{background:#FFF7E8;color:#8A5B0B;border-left:3px solid var(--accent)}
+.callout.tip{background:#EAF8F3;color:#0B6B4D;border-left:3px solid var(--green)}
+.callout.info{background:#EEF4FF;color:#2549A6;border-left:3px solid var(--primary)}
+.callout b{font-weight:700}
+.diagram-box{background:#FBFCFF;border:1px solid var(--line);border-radius:14px;padding:10px;margin-top:4px}
+.diagram-box svg{width:100%;height:auto}
+.diagram-cap{text-align:center;font-size:11px;color:var(--muted);margin-top:6px}
+.example{background:#F8F9FD;border-radius:12px;padding:12px 13px;font-size:12.5px;line-height:1.75;color:var(--text-2)}
+.example b{color:var(--primary)}
+.nav-bottom{display:flex;gap:10px;margin-top:16px}
+.nav-bottom .btn{flex:1}
+
+/* ===== 练习 ===== */
+.quiz-setup .qs-card{background:#fff;border-radius:16px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.qs-title{font-size:14px;font-weight:700;margin-bottom:12px}
+.qs-num{display:flex;gap:8px;flex-wrap:wrap}
+.qs-num button{
+  min-width:52px;height:38px;border-radius:11px;background:#F2F4FA;color:var(--text-2);
+  font-size:13px;font-weight:700;
+}
+.qs-num button.on{background:var(--primary);color:#fff;box-shadow:0 5px 14px rgba(79,70,229,.25)}
+.qs-info{display:flex;gap:10px;margin-bottom:14px}
+.qs-info div{flex:1;background:#fff;border-radius:14px;padding:12px;text-align:center;box-shadow:var(--shadow)}
+.qs-info b{display:block;font-size:19px;color:var(--primary)}
+.qs-info span{font-size:10.5px;color:var(--muted)}
+
+.quiz-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;color:var(--muted)}
+.quiz-bar{height:6px;background:#E7E9F3;border-radius:6px;overflow:hidden;margin-bottom:16px}
+.quiz-bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--primary),var(--violet));transition:width .3s}
+.q-card{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.q-stem{font-size:15.5px;font-weight:650;line-height:1.75;margin-bottom:16px}
+.options{display:flex;flex-direction:column;gap:10px}
+.option{
+  display:flex;align-items:flex-start;gap:11px;border:1.5px solid var(--line);border-radius:13px;
+  padding:12px 13px;background:#fff;transition:all .16s;font-size:13.5px;line-height:1.55;
+}
+.option .k{
+  width:23px;height:23px;border-radius:7px;background:#F2F4FA;color:#7A8198;font-size:12px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px;
+}
+.option.selected{border-color:var(--primary);background:#F7F7FF}
+.option.selected .k{background:var(--primary);color:#fff}
+.option.correct{border-color:var(--green);background:var(--green-soft)}
+.option.correct .k{background:var(--green);color:#fff}
+.option.wrong{border-color:var(--red);background:var(--red-soft)}
+.option.wrong .k{background:var(--red);color:#fff}
+.option.dim{opacity:.55}
+.explain-box{margin-top:14px;border-radius:13px;padding:13px 14px;font-size:12.5px;line-height:1.75;display:none}
+.explain-box.show{display:block;animation:fadeUp .25s}
+.explain-box.ok{background:var(--green-soft);border-left:3px solid var(--green)}
+.explain-box.no{background:var(--red-soft);border-left:3px solid var(--red)}
+.explain-box .eh{font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.explain-box .ans{font-weight:700;color:var(--primary-deep)}
+.quiz-foot{margin-top:16px;display:flex;gap:10px}
+
+.result-hero{
+  background:linear-gradient(125deg,#5B54E8,#8B5CF6);border-radius:22px;padding:24px 18px;
+  text-align:center;color:#fff;margin-bottom:14px;box-shadow:0 12px 26px rgba(91,84,232,.26);
+}
+.result-ring{width:112px;height:112px;margin:0 auto 12px;position:relative}
+.result-ring svg{transform:rotate(-90deg)}
+.result-ring .rr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.result-ring b{font-size:32px;line-height:1}
+.result-ring small{font-size:10.5px;opacity:.85;margin-top:3px}
+.result-title{font-size:17px;font-weight:800;margin-bottom:4px}
+.result-sub{font-size:12px;opacity:.88}
+.result-stats{display:flex;background:#fff;border-radius:16px;padding:16px 8px;box-shadow:var(--shadow);margin-bottom:14px}
+.result-stats div{flex:1;text-align:center}
+.result-stats div+div{border-left:1px solid var(--line)}
+.result-stats b{display:block;font-size:19px;font-weight:800}
+.result-stats span{font-size:10.5px;color:var(--muted)}
+
+/* ===== 实验 ===== */
+.lab-intro{background:linear-gradient(120deg,#EEF4FF,#F7F4FF);border:1px solid #E3E7FF;border-radius:16px;padding:13px 14px;font-size:12px;color:#4B4F7A;line-height:1.65;margin-bottom:14px}
+.lab-card{background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.lab-h{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:750;margin-bottom:4px}
+.lab-h .lab-ic{width:32px;height:32px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.lab-h .lab-ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.lab-desc{font-size:11.5px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.lab-stage{background:#FAFBFF;border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:14px}
+.lab-stage svg{width:100%;height:auto}
+.slider-row{margin-bottom:13px}
+.slider-row label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:7px}
+.slider-row label b{color:var(--primary);font-variant-numeric:tabular-nums}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:5px;
+  background:linear-gradient(90deg,var(--primary) var(--p,50%),#E8EAF3 var(--p,50%));outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:#fff;
+  border:3px solid var(--primary);box-shadow:0 2px 7px rgba(79,70,229,.35);cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--primary);cursor:pointer}
+.seg-mini{display:flex;gap:7px;margin-bottom:13px}
+.seg-mini button{flex:1;height:32px;border-radius:9px;background:#F1F3F9;font-size:12px;font-weight:600;color:var(--text-2)}
+.seg-mini button.on{background:var(--primary);color:#fff}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:2px}
+.readout div{background:#F7F8FD;border-radius:11px;padding:9px 6px;text-align:center}
+.readout b{display:block;font-size:15px;color:var(--primary-deep);font-variant-numeric:tabular-nums}
+.readout span{font-size:10px;color:var(--muted)}
+.lab-note{margin-top:12px;background:var(--accent-soft);border-radius:11px;padding:10px 12px;font-size:12px;line-height:1.65;color:#8A5B0B}
+.lab-note b{color:#B45309}
+
+/* ===== 我的 ===== */
+.profile{background:linear-gradient(125deg,#5B54E8,#8B5CF6);border-radius:20px;padding:18px;color:#fff;display:flex;align-items:center;gap:14px;margin-bottom:14px;box-shadow:0 10px 24px rgba(91,84,232,.24)}
+.avatar{width:52px;height:52px;border-radius:17px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+.profile b{font-size:16px;display:block}
+.profile span{font-size:11.5px;opacity:.86}
+.profile .lv{margin-top:6px;display:inline-block;background:rgba(255,255,255,.2);padding:2px 9px;border-radius:20px;font-size:10.5px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stat-grid div{background:#fff;border-radius:14px;padding:13px 4px;text-align:center;box-shadow:var(--shadow)}
+.stat-grid b{display:block;font-size:18px;font-weight:800;color:var(--primary)}
+.stat-grid span{font-size:10px;color:var(--muted)}
+.menu-list{background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.menu-item{display:flex;align-items:center;gap:12px;padding:14px 15px;border-bottom:1px solid var(--line)}
+.menu-item:last-child{border-bottom:none}
+.menu-item:active{background:#FAFBFF}
+.mi-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+.mi-ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.menu-item .mi-t{flex:1;font-size:13.5px;font-weight:600}
+.menu-item .mi-v{font-size:12px;color:var(--muted)}
+.menu-item .mi-arrow{width:15px;height:15px;color:#C7CBD9}
+.heat{display:flex;gap:5px;margin-top:10px}
+.heat i{flex:1;height:26px;border-radius:6px;background:#EFF1F8;display:flex;align-items:center;justify-content:center;font-size:9px;color:#A8AEBF;font-style:normal}
+.heat i.on{background:var(--primary);color:#fff;font-weight:700}
+.wrong-item{background:#fff;border-radius:14px;padding:14px;box-shadow:var(--shadow);margin-bottom:10px}
+.wi-stem{font-size:13px;font-weight:600;line-height:1.6;margin-bottom:8px}
+.wi-ans{font-size:11.5px;color:var(--green);font-weight:600;margin-bottom:6px}
+.wi-exp{font-size:11.5px;color:var(--muted);line-height:1.6;display:none;margin-bottom:10px}
+.wrong-item.open .wi-exp{display:block}
+.wi-foot{display:flex;gap:8px;justify-content:flex-end}
+
+/* ===== 杂项 ===== */
+.toast{
+  position:fixed;left:50%;bottom:90px;transform:translate(-50%,14px);
+  background:rgba(28,32,48,.92);color:#fff;padding:10px 18px;border-radius:22px;
+  font-size:12.5px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:99;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:80vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeUp .26s ease-out}
+.foot-tip{text-align:center;font-size:11px;color:#AFB5C6;padding:8px 0 2px;line-height:1.7}
+
+/* ===== 图标与按钮的补充规则 ===== */
+.btn svg,.appbar-back svg,.section-more svg,.topic-arrow svg,.mi-arrow svg,
+.search-clear svg,.empty svg,.lab-intro svg,.callout svg{
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.btn svg{width:16px;height:16px}
+.appbar-back svg{stroke-width:2.2}
+.section-more svg{width:13px;height:13px;display:inline-block}
+.topic-arrow svg{width:16px;height:16px}
+.mi-arrow svg{width:15px;height:15px}
+.search-clear svg{width:14px;height:14px}
+.empty svg{width:52px;height:52px;stroke-width:1.5}
+.lab-intro svg,.callout svg{width:15px;height:15px;display:inline-block;vertical-align:-3px;margin-right:4px}
+.topic-item,.menu-item{width:100%;text-align:left}
+
+/* ===== 移动端全屏 ===== */
+@media (max-width:480px){
+  body{background:var(--bg)}
+  .desktop-bg{padding:0;min-height:100dvh;background:none}
+  .phone{width:100vw;height:100dvh;border-radius:0;box-shadow:none}
+  .statusbar{padding-top:env(safe-area-inset-top);height:calc(34px + env(safe-area-inset-top))}
+}
+
+</style>
+</head>
+<body>
+<div class="desktop-bg">
+  <div class="phone" id="phone">
+    <div class="statusbar">
+      <span class="sb-time" id="sbTime">9:41</span>
+      <span class="sb-icons">
+        <svg viewBox="0 0 18 12" width="17" height="11" aria-hidden="true"><path d="M1 9.5h2v2H1zm4-2.5h2v4.5H5zm4-3h2v7.5H9zm4-3h2v10.5h-2z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 16 12" width="15" height="11" aria-hidden="true"><path d="M8 11.2a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6zM3.4 6.6a6.6 6.6 0 0 1 9.2 0l-1.3 1.3a4.8 4.8 0 0 0-6.6 0zM.8 4a10.4 10.4 0 0 1 14.4 0L13.9 5.3a8.6 8.6 0 0 0-11.8 0z" fill="currentColor"/></svg>
+        <span class="sb-battery"><span></span></span>
+      </span>
+    </div>
+
+    <header class="appbar">
+      <button class="appbar-back" id="backBtn" aria-label="返回"></button>
+      <div class="appbar-title" id="appTitle">物理小课</div>
+      <div class="capsule" aria-hidden="true"><span class="cap-dots">•••</span><span class="cap-split"></span><span class="cap-circle"></span></div>
+    </header>
+
+    <main class="view" id="view"></main>
+
+    <nav class="tabbar" id="tabbar" aria-label="主导航"></nav>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+/* ============================================================
+   物理小课 · 初中物理知识库
+   数据文件：模块 / 知识点 / 公式 / 题库
+   ============================================================ */
+
+const MODULES = [
+  { id:'sound',       name:'声现象',   icon:'sound',       color:'#06B6D4', soft:'#E2F7FB', desc:'产生、传播、特性与利用' },
+  { id:'light',       name:'光学',     icon:'light',       color:'#F59E0B', soft:'#FFF4DF', desc:'反射、折射与透镜成像' },
+  { id:'thermal',     name:'热学',     icon:'thermal',     color:'#EF6A5B', soft:'#FFEDEA', desc:'物态变化、内能与比热容' },
+  { id:'mechanics',   name:'力学',     icon:'mechanics',   color:'#3B82F6', soft:'#E7F0FF', desc:'力、压强、浮力与机械' },
+  { id:'electricity', name:'电学',     icon:'electricity', color:'#8B5CF6', soft:'#F1EAFF', desc:'电路、欧姆定律与电功率' },
+  { id:'magnetism',   name:'磁与能源', icon:'magnetism',   color:'#10B981', soft:'#E4F8F0', desc:'磁场、电磁感应与能源' }
+];
+
+const MODULE_MAP = Object.fromEntries(MODULES.map(m => [m.id, m]));
+
+/* ---------------- 知识点 ---------------- */
+const TOPICS = [
+  /* ===== 声现象 ===== */
+  {
+    id:'s1', m:'sound', title:'声音的产生与传播',
+    sum:'一切声音都由物体振动产生；传播必须依靠介质，真空不能传声。',
+    points:[
+      '<b>产生</b>：发声体都在振动，振动停止，<b>发声</b>也停止（但已发出的声音仍会继续传播）。',
+      '<b>传播</b>：需要介质（固体、液体、气体都能传声），<b>真空不能传声</b>。',
+      '<b>声速</b>：15℃空气中约为 <b>340 m/s</b>；一般 v<sub>固</sub> &gt; v<sub>液</sub> &gt; v<sub>气</sub>；声速还与温度有关。',
+      '<b>人耳听声</b>：声音经介质传到耳朵，引起鼓膜振动，再由听觉神经传给大脑。'
+    ],
+    formulas:[{ e:'v = s / t', n:'声速、路程与时间的关系，声音在空气中传播时常用 v=340 m/s' }],
+    pitfall:['「振动停止，声音消失」是错的——停止的只是发声，已经发出的声波还在介质中传播。','太空舱外没有空气，所以宇航员必须靠无线电通话。'],
+    example:'对着山谷大喊，2 s 后听到回声，人与山壁距离 s = vt/2 = 340×2/2 = <b>340 m</b>。',
+    diagram:'sound_wave'
+  },
+  {
+    id:'s2', m:'sound', title:'声音的三个特性',
+    sum:'音调看频率，响度看振幅，音色看发声体本身。三者互相独立。',
+    points:[
+      '<b>音调</b>：声音的高低，由发声体振动的<b>频率</b>决定。频率越高音调越高，单位赫兹（Hz）。',
+      '<b>响度</b>：声音的大小（强弱），与<b>振幅</b>和距发声体的远近有关，还与声音分散程度有关。',
+      '<b>音色</b>：声音的品质，由发声体的<b>材料和结构</b>决定，是辨别不同发声体的依据。',
+      '人耳听觉范围 <b>20 Hz ~ 20000 Hz</b>；高于 20000 Hz 叫超声波，低于 20 Hz 叫次声波。'
+    ],
+    formulas:[{ e:'f = n / t', n:'频率＝振动次数/时间，单位 Hz；1 Hz 表示每秒振动 1 次' }],
+    pitfall:['「女高音」「男低音」说的是<b>音调</b>；「引吭高歌」「震耳欲聋」说的是<b>响度</b>。','「闻其声知其人」「听声辨西瓜生熟」依据的是<b>音色</b>。','超声波和次声波人耳都听不到，但它们仍是声音，也需要介质传播。'],
+    example:'用大小不同的力敲同一音叉，改变的是<b>响度</b>；换用不同频率的音叉，改变的是<b>音调</b>。'
+  },
+  {
+    id:'s3', m:'sound', title:'噪声的危害与控制',
+    sum:'从声源、传播过程、人耳三个环节减弱噪声；声音等级用分贝（dB）表示。',
+    points:[
+      '<b>物理学角度</b>：发声体做无规则振动时发出的声音；<b>环保角度</b>：妨碍人们正常休息、学习和工作的声音。',
+      '等级：0 dB 是人刚能听到的最微弱声音；<b>30~40 dB</b> 较理想安静环境；超过 <b>90 dB</b> 会损伤听力。',
+      '<b>减弱噪声三途径</b>：①在声源处（摩托车消声器、禁鸣喇叭）；②在传播过程中（隔音墙、植树）；③在人耳处（戴耳塞）。'
+    ],
+    formulas:[],
+    pitfall:['「禁止鸣笛」属于在<b>声源处</b>减弱；「道路两旁设置隔音板」属于在<b>传播过程中</b>减弱。'],
+    example:'高速公路旁的声屏障，是在<b>传播过程中</b>减弱噪声。'
+  },
+  {
+    id:'s4', m:'sound', title:'回声与声速计算',
+    sum:'回声是声音遇到障碍物反射回来形成的；测距时注意路程是往返的两倍。',
+    points:[
+      '人耳能把回声与原声区分开，两者时间间隔需大于 <b>0.1 s</b>，对应距障碍物约 <b>17 m</b> 以上。',
+      '回声测距要用 <b>s = vt / 2</b>，因为声音走了一个来回。',
+      '回声可以加强原声（如空房间里说话更响），也可用于测海深、探测鱼群和潜艇声呐。'
+    ],
+    formulas:[{ e:'s = v t / 2', n:'回声测距；v 取声速，t 为从发声到听到回声的总时间' }],
+    pitfall:['最常见的错误是忘记除以 2，把往返路程当成单程距离。'],
+    example:'声呐向海底发射超声波，4 s 后收到回波，水中声速 1500 m/s，海深 h = 1500×4/2 = <b>3000 m</b>。'
+  },
+  {
+    id:'s5', m:'sound', title:'声的利用：超声波与次声波',
+    sum:'声既能传递信息，也能传递能量。',
+    points:[
+      '<b>传递信息</b>：B 超检查、声呐探测、回声定位、超声探伤、蝙蝠靠超声波辨路、地震火山伴随次声波可预报。',
+      '<b>传递能量</b>：超声波清洗精密仪器、超声波击碎体内结石、超声波加湿器。',
+      '超声波特点：方向性好、穿透能力强、遇杂质易反射；次声波传播距离远、能量衰减小，可绕过障碍物。'
+    ],
+    formulas:[],
+    pitfall:['「B 超」是传递<b>信息</b>，「超声波碎石」是传递<b>能量</b>，这两类应用最容易被混淆。'],
+    example:'医生用 B 超观察胎儿，利用的是声能传递<b>信息</b>。'
+  },
+
+  /* ===== 光学 ===== */
+  {
+    id:'l1', m:'light', title:'光的直线传播',
+    sum:'光在同种均匀介质中沿直线传播；真空中光速约 3×10⁸ m/s。',
+    points:[
+      '条件：<b>同种、均匀、透明</b>介质。介质不均匀时（如海面上方空气疏密不同）光路会弯曲。',
+      '典型现象：影子的形成、日食月食、小孔成像、激光准直、射击「三点一线」。',
+      '<b>小孔成像</b>：成倒立的实像，像的形状与物体相同、与孔的形状无关，大小由物距与像距决定。',
+      '光速：真空中 c = <b>3×10⁸ m/s</b> = 3×10⁵ km/s，空气中略小；光年是<b>长度</b>单位。'
+    ],
+    formulas:[{ e:'c = 3×10⁸ m/s', n:'真空中的光速，是宇宙中最快的速度' }],
+    pitfall:['小孔所成的是<b>实像</b>（能被光屏承接）且一定是<b>倒立</b>的；影子不是像。','光年指光一年走过的距离，是长度单位，不是时间单位。'],
+    example:'太阳光透过树叶缝隙在地面形成圆形光斑，是太阳通过小孔所成的<b>倒立实像</b>，所以是圆形。',
+    diagram:'pinhole'
+  },
+  {
+    id:'l2', m:'light', title:'光的反射与平面镜成像',
+    sum:'反射角等于入射角；平面镜成正立、等大的虚像，像与物关于镜面对称。',
+    points:[
+      '<b>反射定律</b>：反射光线、入射光线和法线在同一平面内；反射光线与入射光线分居法线两侧；<b>反射角等于入射角</b>。',
+      '光路是<b>可逆</b>的；镜面反射与漫反射都遵守反射定律。',
+      '<b>平面镜成像特点</b>：像与物大小相等、到镜面距离相等、连线与镜面垂直、左右相反，是<b>正立的虚像</b>。',
+      '注意：入射角是入射光线与<b>法线</b>的夹角，不是与镜面的夹角。'
+    ],
+    formulas:[{ e:'∠r = ∠i', n:'反射角等于入射角；若光线与镜面成 θ 角，则入射角为 90°−θ' }],
+    pitfall:['人走向平面镜时，<b>像的大小不变</b>（因为像始终与物等大），只是视角变大所以「看起来变大」。','平面镜成的是虚像，<b>不能用光屏承接</b>；影子、小孔成像、照相机成的都是实像。'],
+    example:'入射光线与镜面成 30°，则入射角 = 90°−30° = <b>60°</b>，反射角也是 60°，反射光线与入射光线夹角为 120°。',
+    diagram:'reflection'
+  },
+  {
+    id:'l3', m:'light', title:'光的折射',
+    sum:'光从一种介质斜射入另一种介质时传播方向发生偏折；从空气斜射入水或玻璃时，折射角小于入射角。',
+    points:[
+      '折射光线、入射光线、法线在同一平面内；折射光线与入射光线分居法线两侧；光路可逆。',
+      '<b>空气 → 水/玻璃</b>：折射角 <b>小于</b> 入射角（向法线偏折）；<b>水/玻璃 → 空气</b>：折射角大于入射角。',
+      '垂直入射时传播方向<b>不改变</b>，但光速发生变化。',
+      '现象：插入水中的筷子看起来「折断」、池水看起来比实际浅、看到的水中鱼是变<b>浅</b>的虚像、海市蜃楼、太阳未出地平线就能被看到。'
+    ],
+    formulas:[],
+    pitfall:['看到水中的鱼，是鱼反射的光从水进入空气发生折射后进入人眼，人眼逆着光线看过去，看到的是位置<b>偏高（变浅）的虚像</b>；叉鱼要瞄准看到位置的<b>下方</b>。'],
+    example:'潜水员在水中看岸上的树，树的位置看起来比实际<b>更高</b>。',
+    diagram:'refraction'
+  },
+  {
+    id:'l4', m:'light', title:'透镜与凸透镜成像规律',
+    sum:'凸透镜会聚光线、凹透镜发散光线；成像性质由物距 u 与焦距 f 的关系决定。',
+    points:[
+      '<b>凸透镜</b>：中间厚边缘薄，对光有会聚作用；平行于主光轴的光经折射后会聚于焦点 F，焦点到光心的距离叫焦距 f。',
+      '<b>凸透镜成像规律</b>：u &gt; 2f 成倒立缩小实像（照相机）；u = 2f 成倒立等大实像；f &lt; u &lt; 2f 成倒立放大实像（投影仪/幻灯机）；u = f 不成像；u &lt; f 成正立放大虚像（放大镜）。',
+      '<b>记忆口诀</b>：一倍焦距分虚实，二倍焦距分大小；成实像时「物近像远像变大」。',
+      '<b>近视眼</b>：像成在视网膜<b>前</b>，用<b>凹透镜</b>矫正；<b>远视眼</b>：像成在视网膜后，用凸透镜矫正。'
+    ],
+    formulas:[{ e:'1/f = 1/u + 1/v', n:'透镜成像公式（初中了解），v 为像距；放大率 m = v/u' }],
+    pitfall:['实像都是倒立的且能呈现在光屏上，虚像都是正立的且不能呈现在光屏上。','物体从 2f 外向透镜靠近（仍大于 f）时，像距变大、像也变大，不是变小。'],
+    example:'照相机拍照时，景物在 2f 以外，底片上得到<b>倒立、缩小的实像</b>；想让像变大，应让相机靠近景物并把镜头向前伸（增大像距）。',
+    diagram:'lens'
+  },
+  {
+    id:'l5', m:'light', title:'光的色散与看不见的光',
+    sum:'白光由各种色光混合而成；红光外侧是红外线，紫光外侧是紫外线。',
+    points:[
+      '<b>色散</b>：白光通过三棱镜分解成红、橙、黄、绿、蓝、靛、紫，说明白光是复色光；<b>红光偏折最小，紫光最大</b>。',
+      '色光三原色：<b>红、绿、蓝</b>；颜料三原色：红、黄、蓝。',
+      '<b>物体的颜色</b>：透明物体由它<b>透过</b>的色光决定，不透明物体由它<b>反射</b>的色光决定；白色反射所有色光，黑色吸收所有色光。',
+      '<b>红外线</b>：热效应强，用于遥控器、夜视仪、红外测温；<b>紫外线</b>：化学效应强，能使荧光物质发光（验钞）、杀菌，适量有助合成维生素 D，过量有害。'
+    ],
+    formulas:[],
+    pitfall:['遥控器用的是<b>红外线</b>，验钞机用的是<b>紫外线</b>，不要弄反。','红玻璃只透过红光，所以透过红玻璃看白纸呈红色，看蓝纸接近黑色。'],
+    example:'太阳光通过三棱镜后，屏幕上最上（偏折最小）的是<b>红光</b>，最下的是紫光。'
+  },
+
+  /* ===== 热学 ===== */
+  {
+    id:'t1', m:'thermal', title:'温度与温度计',
+    sum:'温度表示物体的冷热程度；常用温度计根据液体热胀冷缩的性质制成。',
+    points:[
+      '摄氏温度规定：标准大气压下冰水混合物为 <b>0℃</b>，沸水为 <b>100℃</b>，中间分 100 等份，每份 1℃。',
+      '<b>使用规则</b>：玻璃泡全部浸入被测液体，不碰容器底和壁；待示数稳定后读数；读数时玻璃泡不能离开液体；视线与液柱上表面相平。',
+      '<b>体温计</b>：量程 35℃~42℃，分度值 0.1℃；玻璃泡上方有<b>缩口</b>，所以可以离开人体读数，用前需甩一甩。',
+      '四种测温：实验室温度计、体温计、寒暑表、热电偶/红外测温仪。'
+    ],
+    formulas:[],
+    pitfall:['读数时视线要与液柱<b>上表面相平</b>，仰视读数偏小、俯视偏大（对常见液柱温度计而言要结合刻度方向判断）。','体温计可以离开人体读数，实验室温度计<b>不可以</b>。'],
+    example:'体温计示数为 38.5℃，说明分度值为 0.1℃；未甩就去测 37℃ 的人，示数仍为 38.5℃。'
+  },
+  {
+    id:'t2', m:'thermal', title:'物态变化与晶体熔化',
+    sum:'六种物态变化伴随吸热或放热；晶体有固定熔点，非晶体没有。',
+    points:[
+      '<b>吸热</b>：熔化（固→液）、汽化（液→气）、升华（固→气）；<b>放热</b>：凝固、液化、凝华。',
+      '<b>晶体</b>（冰、海波、各种金属）：熔化时<b>温度保持不变</b>，但要继续吸热；这个温度叫熔点。<b>非晶体</b>（蜡、松香、玻璃、沥青）没有固定熔点，熔化时温度持续上升。',
+      '晶体熔化条件：①温度达到熔点；②继续吸热。两条缺一不可。',
+      '晶体熔化图像中，水平段对应的温度即熔点，此阶段物质为<b>固液共存</b>态，内能持续增大。'
+    ],
+    formulas:[],
+    pitfall:['晶体熔化时温度不变，但<b>内能增加</b>（持续吸热），所以「温度不变则内能不变」是错的。','0℃ 的冰和 0℃ 的水冷热程度相同，但冰熔化成水需要吸热，所以 0℃ 的水内能更大。'],
+    example:'把 −5℃ 的冰加热到 0℃ 并开始熔化，继续加热时温度保持 0℃ 不变，直到全部变成水后温度才继续上升。',
+    diagram:'melting'
+  },
+  {
+    id:'t3', m:'thermal', title:'汽化与液化',
+    sum:'汽化的两种方式是蒸发和沸腾；液化的两种方式是降低温度和压缩体积。',
+    points:[
+      '<b>蒸发</b>：任何温度下、只在液体表面、缓慢进行；<b>吸热致冷</b>。加快蒸发的方法：提高温度、增大表面积、加快表面空气流动。',
+      '<b>沸腾</b>：一定温度（沸点）下、在液体内部和表面同时剧烈汽化；沸腾时温度不变但需要持续吸热；沸腾时气泡上升变大，沸腾前气泡上升变小。',
+      '沸点与气压有关：气压越高沸点越高（高压锅），气压越低沸点越低（高山上煮不熟饭）。',
+      '<b>液化</b>：降低温度（露水、雾、白气）或压缩体积（液化石油气、打火机）；液化放热。'
+    ],
+    formulas:[],
+    pitfall:['「白气」不是水蒸气（水蒸气无色透明看不见），而是水蒸气<b>液化</b>成的小水滴。','夏天扇扇子感觉凉快，是加快汗液蒸发<b>吸热</b>，并没有降低气温。'],
+    example:'从冰箱拿出的饮料瓶外壁出现水珠，是空气中水蒸气遇冷<b>液化</b>放热形成的。'
+  },
+  {
+    id:'t4', m:'thermal', title:'升华、凝华与水循环',
+    sum:'升华吸热、凝华放热，都是固态与气态之间的直接变化。',
+    points:[
+      '<b>升华（吸热）</b>：樟脑丸变小、干冰升华制冷（人工降雨、舞台云雾）、冰冻衣服变干、灯丝用久变细。',
+      '<b>凝华（放热）</b>：霜、雾凇、窗玻璃上的冰花（出现在玻璃<b>内</b>侧）、灯泡用久发黑。',
+      '自然界水循环：汽化/升华 → 水蒸气上升 → 液化成小水滴或凝华成小冰晶形成云 → 降雨降雪回到地面。'
+    ],
+    formulas:[],
+    pitfall:['霜和雾凇是<b>凝华</b>，不是凝固；露和雾是<b>液化</b>，不是凝固。','干冰制造的「白雾」是空气中水蒸气遇冷<b>液化</b>的小水滴，不是二氧化碳气体。'],
+    example:'冬天窗玻璃内表面出现冰花，是室内水蒸气遇到冷玻璃直接<b>凝华</b>成小冰晶。'
+  },
+  {
+    id:'t5', m:'thermal', title:'内能及其改变方式',
+    sum:'物体内所有分子动能与分子势能的总和叫内能；做功和热传递都能改变内能。',
+    points:[
+      '一切物体在任何温度下都<b>具有内能</b>；同一物体温度越高，内能越大。',
+      '<b>热传递</b>：能量从高温物体转移到低温物体，条件是存在<b>温度差</b>；传递的能量叫热量 Q，单位焦耳（J）。',
+      '<b>做功</b>：对物体做功内能增加（摩擦生热、压缩气体），物体对外做功内能减少（气体膨胀推动活塞）。',
+      '做功和热传递在改变内能上是<b>等效</b>的；热传递改变的是能量的转移，做功是能量的转化。'
+    ],
+    formulas:[],
+    pitfall:['「热量」是过程量，只能说「吸收/放出热量」，不能说物体「含有热量」。','物体温度升高，内能一定增加；但内能增加，温度不一定升高（如晶体熔化）。'],
+    example:'冬天搓手取暖是<b>做功</b>改变内能，用热水袋暖手是<b>热传递</b>改变内能。'
+  },
+  {
+    id:'t6', m:'thermal', title:'比热容与热量计算',
+    sum:'比热容是物质的特性；水的比热容大，常用来做冷却剂和调节气温。',
+    points:[
+      '定义：单位质量（1 kg）的某种物质温度升高（或降低）1℃ 所吸收（或放出）的热量，符号 c，单位 <b>J/(kg·℃)</b>。',
+      '水的比热容 c<sub>水</sub> = <b>4.2×10³ J/(kg·℃)</b>，含义：1 kg 水温度升高 1℃ 吸收 4.2×10³ J 热量。',
+      '<b>比热容是物质的特性</b>，与质量、温度变化、吸放热多少<b>无关</b>，只与物质种类和状态有关。',
+      '应用：沿海昼夜温差小、内陆温差大；汽车用水做冷却剂；暖气用水做介质；稻田灌水防冻。',
+      '热机四冲程：吸气、压缩（机械能→内能）、<b>做功（内能→机械能，唯一对外做功）</b>、排气。'
+    ],
+    formulas:[
+      { e:'Q = c m Δt', n:'热量计算；吸热 Q吸=cm(t−t₀)，放热 Q放=cm(t₀−t)' },
+      { e:'η = W有 / Q放', n:'热机效率，总小于 1' }
+    ],
+    pitfall:['计算时 Δt 是<b>变化量</b>，「升高到」和「升高了」含义不同。','同种物质状态不同比热容不同（水和冰的比热容不同）。'],
+    example:'2 kg 水从 20℃ 升高到 70℃ 吸热：Q = 4.2×10³ × 2 × 50 = <b>4.2×10⁵ J</b>。',
+    diagram:'heat'
+  },
+
+  /* ===== 力学 ===== */
+  {
+    id:'m1', m:'mechanics', title:'长度与时间的测量',
+    sum:'刻度尺要看量程、分度值和零刻线；误差不可避免，只能减小。',
+    points:[
+      '长度主单位米（m）：1 km=10³ m，1 m=10 dm=10² cm=10³ mm=10⁶ μm=10⁹ nm。',
+      '<b>刻度尺使用</b>：认清量程和分度值；刻度线紧贴被测物；读数时视线与尺面垂直；要<b>估读到分度值的下一位</b>；记录结果由数字和单位组成。',
+      '<b>误差</b>不是错误，不能消除，只能减小：多次测量求平均值、选用精密仪器、改进方法。',
+      '特殊测量：累积法（测细铜丝直径、一张纸厚度）、平移法（测硬币直径）、化曲为直法（测地图上的铁路长）。'
+    ],
+    formulas:[],
+    pitfall:['测量结果必须带<b>单位</b>，没有单位的数据没有物理意义。','多次测量求平均值可以减小误差，但错误（读错、记错）必须剔除而不是平均。'],
+    example:'分度值为 1 mm 的刻度尺，读数应写到毫米的下一位，如 2.35 cm。'
+  },
+  {
+    id:'m2', m:'mechanics', title:'质量与密度',
+    sum:'质量是物体的属性，不随形状、状态、位置和温度改变；密度是物质的特性。',
+    points:[
+      '<b>质量</b>：物体所含物质的多少，主单位千克（kg）。天平使用：放水平台、游码归零、调平衡螺母（左偏右调）、左物右码、用镊子加减砝码。',
+      '<b>密度</b>：某种物质组成的物体的质量与体积之比，是物质的<b>特性</b>，与 m、V 无关。',
+      '水的密度 ρ<sub>水</sub> = <b>1.0×10³ kg/m³</b> = 1 g/cm³，表示 1 m³ 水的质量是 1000 kg。',
+      '密度测量：用天平测质量 m，用量筒测体积 V（排水法），ρ = m/V。',
+      '单位换算：<b>1 g/cm³ = 1×10³ kg/m³</b>；1 mL = 1 cm³ = 10⁻⁶ m³。'
+    ],
+    formulas:[
+      { e:'ρ = m / V', n:'密度；变形 m = ρV、V = m/ρ' },
+      { e:'1 g/cm³ = 10³ kg/m³', n:'密度单位换算' }
+    ],
+    pitfall:['一瓶水喝掉一半，质量和体积都减半，但<b>密度不变</b>；把铁块带到月球，质量不变、重力变小。','气体密度会随温度和压强明显变化（如氧气瓶用掉一半氧气，瓶内气体密度变为原来一半）。'],
+    example:'体积 20 cm³ 的物体质量 54 g，ρ = 54/20 = 2.7 g/cm³ = <b>2.7×10³ kg/m³</b>，该物质可能是铝。'
+  },
+  {
+    id:'m3', m:'mechanics', title:'力、重力与摩擦力',
+    sum:'力是物体对物体的作用；力的作用效果与大小、方向、作用点有关。',
+    points:[
+      '<b>力的三要素</b>：大小、方向、作用点；力不能脱离物体单独存在，物体间力的作用是<b>相互的</b>。',
+      '作用效果：改变物体的<b>形状</b>或改变物体的<b>运动状态</b>（速度大小或方向改变）。',
+      '<b>重力</b>：由于地球吸引而受的力，方向<b>竖直向下</b>（不是垂直向下），作用点叫重心；g = 9.8 N/kg，粗略取 10 N/kg。',
+      '<b>弹力</b>：发生弹性形变产生；弹簧测力计原理是「在弹性限度内，弹簧伸长量与所受拉力成正比」，使用前要调零、看清量程分度值。',
+      '<b>摩擦力</b>：滑动摩擦力大小与<b>压力大小</b>和<b>接触面粗糙程度</b>有关，与接触面积、运动速度无关；增大（加压、变粗糙、变滚动为滑动）、减小（减压、变光滑、变滑动为滚动、使接触面分离）。'
+    ],
+    formulas:[{ e:'G = m g', n:'重力计算，g = 9.8 N/kg（常取 10 N/kg）' }],
+    pitfall:['重力方向是「竖直向下」（指向地面附近水平面的垂线方向），不能说成「垂直向下」。','摩擦力不一定是阻力：人走路、传送带送货物时摩擦力是<b>动力</b>。'],
+    example:'质量 5 kg 的物体受到的重力 G = 5×9.8 = <b>49 N</b>。'
+  },
+  {
+    id:'m4', m:'mechanics', title:'牛顿第一定律与二力平衡',
+    sum:'一切物体都有惯性；物体不受力或受平衡力时保持静止或匀速直线运动。',
+    points:[
+      '<b>牛顿第一定律（惯性定律）</b>：一切物体在没有受到力的作用时，总保持静止状态或匀速直线运动状态。它是在实验基础上通过<b>科学推理</b>得出的，不能直接由实验验证。',
+      '<b>惯性</b>：物体保持原来运动状态不变的性质。<b>一切物体都有惯性</b>，惯性大小只与<b>质量</b>有关，与速度、受力无关。惯性不是力，不能说「受到惯性作用」。',
+      '<b>二力平衡条件</b>：作用在<b>同一物体</b>上的两个力，大小相等、方向相反、作用在同一直线上（同体、等大、反向、共线）。',
+      '<b>平衡力 vs 相互作用力</b>：平衡力作用在同一物体上；相互作用力分别作用在两个物体上。'
+    ],
+    formulas:[],
+    pitfall:['「物体运动需要力来维持」是错的，力是<b>改变</b>运动状态的原因，不是维持运动的原因。','跳远助跑、拍打衣服除尘、汽车刹车人前倾都是利用惯性；安全带、安全气囊是防止惯性带来的危害。'],
+    example:'书静止在水平桌面上：书受到的重力与桌面对书的支持力是一对<b>平衡力</b>；书对桌面的压力与桌面对书的支持力是一对<b>相互作用力</b>。'
+  },
+  {
+    id:'m5', m:'mechanics', title:'压强（固体、液体与大气）',
+    sum:'压强表示压力的作用效果；液体压强随深度增大；流速越大压强越小。',
+    points:[
+      '<b>固体压强</b>：p = F/S，单位帕斯卡（Pa），1 Pa = 1 N/m²。增大压强：增大压力或减小受力面积；减小压强相反。',
+      '<b>液体压强</b>：p = ρgh，只与<b>液体密度和深度</b>有关，与容器形状、液体总重无关；h 是该点到<b>自由液面</b>的竖直距离。',
+      '<b>连通器</b>：上端开口、下部连通，装同种液体静止时各容器液面相平（茶壶、船闸、锅炉水位计）。',
+      '<b>大气压</b>：托里拆利实验测得标准大气压约 <b>760 mm 汞柱 = 1.013×10⁵ Pa</b>；随高度升高而减小；液体的沸点随气压减小而降低。',
+      '<b>流体压强与流速</b>：流速越大的位置压强越小（飞机机翼升力、站台安全线、两张纸中间吹气会靠拢）。'
+    ],
+    formulas:[
+      { e:'p = F / S', n:'压强定义式；F 为压力，S 为受力面积（单位换算成 m²）' },
+      { e:'p = ρ g h', n:'液体内部压强；h 是深度（m）' },
+      { e:'F = p S', n:'压力的变形计算' }
+    ],
+    pitfall:['压力<b>不等于</b>重力。只有物体放在水平面上且不受其他力时，压力大小才等于重力。','计算受力面积时注意单位：1 cm² = 10⁻⁴ m²，且要看是几只脚/几个轮子接触。'],
+    example:'质量 60 kg 的人双脚站立，每只脚接触面积 200 cm²，对地压强 p = 600 / (2×0.02) = <b>1.5×10⁴ Pa</b>。',
+    diagram:'pressure'
+  },
+  {
+    id:'m6', m:'mechanics', title:'浮力与浮沉条件',
+    sum:'浸在液体中的物体受到向上的浮力，大小等于它排开液体所受的重力。',
+    points:[
+      '<b>阿基米德原理</b>：F<sub>浮</sub> = G<sub>排</sub> = ρ<sub>液</sub> g V<sub>排</sub>，浮力只与<b>液体密度</b>和<b>排开液体的体积</b>有关，与物体密度、形状、浸没深度无关（完全浸没后）。',
+      '<b>称重法</b>：F<sub>浮</sub> = G − F<sub>拉</sub>（弹簧测力计在液体中的示数）。',
+      '<b>浮沉条件</b>（浸没时）：F<sub>浮</sub> &gt; G 上浮；F<sub>浮</sub> = G 悬浮；F<sub>浮</sub> &lt; G 下沉；漂浮/悬浮时 F<sub>浮</sub> = G。也可用密度判断：ρ<sub>物</sub> &lt; ρ<sub>液</sub> 上浮最终漂浮。',
+      '<b>应用</b>：轮船（空心增大 V排，漂浮时 F浮=G，从河入海浮力不变、V排变小会上浮一些）、潜水艇（改变<b>自身重力</b>）、气球飞艇（充密度小的气体）、密度计（漂浮，刻度上小下大）。'
+    ],
+    formulas:[
+      { e:'F浮 = ρ液 g V排', n:'阿基米德原理，通用计算式' },
+      { e:'F浮 = G − F拉', n:'称重法测浮力' },
+      { e:'F浮 = G物', n:'漂浮或悬浮时的平衡条件' }
+    ],
+    pitfall:['物体完全浸没后继续下沉，V排 不变，所以<b>浮力不变</b>（但液体压强变大）。','「浮力等于重力」只在漂浮和悬浮时成立，下沉过程中不成立。'],
+    example:'体积 100 cm³ 的物体全部浸没在水中，F浮 = 1.0×10³ × 10 × 1×10⁻⁴ = <b>1 N</b>。',
+    diagram:'buoyancy'
+  },
+  {
+    id:'m7', m:'mechanics', title:'简单机械、功与机械能',
+    sum:'杠杆平衡条件是 F₁l₁=F₂l₂；做功需要力和沿力方向移动的距离。',
+    points:[
+      '<b>杠杆五要素</b>：支点 O、动力 F₁、阻力 F₂、动力臂 l₁（支点到动力作用线的<b>垂直距离</b>）、阻力臂 l₂。',
+      '分类：l₁ &gt; l₂ 省力杠杆（撬棒、开瓶器、老虎钳）；l₁ &lt; l₂ 费力杠杆（镊子、钓鱼竿、筷子，省距离）；l₁ = l₂ 等臂杠杆（天平、定滑轮）。',
+      '<b>滑轮</b>：定滑轮不省力但能改变力的方向（实质等臂杠杆）；动滑轮省一半力但费距离、不能改变方向；滑轮组 F = (G物+G动)/n，s = nh，n 是承担物重的绳子段数。',
+      '<b>功</b>：W = Fs，单位焦耳（J）。做功两个必要因素：作用在物体上的力、物体在<b>这个力的方向上</b>移动的距离。不做功三种情况：有力无距离、有距离无力、力与距离垂直。',
+      '<b>功率</b>：P = W/t，表示做功<b>快慢</b>，单位瓦特（W）。<b>机械效率</b> η = W有/W总 &lt; 1。',
+      '<b>机械能</b>：动能（质量、速度）+ 重力势能（质量、高度）+ 弹性势能；只有动能与势能相互转化时机械能守恒，有摩擦则机械能转化为内能。'
+    ],
+    formulas:[
+      { e:'F₁ l₁ = F₂ l₂', n:'杠杆平衡条件；力臂是垂直距离，不是支点到作用点的长度' },
+      { e:'W = F s', n:'功；1 J = 1 N·m' },
+      { e:'P = W / t = F v', n:'功率；1 W = 1 J/s' },
+      { e:'η = W有 / W总 ×100%', n:'机械效率，永远小于 100%' },
+      { e:'F = (G物 + G动) / n', n:'滑轮组省力公式，n 为承担物重的绳子段数' }
+    ],
+    pitfall:['力臂不是「支点到力的作用点的距离」，而是到<b>力的作用线</b>的垂直距离。','机械效率与功率、省力多少都没有必然关系；增大物重、减小动滑轮重和摩擦可以提高效率。'],
+    example:'把 100 N 的物体匀速提高 2 m，拉力做功 250 J，则 W有 = 100×2 = 200 J，η = 200/250 = <b>80%</b>。',
+    diagram:'lever'
+  },
+
+  /* ===== 电学 ===== */
+  {
+    id:'e1', m:'electricity', title:'电荷、电路与电流',
+    sum:'电荷定向移动形成电流；电流表要串联接入电路。',
+    points:[
+      '<b>两种电荷</b>：丝绸摩擦玻璃棒带正电，毛皮摩擦橡胶棒带负电；同种相斥、异种相吸。摩擦起电是<b>电子的转移</b>，不是创造电荷。',
+      '<b>导体与绝缘体</b>：容易导电的是导体（金属、人体、大地、酸碱盐水溶液），不易导电的是绝缘体（橡胶、玻璃、陶瓷、塑料、干木）；两者没有绝对界限，条件改变可转化。',
+      '<b>电流方向</b>：规定<b>正电荷</b>定向移动的方向为电流方向；在电源外部，电流从正极经用电器流向负极。',
+      '<b>电路组成</b>：电源、用电器、开关、导线；三种状态：通路、断路（开路）、短路（电源短路会烧坏电源，绝不允许）。',
+      '<b>电流表使用</b>：①<b>串联</b>；②电流从「+」接线柱流入、「−」流出；③不超过量程（试触）；④<b>绝不允许不经过用电器直接接到电源两极</b>。读数：0~0.6 A 分度值 0.02 A，0~3 A 分度值 0.1 A。',
+      '<b>串并联电流规律</b>：串联 I = I₁ = I₂；并联 I = I₁ + I₂。'
+    ],
+    formulas:[
+      { e:'I = Q / t', n:'电流定义式；1 A = 1 C/s' },
+      { e:'I = I₁ + I₂', n:'并联电路干路电流等于各支路电流之和' }
+    ],
+    pitfall:['电流表内阻极小，若直接并联在电源两端会造成<b>电源短路</b>，烧坏电流表和电源。','串联电路中各处电流相等，与用电器电阻大小、位置先后都无关。','金属导体中自由电子定向移动的方向与规定的电流方向<b>相反</b>。'],
+    example:'串联电路中电流表在 A 处示数 0.4 A，则 B 处示数也是 <b>0.4 A</b>；并联电路中干路 0.6 A、一条支路 0.25 A，则另一支路为 0.35 A。',
+    diagram:'circuit_series'
+  },
+  {
+    id:'e2', m:'electricity', title:'电压与电阻',
+    sum:'电压是形成电流的原因；电阻是导体本身的属性，与电压电流无关。',
+    points:[
+      '<b>电压</b>：使电路中形成电流的原因，电源是提供电压的装置。单位伏特（V）；一节干电池 1.5 V，家庭电路 220 V，人体安全电压<b>不高于 36 V</b>。',
+      '<b>电压表使用</b>：①<b>并联</b>在被测电路两端；②「+」进「−」出；③不超量程。电压表可以直接接在电源两极测电源电压。',
+      '<b>串并联电压规律</b>：串联 U = U₁ + U₂（分压）；并联 U = U₁ = U₂。',
+      '<b>电阻</b>：导体对电流阻碍作用的大小，符号 R，单位欧姆（Ω）。它是导体的<b>属性</b>，由<b>材料、长度、横截面积和温度</b>决定，与所加电压和通过的电流<b>无关</b>。',
+      '<b>滑动变阻器</b>：靠改变接入电路中电阻丝的<b>长度</b>来改变电阻；接线必须「<b>一上一下</b>」；闭合开关前应调到<b>阻值最大</b>处，起保护电路作用；在探究实验中还能改变电压/保持电压不变。'
+    ],
+    formulas:[
+      { e:'U = U₁ + U₂', n:'串联电路总电压等于各部分电压之和' },
+      { e:'U = U₁ = U₂', n:'并联电路各支路电压相等' }
+    ],
+    pitfall:['「导体电阻与电压成正比、与电流成反比」是错的，R = U/I 只是<b>计算式</b>不是决定式；电压为零时电阻依然存在。','滑动变阻器同时接上面两个接线柱相当于接入一根导线（电阻为 0），同时接下面两个相当于定值电阻，都起不到调节作用。'],
+    example:'某导体两端电压 6 V 时电流 0.3 A，电阻 R = 20 Ω；电压降为 3 V 时电流为 0.15 A，但电阻仍是 <b>20 Ω</b>。'
+  },
+  {
+    id:'e3', m:'electricity', title:'欧姆定律',
+    sum:'导体中的电流与导体两端电压成正比、与导体电阻成反比。',
+    points:[
+      '<b>内容</b>：I = U / R。三个量必须是<b>同一段电路、同一时刻</b>的（同体性、同时性）；单位统一用 A、V、Ω。',
+      '<b>探究实验</b>用<b>控制变量法</b>：研究 I 与 U 关系时保持 R 不变（调节滑动变阻器）；研究 I 与 R 关系时更换电阻后调节滑变使<b>电压保持不变</b>。',
+      '<b>串联电阻</b>：R = R₁ + R₂（越串越大，相当于增大长度）；串联分压 U₁/U₂ = R₁/R₂。',
+      '<b>并联电阻</b>：1/R = 1/R₁ + 1/R₂，两电阻并联 R = R₁R₂/(R₁+R₂)（越并越小，相当于增大横截面积）；并联分流 I₁/I₂ = R₂/R₁。',
+      '<b>伏安法测电阻</b>：原理 R = U/I，用电压表测 U、电流表测 I，滑动变阻器改变电压实现多次测量求平均值减小误差。'
+    ],
+    formulas:[
+      { e:'I = U / R', n:'欧姆定律；变形 U = IR、R = U/I' },
+      { e:'R = R₁ + R₂', n:'串联总电阻' },
+      { e:'R = R₁R₂ / (R₁+R₂)', n:'两个电阻并联的总电阻' }
+    ],
+    pitfall:['R = U/I 常被误解为「R 与 U 成正比、与 I 成反比」，务必强调电阻由导体自身决定。','灯泡的电阻随温度变化明显，不能简单当成定值电阻。'],
+    example:'R₁=10 Ω 与 R₂=20 Ω 串联接在 6 V 电源上，总电阻 30 Ω，I = 0.2 A，U₁ = 2 V，U₂ = <b>4 V</b>。',
+    diagram:'ohm_graph'
+  },
+  {
+    id:'e4', m:'electricity', title:'电功、电功率与焦耳定律',
+    sum:'电功率表示消耗电能的快慢；电流通过导体产生的热量与电流平方成正比。',
+    points:[
+      '<b>电功</b>：W = UIt = Pt，单位焦耳（J），生活中常用千瓦时（kW·h，度），<b>1 kW·h = 3.6×10⁶ J</b>。电能表测电功。',
+      '<b>电功率</b>：P = W/t = UI，单位瓦特（W）。推导式 P = I²R、P = U²/R（<b>仅适用于纯电阻电路</b>）。',
+      '<b>额定与实际</b>：用电器在<b>额定电压</b>下工作时的功率叫额定功率；实际电压不等于额定电压时，实际功率随之改变。灯丝电阻近似不变时 P实/P额 = (U实/U额)²。灯泡亮度由<b>实际功率</b>决定。',
+      '<b>焦耳定律</b>：Q = I²Rt，电流通过导体产生的热量与电流的<b>平方</b>成正比。电热水器、电饭锅利用电热；电视机散热孔、电脑风扇是防止电热危害。',
+      '<b>测量小灯泡电功率</b>：原理 P = UI，用电压表、电流表和滑动变阻器，分别测 U实 &lt; U额、U实 = U额、U实 &gt; U额 三种情况（<b>不能求平均值</b>）。'
+    ],
+    formulas:[
+      { e:'W = U I t = P t', n:'电功；1 kW·h = 3.6×10⁶ J' },
+      { e:'P = W / t = U I', n:'电功率；1 W = 1 J/s = 1 V·A' },
+      { e:'P = I²R = U²/R', n:'纯电阻电路的推导式' },
+      { e:'Q = I² R t', n:'焦耳定律' }
+    ],
+    pitfall:['「220V 100W」的灯泡接在 110 V 上，电阻不变则实际功率为额定的 1/4，即 <b>25 W</b>，不是 50 W。','kW·h 是<b>电功（能量）</b>单位，kW 是功率单位，不要混淆。'],
+    example:'标有「220 V 1000 W」的电热水壶正常工作 10 min 耗电 W = 1 kW × (1/6) h = 1/6 kW·h = <b>6×10⁵ J</b>。'
+  },
+  {
+    id:'e5', m:'electricity', title:'家庭电路与安全用电',
+    sum:'家庭电路各用电器并联，开关接在火线上；安全用电原则是「不接触低压带电体，不靠近高压带电体」。',
+    points:[
+      '<b>组成</b>：进户线（火线、零线，之间 220 V）→ 电能表 → 总开关 → 保险装置 → 用电器、插座。各用电器与插座之间都是<b>并联</b>。',
+      '<b>三线</b>：火线（L）、零线（N）、地线（E）。三孔插座「<b>左零右火上接地</b>」；有金属外壳的用电器外壳必须接地。测电笔用来辨别火线（氖管发光的是火线），使用时手必须接触笔尾金属体。',
+      '<b>开关必须接在火线与用电器之间</b>，这样断开开关后用电器不带电，检修更安全；螺口灯泡的螺旋套接零线。',
+      '<b>电流过大的原因</b>：①短路；②用电器总功率过大（I总 = P总/U）。保险丝用电阻率大、熔点低的铅锑合金，<b>不能用铁丝铜丝代替</b>；空气开关跳闸后应先查原因再复位。',
+      '<b>触电</b>：单线触电、双线触电、高压电弧触电、跨步电压触电。触电急救先<b>切断电源</b>或用绝缘体挑开电线，不能直接用手拉人。'
+    ],
+    formulas:[{ e:'I总 = P总 / U', n:'家庭电路干路电流；P总过大是电流过大的常见原因' }],
+    pitfall:['保险丝要<b>串联</b>在火线上；开关接在零线上虽然也能控制灯，但断开时灯头仍带电，不安全。','发现有人触电，第一件事是<b>切断电源</b>，不是马上用手去拉。'],
+    example:'家庭电路电压 220 V，同时使用的用电器总功率 4400 W，干路电流 I = 4400/220 = <b>20 A</b>，需选额定电流不小于 20 A 的电能表和保险装置。'
+  },
+  {
+    id:'e6', m:'electricity', title:'动态电路与故障分析',
+    sum:'滑动变阻器滑片移动引起电表示数变化，用「先电阻、后电流、再电压」的顺序分析。',
+    points:[
+      '<b>分析顺序</b>：先判断滑片移动使接入电阻如何变 → 总电阻 → 由 I = U/R 判断干路电流 → 再由 U = IR 或串联分压判断各部分电压。',
+      '<b>串联分压</b>：定值电阻与滑变串联时，滑变阻值增大，电路电流减小，定值电阻两端电压减小，滑变两端电压增大（总电压不变）。',
+      '<b>故障判断</b>：电流表无示数 → 电路<b>断路</b>；电压表有示数且接近电源电压 → 与电压表并联的部分断路；电压表无示数 → 该部分短路或其他处断路。',
+      '<b>灯泡不亮</b>：可能是灯丝断了、灯座接触不良、实际功率太小，或被短路。'
+    ],
+    formulas:[],
+    pitfall:['电压表串联接入电路时，因其电阻极大，电路近似断路，电压表示数接近电源电压而灯泡不亮。'],
+    example:'串联电路中滑变阻值调大：总电阻变大 → 电流表示数<b>变小</b> → 定值电阻两端电压<b>变小</b> → 滑变两端电压变大。'
+  },
+
+  /* ===== 磁与能源 ===== */
+  {
+    id:'g1', m:'magnetism', title:'磁现象与磁场',
+    sum:'磁体两端磁性最强；磁感线在磁体外部从 N 极出发回到 S 极。',
+    points:[
+      '<b>磁极</b>：磁体上磁性最强的部分叫磁极，一个磁体必有两个磁极；同名磁极相斥、异名相吸。',
+      '<b>磁化</b>：使原来没有磁性的物体获得磁性的过程；钢被磁化后磁性能长期保持（可做永磁体），软铁磁性容易消失（可做电磁铁铁芯）。',
+      '<b>磁场</b>：存在于磁体周围、能对放入其中的磁体产生力的作用的物质。磁场方向规定为小磁针静止时 <b>N 极所指的方向</b>。',
+      '<b>磁感线</b>：为描述磁场而假想的曲线，<b>并不真实存在</b>；在磁体外部从 N 极到 S 极，内部从 S 极到 N 极，是闭合曲线且不相交；疏密表示磁场强弱。',
+      '<b>地磁场</b>：地球本身是个大磁体，<b>地理北极附近是地磁南极</b>，地理南极附近是地磁北极；指南针指北是因为受地磁场作用；磁偏角由沈括最早记载。'
+    ],
+    formulas:[],
+    pitfall:['磁感线是<b>假想</b>的、不是真实存在的；磁场才是真实存在的物质。','小磁针静止时指向北方的是它的 N 极，说明地理北极附近是地磁<b>南</b>极。'],
+    example:'把条形磁铁从中间折断，每一段仍然有 N、S 两个磁极，不会得到单独的磁单极。',
+    diagram:'magnet'
+  },
+  {
+    id:'g2', m:'magnetism', title:'电生磁：电磁铁与电磁继电器',
+    sum:'电流周围存在磁场；通电螺线管的极性用安培定则判断。',
+    points:[
+      '<b>奥斯特实验</b>：通电导线附近的小磁针发生偏转，说明<b>电流周围存在磁场</b>，且磁场方向与<b>电流方向</b>有关（电流的磁效应）。',
+      '<b>通电螺线管</b>：外部磁场与条形磁铁相似；极性用<b>安培定则（右手螺旋定则）</b>：用右手握住螺线管，四指弯向电流方向，大拇指所指的那端就是 <b>N 极</b>。',
+      '<b>电磁铁</b>：插入铁芯的螺线管，磁性比通电螺线管强得多。磁性强弱与<b>电流大小、线圈匝数、有无铁芯</b>有关；优点是磁性有无可由通断电流控制、磁性强弱可调、极性可改变。',
+      '<b>电磁继电器</b>：用低电压弱电流电路控制高电压强电流电路的<b>自动开关</b>，实质是由电磁铁控制的开关。'
+    ],
+    formulas:[],
+    pitfall:['改变电磁铁磁性强弱要改变电流或匝数；<b>只改变电流方向</b>改变的是磁极极性，不改变磁性强弱。'],
+    example:'要让电磁铁磁性增强，可增大电流、增加线圈匝数；要让它失去磁性，断开电流即可。'
+  },
+  {
+    id:'g3', m:'magnetism', title:'磁生电：电动机与发电机',
+    sum:'磁场对通电导线有力的作用制成电动机；电磁感应制成发电机。',
+    points:[
+      '<b>磁场对通电导线的作用</b>：通电导线在磁场中会受到力的作用，受力方向与<b>电流方向和磁场方向</b>有关；把电能转化为机械能 → <b>电动机</b>。换向器能在线圈刚转过平衡位置时自动改变线圈中电流方向，使线圈持续转动。',
+      '<b>电磁感应</b>：<b>闭合电路</b>的<b>一部分导体</b>在磁场中做<b>切割磁感线</b>运动时，导体中产生感应电流；把机械能转化为电能 → <b>发电机</b>。感应电流方向与导体运动方向和磁场方向有关。',
+      '产生感应电流三个条件缺一不可：闭合电路、一部分导体、切割磁感线运动。',
+      '应用：动圈式话筒（声信号→电信号，电磁感应）、扬声器（电信号→声信号，磁场对电流的作用）、变压器（电磁感应）。'
+    ],
+    formulas:[],
+    pitfall:['电动机原理是「通电导体在磁场中受力」，发电机原理是「电磁感应」，两者能量转化方向相反，最易混淆。','闭合电路的一部分导体在磁场中<b>沿磁感线方向运动</b>（不切割）时，<b>不会</b>产生感应电流。'],
+    example:'发电机发电时把机械能转化为电能；电动机工作时把电能转化为机械能，同时因线圈有电阻会发热产生内能。',
+    diagram:'induction'
+  },
+  {
+    id:'g4', m:'magnetism', title:'能源与能量守恒',
+    sum:'能量既不会消灭也不会创生，只会转化或转移；能源分为可再生与不可再生。',
+    points:[
+      '<b>能量守恒定律</b>：能量既不会凭空消灭，也不会凭空产生，只会从一种形式<b>转化</b>为其他形式，或从一个物体<b>转移</b>到另一个物体，总量保持不变。',
+      '能量的转化和转移具有<b>方向性</b>（如热量只能自发地从高温物体传向低温物体），所以仍要节约能源。',
+      '<b>一次能源</b>：可从自然界直接获取（煤、石油、天然气、风能、水能、太阳能、核能）；<b>二次能源</b>：由一次能源加工转换而来（电能、汽油、焦炭、氢能）。',
+      '<b>可再生能源</b>：太阳能、风能、水能、生物质能、潮汐能、地热能；<b>不可再生能源</b>：煤、石油、天然气、核燃料（铀）。',
+      '<b>核能</b>：核<b>裂变</b>（重核分裂，核电站、原子弹，现已可控制）与核<b>聚变</b>（轻核结合，太阳内部、氢弹，尚不可控）。核电站：核能→内能→机械能→电能。',
+      '太阳能利用：光热转换（太阳能热水器）、光电转换（太阳能电池，太阳能→电能）、光化转换（光合作用）。'
+    ],
+    formulas:[{ e:'η = E有 / E总 ×100%', n:'能量转化效率，总小于 100%' }],
+    pitfall:['电能是<b>二次能源</b>；核能是<b>不可再生</b>能源，也属于一次能源。','「能量守恒」不等于「不需要节约能源」，因为可利用的能量品质会下降。'],
+    example:'太阳能电池板把<b>太阳能（光能）转化为电能</b>；核电站最终输出的是电能。'
+  }
+];
+
+/* ---------------- 公式速查表 ---------------- */
+const FORMULAS = [
+  { m:'sound', n:'速度（声速/运动）', e:'v = s / t', v:'v 速度，s 路程，t 时间', u:'m/s、km/h', note:'1 m/s = 3.6 km/h。声速在 15℃ 空气中取 340 m/s；回声测距用 s = vt/2。' },
+  { m:'sound', n:'频率', e:'f = n / t', v:'f 频率，n 振动次数，t 时间', u:'Hz', note:'频率决定音调；人耳听觉范围 20~20000 Hz。' },
+  { m:'sound', n:'回声测距', e:'s = v t / 2', v:'t 为发声到收到回声的总时间', u:'m', note:'声音走了一个来回，务必除以 2。' },
+
+  { m:'light', n:'光速', e:'c = 3×10⁸ m/s', v:'真空中的光速', u:'m/s', note:'等于 3×10⁵ km/s；光年是长度单位。' },
+  { m:'light', n:'反射定律', e:'∠r = ∠i', v:'i 入射角，r 反射角', u:'度（°）', note:'角都是与法线的夹角；光线与镜面成 θ 时入射角为 90°−θ。' },
+  { m:'light', n:'透镜成像（了解）', e:'1/f = 1/u + 1/v', v:'f 焦距，u 物距，v 像距', u:'m', note:'放大率 m = v/u；u>2f 缩小实像，f<u<2f 放大实像，u<f 放大虚像。' },
+
+  { m:'thermal', n:'热量计算', e:'Q = c m Δt', v:'c 比热容，m 质量，Δt 温度变化量', u:'J', note:'吸热 Q=cm(t−t₀)，放热 Q=cm(t₀−t)。c水=4.2×10³ J/(kg·℃)。' },
+  { m:'thermal', n:'比热容定义', e:'c = Q / (m Δt)', v:'比热容是物质特性', u:'J/(kg·℃)', note:'与质量、温度变化、吸放热多少无关，只与种类和状态有关。' },
+  { m:'thermal', n:'燃料燃烧放热', e:'Q = m q', v:'q 热值，固体液体燃料', u:'J', note:'气体燃料常用 Q = Vq；q 单位 J/kg 或 J/m³。' },
+  { m:'thermal', n:'热机效率', e:'η = W有 / Q放 ×100%', v:'W有 有用功，Q放 燃料完全燃烧放热', u:'—', note:'总小于 1；减少废气带走的热量、减小摩擦可提高效率。' },
+
+  { m:'mechanics', n:'密度', e:'ρ = m / V', v:'ρ 密度，m 质量，V 体积', u:'kg/m³、g/cm³', note:'1 g/cm³ = 10³ kg/m³；ρ是物质特性，与 m、V 无关。ρ水=1.0×10³ kg/m³。' },
+  { m:'mechanics', n:'重力', e:'G = m g', v:'m 质量，g = 9.8 N/kg', u:'N', note:'粗略计算常取 g = 10 N/kg；方向竖直向下。质量不随位置改变。' },
+  { m:'mechanics', n:'同一直线二力合成', e:'F合 = F₁ ± F₂', v:'同向相加，反向相减', u:'N', note:'反向时合力方向与较大的力相同；二力平衡时 F合 = 0。' },
+  { m:'mechanics', n:'压强', e:'p = F / S', v:'F 压力，S 受力面积', u:'Pa', note:'1 Pa = 1 N/m²；1 cm² = 10⁻⁴ m²。水平面上自由放置时 F = G。' },
+  { m:'mechanics', n:'液体压强', e:'p = ρ g h', v:'h 为该点到自由液面的竖直深度', u:'Pa', note:'与容器形状、液体总重无关；标准大气压约 1.013×10⁵ Pa。' },
+  { m:'mechanics', n:'压力计算', e:'F = p S', v:'由压强求压力', u:'N', note:'注意面积单位换算成 m²。' },
+  { m:'mechanics', n:'阿基米德原理', e:'F浮 = ρ液 g V排', v:'V排 为排开液体的体积', u:'N', note:'完全浸没后 V排 不变，浮力与深度无关。' },
+  { m:'mechanics', n:'称重法测浮力', e:'F浮 = G − F拉', v:'F拉 为物体浸在液体中时测力计示数', u:'N', note:'示数变小是因为受到了向上的浮力。' },
+  { m:'mechanics', n:'漂浮/悬浮条件', e:'F浮 = G物', v:'二力平衡', u:'N', note:'轮船从河入海浮力不变，因海水密度大所以 V排 变小、会上浮一些。' },
+  { m:'mechanics', n:'杠杆平衡条件', e:'F₁ l₁ = F₂ l₂', v:'l 为力臂（到作用线的垂直距离）', u:'N·m', note:'l₁>l₂ 省力费距离；l₁<l₂ 费力省距离。' },
+  { m:'mechanics', n:'滑轮组', e:'F = (G物 + G动) / n', v:'n 为承担物重的绳子段数', u:'N', note:'s = n h；不计摩擦和绳重时成立。' },
+  { m:'mechanics', n:'功', e:'W = F s', v:'s 必须是沿力的方向移动的距离', u:'J', note:'1 J = 1 N·m；力与距离垂直时不做功。' },
+  { m:'mechanics', n:'功率', e:'P = W / t = F v', v:'W 功，t 时间，v 速度', u:'W', note:'1 W = 1 J/s；功率表示做功快慢，与机械效率无关。' },
+  { m:'mechanics', n:'机械效率', e:'η = W有 / W总 ×100%', v:'W总 = W有 + W额', u:'—', note:'恒小于 100%；提升物重、减小动滑轮重和摩擦可提高效率。' },
+  { m:'mechanics', n:'滑轮组效率', e:'η = G / (n F)', v:'由 F=(G+G动)/n 推导', u:'—', note:'也可写成 η = G/(G+G动)（不计摩擦绳重）。' },
+
+  { m:'electricity', n:'电流定义', e:'I = Q / t', v:'Q 电荷量，t 时间', u:'A', note:'1 A = 1 C/s。串联 I=I₁=I₂，并联 I=I₁+I₂。' },
+  { m:'electricity', n:'欧姆定律', e:'I = U / R', v:'U 电压，R 电阻', u:'A', note:'变形 U=IR、R=U/I；R 由导体本身决定，与 U、I 无关。' },
+  { m:'electricity', n:'串联电阻', e:'R = R₁ + R₂', v:'n 个相同电阻串联 R = nR₀', u:'Ω', note:'越串越大；串联分压 U₁/U₂ = R₁/R₂。' },
+  { m:'electricity', n:'并联电阻', e:'R = R₁R₂ / (R₁+R₂)', v:'两电阻并联', u:'Ω', note:'一般式 1/R = 1/R₁+1/R₂；越并越小且小于任一支路。' },
+  { m:'electricity', n:'串联电压规律', e:'U = U₁ + U₂', v:'总电压等于各部分电压之和', u:'V', note:'并联时 U = U₁ = U₂。' },
+  { m:'electricity', n:'电功', e:'W = U I t = P t', v:'W 电功，U 电压，I 电流，t 时间', u:'J、kW·h', note:'1 kW·h = 3.6×10⁶ J；电能表测量电功。' },
+  { m:'electricity', n:'电功率', e:'P = W / t = U I', v:'P 电功率', u:'W', note:'纯电阻电路可用 P = I²R = U²/R；灯泡亮度取决于实际功率。' },
+  { m:'electricity', n:'额定与实际功率', e:'P实 / P额 = (U实 / U额)²', v:'假定灯丝电阻不变', u:'—', note:'「220V 100W」接 110V 时实际功率为 25 W。' },
+  { m:'electricity', n:'焦耳定律', e:'Q = I² R t', v:'Q 电热', u:'J', note:'纯电阻电路中 Q = W = UIt = Pt。' },
+  { m:'electricity', n:'家庭电路干路电流', e:'I总 = P总 / U', v:'U = 220 V', u:'A', note:'用电器总功率过大或短路都会使电流过大。' },
+  { m:'electricity', n:'电能表读数', e:'W = n / N', v:'n 转盘转数，N 表盘参数（如 2500 r/kW·h）', u:'kW·h', note:'也可按指示灯闪烁次数 imp/(kW·h) 计算。' },
+
+  { m:'magnetism', n:'能量转化效率', e:'η = E有 / E总 ×100%', v:'E有 有效利用能量', u:'—', note:'能量守恒但转化有方向性，效率恒小于 100%。' },
+  { m:'magnetism', n:'电磁波（了解）', e:'c = λ f', v:'λ 波长，f 频率', u:'m、Hz', note:'真空中电磁波波速 c = 3×10⁸ m/s；频率越高波长越短。' }
+];
+
+/* ---------------- 题库 ----------------
+   lv: 1 基础 / 2 进阶 / 3 提高   ans: 正确选项下标(0起)
+--------------------------------------- */
+const QUESTIONS = [
+  /* 声现象 6 */
+  { id:'q1', m:'sound', lv:1, stem:'关于声音的产生，下列说法正确的是（　）', opts:['一切发声的物体都在振动','物体不振动也能发出声音','振动停止后声音会立即消失','只有固体振动才能发声'], ans:0, exp:'声音由物体振动产生，一切发声体都在振动，A 正确。振动停止只是停止发声，已发出的声音仍在介质中传播，C 错。固体、液体、气体都能发声，D 错。' },
+  { id:'q2', m:'sound', lv:1, stem:'宇航员在太空舱外必须用无线电通话，主要原因是（　）', opts:['太空温度太低','真空不能传声','太空噪声太大','无线电传播得更快'], ans:1, exp:'声音传播需要介质，太空接近真空，无法传声；电磁波（无线电）可以在真空中传播。' },
+  { id:'q3', m:'sound', lv:1, stem:'「闻其声而知其人」，判断的依据主要是声音的（　）', opts:['音调','响度','音色','声速'], ans:2, exp:'音色由发声体的材料和结构决定，是辨别不同发声体的依据。音调由频率决定，响度由振幅决定。' },
+  { id:'q4', m:'sound', lv:2, stem:'「女高音歌唱家」中的「高」指的是声音的（　）', opts:['响度大','音调高','音色好','传播快'], ans:1, exp:'「高音」「低音」描述的是音调，由发声体振动频率决定；「高声喧哗」中的「高」才指响度。' },
+  { id:'q5', m:'sound', lv:2, stem:'下列减弱噪声的措施中，属于「在传播过程中减弱」的是（　）', opts:['摩托车安装消声器','城市道路两旁设置隔音墙','工人戴防噪声耳罩','汽车禁止鸣笛'], ans:1, exp:'隔音墙阻断声音的传播，属于在传播过程中减弱；消声器、禁鸣是在声源处，耳罩是在人耳处。' },
+  { id:'q6', m:'sound', lv:2, stem:'某人对着山崖大喊，2 s 后听到回声（15℃ 空气），人与山崖的距离约为（　）', opts:['170 m','340 m','680 m','680 m/s'], ans:1, exp:'声音走了往返路程，s = vt/2 = 340 m/s × 2 s ÷ 2 = 340 m。若忘记除以 2 会误选 680 m。' },
+
+  /* 光学 8 */
+  { id:'q7', m:'light', lv:1, stem:'下列现象中，由光的直线传播形成的是（　）', opts:['水中筷子看起来变弯','平面镜中的像','小孔成像','彩虹'], ans:2, exp:'小孔成像是光沿直线传播的结果，成倒立实像。筷子变弯和彩虹属于折射/色散，平面镜成像属于反射。' },
+  { id:'q8', m:'light', lv:2, stem:'人逐渐走近竖直放置的平面镜时，他在镜中像的大小将（　）', opts:['变大','变小','不变','先变大后变小'], ans:2, exp:'平面镜成的像始终与物体等大，与距离无关。感觉「变大」是因为视角变大，像的实际大小不变。' },
+  { id:'q9', m:'light', lv:2, stem:'一束光与平面镜镜面成 30° 角入射，则反射角为（　）', opts:['30°','60°','90°','120°'], ans:1, exp:'入射角是入射光线与法线的夹角 = 90°−30° = 60°，反射角等于入射角，也是 60°。反射光线与入射光线夹角为 120°。' },
+  { id:'q10', m:'light', lv:2, stem:'光从空气斜射入水中时，下列说法正确的是（　）', opts:['折射角大于入射角','折射角小于入射角','传播方向一定不变','折射角等于入射角'], ans:1, exp:'光从空气（光疏）斜射入水（光密），向法线偏折，折射角小于入射角。垂直入射时方向才不变。' },
+  { id:'q11', m:'light', lv:2, stem:'人在岸上看水中的鱼，看到的是鱼的（　）', opts:['实像，位置比实际深','虚像，位置比实际浅','虚像，位置比实际深','实像，位置不变'], ans:1, exp:'鱼反射的光由水进入空气发生折射，人眼逆着折射光线看去，看到的是位置偏高（变浅）的虚像，所以叉鱼要瞄准更深处。' },
+  { id:'q12', m:'light', lv:2, stem:'物体位于凸透镜 2 倍焦距以外时，成的像是（　）', opts:['倒立、缩小的实像','倒立、放大的实像','正立、放大的虚像','正立、等大的虚像'], ans:0, exp:'u > 2f 时成倒立、缩小的实像，应用是照相机；f < u < 2f 成倒立放大实像（投影仪）；u < f 成正立放大虚像（放大镜）。' },
+  { id:'q13', m:'light', lv:3, stem:'物体从距凸透镜较远处向透镜靠近（始终大于焦距），则像和像距的变化是（　）', opts:['像变小，像距变小','像变大，像距变大','像变大，像距变小','像不变，像距不变'], ans:1, exp:'成实像时遵循「物近像远像变大」：物距减小，像距增大，像也变大。' },
+  { id:'q14', m:'light', lv:2, stem:'近视眼成像位置和矫正方法是（　）', opts:['像成在视网膜后，用凸透镜','像成在视网膜前，用凹透镜','像成在视网膜前，用凸透镜','像成在视网膜后，用凹透镜'], ans:1, exp:'近视眼晶状体折光能力太强或眼球前后径过长，像成在视网膜前，需用对光有发散作用的凹透镜矫正。' },
+  { id:'q15', m:'light', lv:2, stem:'电视遥控器使用的、以及验钞机使用的分别是（　）', opts:['紫外线、红外线','红外线、紫外线','都是红外线','都是紫外线'], ans:1, exp:'遥控器利用红外线（热效应、可遥控），验钞机利用紫外线能使荧光物质发光。' },
+
+  /* 热学 8 */
+  { id:'q16', m:'thermal', lv:1, stem:'关于温度计的使用，下列做法正确的是（　）', opts:['玻璃泡碰到容器底','读数时把温度计取出液体','待示数稳定后再读数','视线与液柱上表面成 45°'], ans:2, exp:'玻璃泡要全部浸入且不碰底和壁；读数时不能离开被测液体；视线应与液柱上表面相平；必须等示数稳定。' },
+  { id:'q17', m:'thermal', lv:2, stem:'晶体在熔化过程中（　）', opts:['温度升高，内能不变','温度不变，内能增加','温度不变，内能不变','温度降低，内能减少'], ans:1, exp:'晶体熔化时温度保持在熔点不变，但需要持续吸热，因此内能增加，物质处于固液共存态。' },
+  { id:'q18', m:'thermal', lv:1, stem:'夏天在地上洒水感觉凉快，主要是因为（　）', opts:['水的温度低','水蒸发吸热','水液化放热','水的比热容大'], ans:1, exp:'水蒸发（汽化）时从周围吸收热量，有致冷作用。扇扇子也是加快汗液蒸发吸热，并不降低气温。' },
+  { id:'q19', m:'thermal', lv:2, stem:'冬天嘴里呼出的「白气」，其形成过程和物态变化是（　）', opts:['水蒸气，汽化','小水滴，液化','小冰晶，凝华','小水滴，熔化'], ans:1, exp:'水蒸气无色透明不可见；呼出的水蒸气遇冷液化成小水滴悬浮在空中，才形成可见的「白气」。' },
+  { id:'q20', m:'thermal', lv:2, stem:'下列现象中属于凝华的是（　）', opts:['露水的形成','雾的形成','霜的形成','冰化成水'], ans:2, exp:'霜、雾凇、窗上的冰花是水蒸气直接变成小冰晶，属于凝华（放热）；露和雾是液化，冰化水是熔化。' },
+  { id:'q21', m:'thermal', lv:2, stem:'水沸腾时，下列说法正确的是（　）', opts:['气泡上升变小','温度不断升高','继续吸热但温度不变','不需要继续吸热'], ans:2, exp:'沸腾是在沸点下内部和表面同时剧烈汽化，气泡上升变大；沸腾时温度保持不变，但必须继续吸热。' },
+  { id:'q22', m:'thermal', lv:2, stem:'沿海地区昼夜温差比内陆小，主要原因是（　）', opts:['水的密度大','水的比热容大','水的沸点高','海水会流动'], ans:1, exp:'水的比热容大，在吸收或放出相同热量时温度变化小，因此对气温有调节作用，也是汽车用水作冷却剂的原因。' },
+  { id:'q23', m:'thermal', lv:3, stem:'2 kg 水温度从 20℃ 升高到 70℃，吸收的热量是 [c水=4.2×10³ J/(kg·℃)]（　）', opts:['4.2×10⁴ J','1.68×10⁵ J','4.2×10⁵ J','8.4×10⁵ J'], ans:2, exp:'Q = cmΔt = 4.2×10³ × 2 × (70−20) = 4.2×10⁵ J。注意 Δt 是温度变化量 50℃，不是 70℃。' },
+  { id:'q24', m:'thermal', lv:2, stem:'下列改变物体内能的方式中，属于做功的是（　）', opts:['用热水袋暖手','阳光晒热棉被','反复弯折铁丝发热','把冰块放入饮料'], ans:2, exp:'弯折铁丝是克服摩擦/形变做功，机械能转化为内能；其余三项都是热传递（能量的转移）。' },
+
+  /* 力学 12 */
+  { id:'q25', m:'mechanics', lv:1, stem:'把一块铁从地球带到月球，不发生变化的物理量是（　）', opts:['质量','重力','密度','质量和密度'], ans:3, exp:'质量是物体属性，与位置无关；密度是物质特性，也不变。重力因月球 g 较小而变小（约为地球的 1/6）。' },
+  { id:'q26', m:'mechanics', lv:2, stem:'一瓶矿泉水喝掉一半后，剩下水的密度（　）', opts:['变为原来的一半','变为原来的 2 倍','不变','无法判断'], ans:2, exp:'密度是物质的特性，质量和体积同比例减半，比值 ρ = m/V 保持不变。' },
+  { id:'q27', m:'mechanics', lv:2, stem:'关于惯性，下列说法正确的是（　）', opts:['运动越快的物体惯性越大','静止的物体没有惯性','惯性大小只与质量有关','惯性是一种力'], ans:2, exp:'一切物体在任何状态下都有惯性，惯性大小只由质量决定，与速度、受力无关；惯性不是力，不能说「受到惯性」。' },
+  { id:'q28', m:'mechanics', lv:2, stem:'书静止在水平桌面上，下列属于一对平衡力的是（　）', opts:['书受到的重力与书对桌面的压力','书受到的重力与桌面对书的支持力','书对桌面的压力与桌面对书的支持力','书受到的重力与桌面受到的重力'], ans:1, exp:'平衡力必须作用在同一物体上：重力与支持力都作用在书上，等大反向共线。C 是一对相互作用力，分别作用在桌面和书上。' },
+  { id:'q29', m:'mechanics', lv:1, stem:'下列实例中，为了增大压强的是（　）', opts:['书包背带做得较宽','铁轨铺在枕木上','菜刀刀刃磨得很薄','滑雪板做得宽大'], ans:2, exp:'刀刃磨薄是减小受力面积来增大压强；其余三项都是增大受力面积来减小压强。' },
+  { id:'q30', m:'mechanics', lv:2, stem:'关于液体压强，下列说法正确的是（　）', opts:['与容器形状有关','与液体总重有关','只与液体密度和深度有关','越深处压强越小'], ans:2, exp:'p = ρgh，液体压强只与密度和该点到自由液面的竖直深度有关，与容器形状、液体总量无关；越深压强越大。' },
+  { id:'q31', m:'mechanics', lv:2, stem:'用吸管把饮料吸进嘴里，主要利用了（　）', opts:['嘴的吸力','大气压','液体压强','浮力'], ans:1, exp:'吸气使管内气压减小，外界大气压把饮料压入管内。钢笔吸墨水、吸盘挂钩同理。' },
+  { id:'q32', m:'mechanics', lv:2, stem:'列车进站时人要站在安全线以外，因为列车高速通过时（　）', opts:['车速大，人与车之间空气流速大、压强小','车速大，人与车之间压强大','空气不流动','列车有吸引力'], ans:0, exp:'流体流速越大的位置压强越小，人与车之间空气流速大压强小，外侧较大的气压会把人推向列车。' },
+  { id:'q33', m:'mechanics', lv:2, stem:'一个物体完全浸没在水中后继续下沉（未触底），它受到的浮力（　）', opts:['变大','变小','不变','先变大后变小'], ans:2, exp:'完全浸没后 V排 不变，水的密度不变，由 F浮=ρ液gV排 可知浮力不变；变化的是液体压强随深度增大。' },
+  { id:'q34', m:'mechanics', lv:3, stem:'轮船从长江驶入大海（始终漂浮），它受到的浮力和吃水深度（　）', opts:['浮力变大，吃水变深','浮力不变，吃水变浅','浮力变小，吃水变浅','浮力不变，吃水变深'], ans:1, exp:'漂浮时 F浮 = G 始终不变；海水密度大于江水，由 V排=F浮/(ρ液g) 可知 V排 变小，船会上浮一些、吃水变浅。' },
+  { id:'q35', m:'mechanics', lv:2, stem:'下列工具中，属于费力杠杆的是（　）', opts:['开瓶扳手','老虎钳','镊子','撬棒'], ans:2, exp:'镊子动力臂小于阻力臂，是费力杠杆但省距离；开瓶器、老虎钳、撬棒都是省力杠杆。' },
+  { id:'q36', m:'mechanics', lv:2, stem:'关于功和功率，下列说法正确的是（　）', opts:['做功越多，功率一定越大','功率越大，做功越快','机械效率越高，功率越大','用力推石头没推动，也做了功'], ans:1, exp:'功率表示做功快慢，P = W/t，做功多但时间很长功率未必大；机械效率与功率无必然关系；有力无距离不做功。' },
+  { id:'q37', m:'mechanics', lv:3, stem:'用滑轮组把 100 N 的物体匀速提升 2 m，拉力做功 250 J，该滑轮组的机械效率是（　）', opts:['40%','50%','80%','125%'], ans:2, exp:'W有 = Gh = 100×2 = 200 J，W总 = 250 J，η = 200/250×100% = 80%。机械效率恒小于 100%。' },
+
+  /* 电学 11 */
+  { id:'q38', m:'electricity', lv:1, stem:'关于电流表的使用，下列说法正确的是（　）', opts:['与被测用电器并联','可以直接接在电源两极','必须串联在被测电路中','电流从「−」接线柱流入'], ans:2, exp:'电流表必须串联，电流「+」进「−」出，不能超过量程，绝不允许不经过用电器直接接到电源两极（会短路烧表）。' },
+  { id:'q39', m:'electricity', lv:1, stem:'关于电压表的使用，下列说法正确的是（　）', opts:['必须串联在电路中','必须并联在被测电路两端','不能直接接电源两极','电流从「−」接线柱流入'], ans:1, exp:'电压表并联在被测电路两端，可直接接在电源两极测电源电压，同样要「+」进「−」出、不超量程。' },
+  { id:'q40', m:'electricity', lv:1, stem:'串联电路中，各处电流的关系是（　）', opts:['越靠近正极越大','各处相等','与电阻成正比','与电阻成反比'], ans:1, exp:'串联电路只有一条电流路径，I = I₁ = I₂ = …；并联电路干路电流等于各支路电流之和。' },
+  { id:'q41', m:'electricity', lv:2, stem:'关于电阻，下列说法正确的是（　）', opts:['导体电阻与电压成正比','导体电阻与电流成反比','电阻是导体本身的属性','电压为 0 时电阻也为 0'], ans:2, exp:'电阻由材料、长度、横截面积和温度决定，与所加电压、通过的电流无关。R = U/I 只是计算式，不是决定式。' },
+  { id:'q42', m:'electricity', lv:2, stem:'滑动变阻器改变电阻的原理是改变接入电路中电阻丝的（　）', opts:['材料','长度','横截面积','温度'], ans:1, exp:'滑片移动改变接入电路电阻丝的长度从而改变电阻；接线要「一上一下」，闭合开关前调到阻值最大处保护电路。' },
+  { id:'q43', m:'electricity', lv:2, stem:'某导体两端电压为 6 V 时通过的电流为 0.3 A，若电压变为 3 V，则电流和电阻分别为（　）', opts:['0.15 A，10 Ω','0.15 A，20 Ω','0.6 A，20 Ω','0.3 A，20 Ω'], ans:1, exp:'R = U/I = 6/0.3 = 20 Ω，电阻不变；电压减半则 I = 3/20 = 0.15 A。' },
+  { id:'q44', m:'electricity', lv:2, stem:'R₁=10 Ω 与 R₂=20 Ω 串联接在 6 V 电源上，R₂ 两端电压为（　）', opts:['2 V','3 V','4 V','6 V'], ans:2, exp:'串联总电阻 30 Ω，I = 6/30 = 0.2 A，U₂ = IR₂ = 0.2×20 = 4 V（U₁ = 2 V）；串联分压与电阻成正比。' },
+  { id:'q45', m:'electricity', lv:2, stem:'两个电阻并联后的总电阻（　）', opts:['大于其中任一个','小于其中任一个','等于两者之和','等于两者之差'], ans:1, exp:'并联相当于增大导体横截面积，总电阻变小且小于任一支路电阻；两个 10 Ω 并联为 5 Ω。' },
+  { id:'q46', m:'electricity', lv:3, stem:'标有「220 V 100 W」的灯泡接在 110 V 电路中（灯丝电阻不变），实际功率为（　）', opts:['100 W','50 W','25 W','200 W'], ans:2, exp:'P实/P额 = (U实/U额)² = (110/220)² = 1/4，故 P实 = 25 W。灯泡亮度由实际功率决定。' },
+  { id:'q47', m:'electricity', lv:2, stem:'焦耳定律 Q = I²Rt 说明，电流产生的热量（　）', opts:['与电流成正比','与电流的平方成正比','与电阻成反比','与时间成反比'], ans:1, exp:'热量与电流的平方、电阻、通电时间成正比。所以电流增大为 2 倍，相同时间内产生的热量变为 4 倍。' },
+  { id:'q48', m:'electricity', lv:2, stem:'关于家庭电路，下列做法正确的是（　）', opts:['开关接在零线上','各用电器串联','三孔插座上孔接地线','用铜丝代替保险丝'], ans:2, exp:'三孔插座「左零右火上接地」；开关必须接火线，各用电器并联，保险丝不能用铜丝铁丝代替（熔点太高起不到保护作用）。' },
+  { id:'q49', m:'electricity', lv:3, stem:'串联电路中滑动变阻器阻值调大时（电源电压不变），下列说法正确的是（　）', opts:['电流表示数变大，定值电阻两端电压变大','电流表示数变小，定值电阻两端电压变小','电流表示数变小，定值电阻两端电压变大','电流表示数不变'], ans:1, exp:'总电阻变大 → I = U/R 变小 → 定值电阻 U = IR 变小；滑变两端电压因总电压不变而变大（串联分压）。' },
+
+  /* 磁与能源 5+ */
+  { id:'q50', m:'magnetism', lv:1, stem:'关于磁感线，下列说法正确的是（　）', opts:['磁感线是真实存在的','磁体外部磁感线从 N 极到 S 极','磁感线可以相交','磁感线越疏磁场越强'], ans:1, exp:'磁感线是为描述磁场而假想的曲线，并不真实存在；外部从 N 到 S、内部从 S 到 N 构成闭合曲线且不相交；越密磁场越强。' },
+  { id:'q51', m:'magnetism', lv:2, stem:'奥斯特实验说明了（　）', opts:['磁能生电','电流周围存在磁场','磁场对电流有力的作用','通电导体在磁场中运动'], ans:1, exp:'奥斯特发现通电导线使附近小磁针偏转，说明电流周围存在磁场（电流的磁效应），且方向与电流方向有关。' },
+  { id:'q52', m:'magnetism', lv:2, stem:'发电机和电动机的工作原理分别是（　）', opts:['都是电磁感应','电磁感应、磁场对通电导线有力的作用','磁场对通电导线有力的作用、电磁感应','都是电流的磁效应'], ans:1, exp:'发电机把机械能转化为电能，原理是电磁感应；电动机把电能转化为机械能，原理是通电导体在磁场中受力。' },
+  { id:'q53', m:'magnetism', lv:2, stem:'闭合电路的一部分导体在磁场中运动，一定能产生感应电流的情况是（　）', opts:['沿磁感线方向运动','静止不动','做切割磁感线运动','只要导体在磁场中'], ans:2, exp:'产生感应电流需同时满足：闭合电路、一部分导体、做切割磁感线运动。沿磁感线方向运动不切割，无感应电流。' },
+  { id:'q54', m:'magnetism', lv:2, stem:'下列能源中，属于可再生能源的是（　）', opts:['煤','石油','天然气','风能'], ans:3, exp:'风能、水能、太阳能、生物质能、地热能、潮汐能可在自然界不断得到补充；煤、石油、天然气和核燃料不可再生。' },
+  { id:'q55', m:'magnetism', lv:2, stem:'核电站发电过程中的能量转化顺序是（　）', opts:['核能→电能→机械能','核能→内能→机械能→电能','化学能→内能→电能','机械能→核能→电能'], ans:1, exp:'核裂变释放核能加热水成高温蒸汽（内能），推动汽轮机（机械能），带动发电机输出电能。' },
+  { id:'q56', m:'magnetism', lv:2, stem:'关于能量守恒定律，下列说法正确的是（　）', opts:['能量可以凭空产生','能量会凭空消失','能量只能转化或转移，总量不变','既然守恒就不必节约能源'], ans:2, exp:'能量既不会凭空产生也不会凭空消灭，只能转化或转移且总量守恒；但转化有方向性、可利用能量品质下降，所以仍需节能。' }
+];
+
+/* ============================================================
+   物理小课 · 图形层：图标 / 示意图 / 交互实验绘图
+   ============================================================ */
+
+/* ---------------- 线性图标 ---------------- */
+const ICONS = {
+  home:'<path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  book:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 17.5h16"/><path d="M8 7h8M8 11h6"/>',
+  flask:'<path d="M9 2h6M10 2v6L4.5 18a2 2 0 0 0 1.7 3h11.6a2 2 0 0 0 1.7-3L14 8V2"/><path d="M7.5 14h9"/><circle cx="11" cy="17" r=".7" fill="currentColor" stroke="none"/><circle cx="14" cy="18" r=".5" fill="currentColor" stroke="none"/>',
+  quiz:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3.5V2h6v1.5M8 9h8M8 13h8M8 17h5"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>',
+  back:'<path d="M15 5l-7 7 7 7"/>',
+  arrow:'<path d="M9 5l7 7-7 7"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+  star:'<path d="m12 2.8 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/>',
+  check:'<path d="m4 12.5 5.2 5.2L20 7"/>',
+  refresh:'<path d="M20 11a8 8 0 1 0-2.3 6.4"/><path d="M20 4v7h-7"/>',
+  fire:'<path d="M12 22a7 7 0 0 0 7-7c0-4-3-6-4-9-1 2-2 2.5-3 3 0-3-2-5-3-6 0 4-4 6-4 12a7 7 0 0 0 7 7z"/>',
+  wrong:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',
+  formula:'<path d="M6 3h12l-6 8 6 10H6"/><path d="M4 12h5"/>',
+  chart:'<path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>',
+  play:'<path d="M7 4.5 19 12 7 19.5z"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>',
+  bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 1.9V16h5.2v-.2c0-.7.3-1.4.9-1.9A6 6 0 0 0 12 3z"/>',
+  sound:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 0 1 0 6M19.5 6.5a7.5 7.5 0 0 1 0 11"/>',
+  light:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  thermal:'<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 10v6"/>',
+  mechanics:'<path d="M3 18h18M12 18v-3M6 15h12"/><path d="M6 15 4 8h4zM18 15l-2-7h4z"/>',
+  electricity:'<path d="M13 2 5 13h6l-1 9 8-12h-6z"/>',
+  magnetism:'<path d="M6 4v8a6 6 0 0 0 12 0V4h-4v8a2 2 0 0 1-4 0V4z"/><path d="M6 7h4M14 7h4"/>',
+  close:'<path d="M6 6l12 12M18 6 6 18"/>'
+};
+function icon(name){
+  return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------------- SVG 公共片段 ---------------- */
+const SVG_DEF = '<defs>' +
+  '<marker id="arwP" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#4F46E5"/></marker>' +
+  '<marker id="arwO" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#F59E0B"/></marker>' +
+  '<marker id="arwG" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#10B981"/></marker>' +
+  '<marker id="arwR" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#EF4444"/></marker>' +
+  '<marker id="arwS" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#94A3B8"/></marker>' +
+  '</defs>';
+function svgBox(inner, h){
+  h = h || 170;
+  return '<svg viewBox="0 0 320 ' + h + '" xmlns="http://www.w3.org/2000/svg" style="font-family:-apple-system,PingFang SC,Microsoft YaHei,sans-serif">' + SVG_DEF + inner + '</svg>';
+}
+function txt(x, y, s, opt){
+  opt = opt || {};
+  return '<text x="' + x + '" y="' + y + '" font-size="' + (opt.size || 11) + '" fill="' + (opt.fill || '#64748B') + '"' +
+    (opt.anchor ? ' text-anchor="' + opt.anchor + '"' : '') +
+    (opt.bold ? ' font-weight="700"' : '') + '>' + s + '</text>';
+}
+function line(x1, y1, x2, y2, opt){
+  opt = opt || {};
+  return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + (opt.c || '#475569') +
+    '" stroke-width="' + (opt.w || 1.6) + '"' +
+    (opt.opacity ? ' opacity="' + opt.opacity + '"' : '') +
+    (opt.dash ? ' stroke-dasharray="' + opt.dash + '"' : '') +
+    (opt.marker ? ' marker-end="url(#' + opt.marker + ')"' : '') + '/>';
+}
+
+/* ---------------- 知识点示意图 ---------------- */
+const DIAGRAMS = {
+  sound_wave: () => svgBox(
+    // 音叉
+    '<path d="M46 40 v55 M64 40 v55 M55 95 v28" stroke="#4F46E5" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+    '<path d="M40 34 q15 -9 30 0" stroke="#4F46E5" stroke-width="3" fill="none"/>' +
+    txt(55, 145, '音叉振动发声', {anchor:'middle', size:10}) +
+    // 疏密相间的空气分子
+    (function(){
+      let s = '';
+      const groups = [[112,4],[128,7],[146,11],[168,11],[190,7],[208,4],[228,9],[250,9]];
+      groups.forEach(g => {
+        for(let i=0;i<g[1];i++){
+          const y = 36 + i * (100 / Math.max(g[1]-1,1));
+          s += '<circle cx="' + g[0] + '" cy="' + y.toFixed(1) + '" r="2.6" fill="#7C9CC4" opacity=".8"/>';
+        }
+      });
+      return s;
+    })() +
+    line(100, 26, 285, 26, {c:'#F59E0B', w:2, marker:'arwO'}) +
+    txt(192, 20, '声波向远处传播', {anchor:'middle', fill:'#D97706', size:10}) +
+    txt(192, 158, '真空不能传声 · 传播需要介质', {anchor:'middle', size:10, fill:'#94A3B8'})
+  ),
+
+  pinhole: () => svgBox(
+    // 屏障
+    '<rect x="154" y="18" width="8" height="60" fill="#CBD5E1"/>' +
+    '<rect x="154" y="98" width="8" height="58" fill="#CBD5E1"/>' +
+    txt(158, 14, '小孔', {anchor:'middle', size:10}) +
+    // 左侧物体（向上箭头）
+    line(65, 120, 65, 45, {c:'#EF4444', w:3, marker:'arwR'}) +
+    txt(65, 136, '物体', {anchor:'middle', size:10, fill:'#EF4444'}) +
+    // 光线：物体顶端的光穿过小孔后到达光屏下部，底端的光到达上部
+    line(65, 45, 158, 88, {c:'#F59E0B', w:1.5}) +
+    line(158, 88, 280, 144, {c:'#F59E0B', w:1.5}) +
+    line(65, 120, 158, 88, {c:'#F59E0B', w:1.5, dash:'5 4'}) +
+    line(158, 88, 280, 46, {c:'#F59E0B', w:1.5, dash:'5 4'}) +
+    // 右侧倒立像
+    '<rect x="278" y="20" width="4" height="140" fill="#CBD5E1"/>' +
+    line(268, 46, 268, 144, {c:'#4F46E5', w:3, marker:'arwP'}) +
+    txt(268, 160, '倒立实像', {anchor:'middle', size:10, fill:'#4F46E5'}) +
+    txt(160, 165, '像的形状与孔的形状无关', {anchor:'middle', size:9.5, fill:'#94A3B8'})
+  ),
+
+  reflection: () => svgBox(
+    // 镜面
+    line(20, 128, 300, 128, {c:'#475569', w:2.5}) +
+    (function(){let s='';for(let x=25;x<300;x+=12)s+=line(x,128,x-7,138,{c:'#CBD5E1',w:1.2});return s;})() +
+    // 法线
+    line(160, 18, 160, 150, {c:'#94A3B8', w:1.4, dash:'5 5'}) +
+    txt(165, 26, '法线', {size:10}) +
+    // 入射与反射
+    line(72, 28, 160, 128, {c:'#F59E0B', w:2.2, marker:'arwO'}) +
+    line(160, 128, 248, 28, {c:'#4F46E5', w:2.2, marker:'arwP'}) +
+    // 角弧
+    '<path d="M160 96 A32 32 0 0 0 141 104" stroke="#F59E0B" stroke-width="1.5" fill="none"/>' +
+    '<path d="M160 96 A32 32 0 0 1 179 104" stroke="#4F46E5" stroke-width="1.5" fill="none"/>' +
+    txt(140, 92, 'i', {size:12, fill:'#D97706', bold:true}) +
+    txt(178, 92, 'r', {size:12, fill:'#4F46E5', bold:true}) +
+    txt(60, 22, '入射光线', {size:10, fill:'#D97706'}) +
+    txt(238, 22, '反射光线', {size:10, fill:'#4F46E5'}) +
+    txt(160, 160, '反射角 = 入射角（都是与法线的夹角）', {anchor:'middle', size:10.5, fill:'#334155', bold:true})
+  ),
+
+  refraction: () => svgBox(
+    '<rect x="20" y="90" width="280" height="70" fill="#DBF0FB" opacity=".75"/>' +
+    line(20, 90, 300, 90, {c:'#0284C7', w:2}) +
+    txt(30, 40, '空气', {size:11, fill:'#64748B'}) +
+    txt(30, 150, '水', {size:11, fill:'#0284C7', bold:true}) +
+    line(160, 12, 160, 160, {c:'#94A3B8', w:1.4, dash:'5 5'}) +
+    line(88, 20, 160, 90, {c:'#F59E0B', w:2.2, marker:'arwO'}) +
+    line(160, 90, 210, 158, {c:'#4F46E5', w:2.2, marker:'arwP'}) +
+    line(160, 90, 232, 20, {c:'#CBD5E1', w:1.5, dash:'5 4'}) +
+    txt(238, 20, '原方向', {size:9, fill:'#94A3B8'}) +
+    txt(196, 106, 'r', {size:12, fill:'#4F46E5', bold:true}) +
+    txt(146, 76, 'i', {size:12, fill:'#D97706', bold:true}) +
+    txt(160, 12, '法线', {anchor:'middle', size:10}) +
+    txt(160, 168, '空气 → 水：折射角 r < 入射角 i（向法线偏折）', {anchor:'middle', size:10, fill:'#334155', bold:true})
+  ),
+
+  lens: () => svgBox(
+    // 主轴
+    line(20, 100, 300, 100, {c:'#94A3B8', w:1.3, dash:'6 4'}) +
+    // 凸透镜
+    '<path d="M158 34 Q172 100 158 166 Q144 100 158 34 Z" fill="#C7D7FE" stroke="#4F46E5" stroke-width="1.8" opacity=".9"/>' +
+    // 焦点标注
+    '<path d="M110 95 v10 M206 95 v10 M62 95 v10 M254 95 v10" stroke="#94A3B8" stroke-width="1.5"/>' +
+    txt(110, 117, 'F', {anchor:'middle', size:10}) +
+    txt(206, 117, 'F', {anchor:'middle', size:10}) +
+    txt(62, 117, '2F', {anchor:'middle', size:10}) +
+    txt(254, 117, '2F', {anchor:'middle', size:10}) +
+    // 物体（2F 之外）
+    line(42, 100, 42, 52, {c:'#EF4444', w:3, marker:'arwR'}) +
+    txt(42, 44, '物体', {anchor:'middle', size:10, fill:'#EF4444'}) +
+    // 两条典型光线
+    line(42, 52, 158, 52, {c:'#F59E0B', w:1.4}) +
+    line(158, 52, 240, 134, {c:'#F59E0B', w:1.4}) +
+    line(42, 52, 240, 134, {c:'#10B981', w:1.4, dash:'5 4'}) +
+    // 像（倒立缩小，位于 F 与 2F 之间）
+    line(240, 100, 240, 134, {c:'#4F46E5', w:3, marker:'arwP'}) +
+    txt(240, 150, '倒立缩小实像', {anchor:'middle', size:10, fill:'#4F46E5', bold:true}) +
+    txt(160, 168, 'u > 2f：照相机原理 · 物近像远像变大', {anchor:'middle', size:10, fill:'#334155'})
+  ),
+
+  melting: () => svgBox(
+    // 坐标轴
+    line(40, 145, 300, 145, {c:'#475569', w:1.6, marker:'arwS'}) +
+    line(40, 145, 40, 18, {c:'#475569', w:1.6, marker:'arwS'}) +
+    txt(300, 160, '时间', {anchor:'end', size:10}) +
+    txt(12, 24, '温度', {size:10}) +
+    // 水平熔点线
+    line(40, 88, 285, 88, {c:'#CBD5E1', w:1.2, dash:'4 4'}) +
+    txt(38, 84, '熔点', {anchor:'end', size:10, fill:'#EF4444'}) +
+    // 折线
+    '<polyline points="45,132 90,88 190,88 250,42" fill="none" stroke="#4F46E5" stroke-width="2.8" stroke-linejoin="round"/>' +
+    txt(62, 122, '固态升温', {size:9.5, fill:'#64748B'}) +
+    txt(112, 80, '熔化：吸热但温度不变', {size:9.5, fill:'#D97706', bold:true}) +
+    txt(212, 38, '液态升温', {size:9.5, fill:'#64748B'}) +
+    txt(140, 106, '固液共存 · 内能持续增大', {anchor:'middle', size:9.5, fill:'#4F46E5'}) +
+    txt(160, 174, '晶体有固定熔点，非晶体没有水平段', {anchor:'middle', size:10, fill:'#334155'})
+  , 182),
+
+  heat: () => svgBox(
+    line(40, 145, 300, 145, {c:'#475569', w:1.6, marker:'arwS'}) +
+    line(40, 145, 40, 20, {c:'#475569', w:1.6, marker:'arwS'}) +
+    txt(302, 160, '加热时间', {anchor:'end', size:10}) +
+    txt(12, 26, '温度', {size:10}) +
+    // 两条升温曲线
+    '<polyline points="45,132 120,112 195,94 270,76" fill="none" stroke="#4F46E5" stroke-width="2.6"/>' +
+    '<polyline points="45,132 120,92 195,54 270,26" fill="none" stroke="#EF6A5B" stroke-width="2.6"/>' +
+    txt(232, 88, '水（c 大）', {size:10, fill:'#4F46E5', bold:true}) +
+    txt(228, 34, '油（c 小）', {size:10, fill:'#EF6A5B', bold:true}) +
+    txt(160, 174, '等质量、吸收相同热量：c 越大，升温越慢', {anchor:'middle', size:10, fill:'#334155'})
+  , 182),
+
+  pressure: () => svgBox(
+    // 容器与水
+    '<path d="M80 22 h150 v132 h-150 Z" fill="#E8F5FD" stroke="#475569" stroke-width="2"/>' +
+    '<rect x="81" y="45" width="148" height="108" fill="#BFE4F8"/>' +
+    line(81,45,229,45,{c:'#0284C7',w:1.6}) +
+    txt(120, 38, '水面', {anchor:'middle', size:10, fill:'#0284C7'}) +
+    // 三个小孔与水柱
+    '<circle cx="230" cy="70" r="3" fill="#0284C7"/><circle cx="230" cy="105" r="3" fill="#0284C7"/><circle cx="230" cy="140" r="3" fill="#0284C7"/>' +
+    // 越深处压强越大，水喷得越远
+    '<path d="M233 70 Q248 84 262 154" fill="none" stroke="#38BDF8" stroke-width="2.4"/>' +
+    '<path d="M233 105 Q266 114 286 154" fill="none" stroke="#38BDF8" stroke-width="2.4"/>' +
+    '<path d="M233 140 Q278 144 306 154" fill="none" stroke="#38BDF8" stroke-width="2.4" marker-end="url(#arwP)"/>' +
+    txt(242, 62, 'h₁', {size:9.5}) + txt(242, 98, 'h₂', {size:9.5}) + txt(242, 133, 'h₃', {size:9.5}) +
+    txt(160, 174, '深度越大，p = ρgh 越大，水喷得越远', {anchor:'middle', size:10, fill:'#334155'})
+  , 182),
+
+  buoyancy: () => svgBox(
+    '<path d="M70 30 h180 v120 h-180" fill="#DBF0FB" stroke="#475569" stroke-width="2"/>' +
+    '<rect x="71" y="45" width="178" height="104" fill="#BFE4F8" opacity=".8"/>' +
+    '<rect x="130" y="72" width="60" height="52" fill="#C7D7FE" stroke="#4F46E5" stroke-width="2" rx="3"/>' +
+    txt(160, 104, '物体', {anchor:'middle', size:11, fill:'#4F46E5', bold:true}) +
+    line(160, 72, 160, 22, {c:'#10B981', w:2.6, marker:'arwG'}) +
+    txt(166, 20, 'F浮', {size:11, fill:'#059669', bold:true}) +
+    line(160, 124, 160, 168, {c:'#EF4444', w:2.6, marker:'arwR'}) +
+    txt(166, 166, 'G', {size:11, fill:'#DC2626', bold:true}) +
+    txt(160, 182, 'F浮 = ρ液 g V排　·　浸没时浮力与深度无关', {anchor:'middle', size:10.5, fill:'#334155'})
+  , 190),
+
+  lever: () => svgBox(
+    // 杠杆
+    '<rect x="35" y="92" width="250" height="9" rx="4" fill="#CBD5E1" stroke="#94A3B8"/>' +
+    // 支点
+    '<path d="M150 101 L138 126 L162 126 Z" fill="#94A3B8"/>' +
+    line(120, 132, 180, 132, {c:'#475569', w:1.5}) +
+    txt(150, 146, '支点 O', {anchor:'middle', size:10}) +
+    // 力
+    line(60, 30, 60, 90, {c:'#EF4444', w:2.6, marker:'arwR'}) +
+    txt(60, 24, 'F₁', {anchor:'middle', size:12, fill:'#DC2626', bold:true}) +
+    line(260, 30, 260, 90, {c:'#4F46E5', w:2.6, marker:'arwP'}) +
+    txt(260, 24, 'F₂', {anchor:'middle', size:12, fill:'#4F46E5', bold:true}) +
+    // 力臂
+    line(60, 60, 150, 60, {c:'#F59E0B', w:1.5, dash:'4 3'}) +
+    line(150, 60, 260, 60, {c:'#F59E0B', w:1.5, dash:'4 3'}) +
+    txt(105, 55, 'l₁', {anchor:'middle', size:11, fill:'#D97706', bold:true}) +
+    txt(205, 55, 'l₂', {anchor:'middle', size:11, fill:'#D97706', bold:true}) +
+    txt(160, 166, '杠杆平衡：F₁l₁ = F₂l₂　力臂是到作用线的垂直距离', {anchor:'middle', size:10, fill:'#334155'})
+  ),
+
+  circuit_series: () => svgBox(
+    // 回路
+    '<path d="M50 45 H270 V140 H50 V105" fill="none" stroke="#475569" stroke-width="2.2"/>' +
+    // 电源（左竖线）
+    line(50, 108, 50, 88, {c:'#475569', w:2.2}) +
+    line(38, 84, 62, 84, {c:'#EF4444', w:2.6}) +
+    line(42, 96, 58, 96, {c:'#475569', w:2.6}) +
+    txt(26, 88, '电源', {size:10}) +
+    // 开关
+    line(92, 45, 112, 45, {c:'#475569', w:2.2}) +
+    line(112, 45, 132, 32, {c:'#4F46E5', w:2.2}) +
+    '<circle cx="112" cy="45" r="2.6" fill="#4F46E5"/><circle cx="136" cy="45" r="2.6" fill="#4F46E5"/>' +
+    txt(112, 24, '开关', {anchor:'middle', size:10}) +
+    // 电阻 R1 R2
+    '<rect x="152" y="36" width="40" height="18" fill="#EEF0FF" stroke="#4F46E5" stroke-width="1.8"/>' +
+    '<rect x="212" y="36" width="40" height="18" fill="#EEF0FF" stroke="#4F46E5" stroke-width="1.8"/>' +
+    txt(172, 32, 'R₁', {anchor:'middle', size:10}) + txt(232, 32, 'R₂', {anchor:'middle', size:10}) +
+    // 电流表
+    '<circle cx="160" cy="140" r="15" fill="#FFF6E5" stroke="#F59E0B" stroke-width="2"/>' +
+    txt(160, 145, 'A', {anchor:'middle', size:13, fill:'#D97706', bold:true}) +
+    // 电流方向
+    line(70, 60, 100, 60, {c:'#10B981', w:2, marker:'arwG'}) +
+    txt(85, 54, 'I', {anchor:'middle', size:11, fill:'#059669', bold:true}) +
+    txt(160, 166, '串联：I = I₁ = I₂　U = U₁ + U₂', {anchor:'middle', size:10.5, fill:'#334155', bold:true})
+  ),
+
+  ohm_graph: () => svgBox(
+    line(42, 145, 300, 145, {c:'#475569', w:1.6, marker:'arwS'}) +
+    line(42, 145, 42, 18, {c:'#475569', w:1.6, marker:'arwS'}) +
+    txt(304, 158, 'U / V', {anchor:'end', size:10}) +
+    txt(16, 24, 'I / A', {size:10}) +
+    line(42, 145, 268, 28, {c:'#4F46E5', w:2.5}) +
+    line(42, 145, 268, 86, {c:'#94A3B8', w:1.8, dash:'5 4'}) +
+    txt(250, 30, 'R 小', {size:10, fill:'#4F46E5', bold:true}) +
+    txt(250, 84, 'R 大', {size:10, fill:'#94A3B8'}) +
+    txt(160, 166, 'R 一定时，I 与 U 成正比（过原点的直线）', {anchor:'middle', size:10, fill:'#334155'})
+  ),
+
+  magnet: () => svgBox(
+    // 条形磁铁
+    '<rect x="110" y="72" width="100" height="36" rx="3" fill="#FCA5A5" stroke="#475569" stroke-width="1.5"/>' +
+    '<rect x="160" y="72" width="50" height="36" fill="#93C5FD"/>' +
+    txt(135, 95, 'N', {anchor:'middle', size:16, fill:'#7F1D1D', bold:true}) +
+    txt(185, 95, 'S', {anchor:'middle', size:16, fill:'#1E3A8A', bold:true}) +
+    // 外部磁感线：从 N 极出发绕到 S 极（内部由 S 回到 N，构成闭合曲线）
+    '<path d="M110 72 Q160 -30 210 72" fill="none" stroke="#4F46E5" stroke-width="1.5"/>' +
+    '<path d="M110 72 Q160 2 210 72" fill="none" stroke="#4F46E5" stroke-width="1.5" marker-end="url(#arwP)"/>' +
+    '<path d="M110 72 Q160 42 210 72" fill="none" stroke="#7C3AED" stroke-width="1.5"/>' +
+    '<path d="M110 108 Q160 146 210 108" fill="none" stroke="#7C3AED" stroke-width="1.5"/>' +
+    '<path d="M110 108 Q160 170 210 108" fill="none" stroke="#4F46E5" stroke-width="1.5"/>' +
+    '<rect x="16" y="8" width="82" height="17" rx="4" fill="#FBFCFF" opacity=".92"/>' +
+    txt(22, 20, '外部 N → S', {size:10, fill:'#4F46E5', bold:true}) +
+    txt(160, 152, '磁感线是假想的闭合曲线（内部 S → N），疏密表示强弱', {anchor:'middle', size:9.5, fill:'#334155'}) +
+    txt(160, 166, '地理北极附近是地磁南极', {anchor:'middle', size:9.5, fill:'#94A3B8'})
+  , 176),
+
+  induction: () => svgBox(
+    // 磁极
+    '<rect x="40" y="25" width="90" height="20" fill="#FCA5A5" stroke="#475569"/>' +
+    '<rect x="40" y="140" width="90" height="20" fill="#93C5FD" stroke="#475569"/>' +
+    txt(85, 39, 'N', {anchor:'middle', size:12, fill:'#7F1D1D', bold:true}) +
+    txt(85, 155, 'S', {anchor:'middle', size:12, fill:'#1E3A8A', bold:true}) +
+    // 磁感线
+    line(58, 48, 58, 136, {c:'#CBD5E1', w:1.4, dash:'4 4', marker:'arwS'}) +
+    line(78, 48, 78, 136, {c:'#CBD5E1', w:1.4, dash:'4 4', marker:'arwS'}) +
+    line(98, 48, 98, 136, {c:'#CBD5E1', w:1.4, dash:'4 4', marker:'arwS'}) +
+    line(118, 48, 118, 136, {c:'#CBD5E1', w:1.4, dash:'4 4', marker:'arwS'}) +
+    // 导体棒 ab
+    line(52, 90, 190, 90, {c:'#EF4444', w:5}) +
+    txt(48, 86, 'a', {size:11, fill:'#DC2626', bold:true}) +
+    txt(192, 86, 'b', {size:11, fill:'#DC2626', bold:true}) +
+    line(140, 70, 200, 70, {c:'#10B981', w:2.2, marker:'arwG'}) +
+    txt(168, 64, '切割磁感线运动 v', {anchor:'middle', size:10, fill:'#059669'}) +
+    // 电流表
+    '<circle cx="262" cy="90" r="21" fill="#FFF6E5" stroke="#F59E0B" stroke-width="2"/>' +
+    txt(262, 96, 'G', {anchor:'middle', size:15, fill:'#D97706', bold:true}) +
+    line(190, 90, 241, 90, {c:'#475569', w:2}) +
+    '<path d="M262 111 V140 H150" fill="none" stroke="#475569" stroke-width="2"/>' +
+    line(150, 140, 150, 90, {c:'#475569', w:2}) +
+    txt(160, 168, '闭合电路的一部分导体切割磁感线 → 产生感应电流', {anchor:'middle', size:9.5, fill:'#334155'})
+  , 180)
+};
+
+function diagram(key){
+  const f = DIAGRAMS[key];
+  return f ? f() : '';
+}
+
+/* ============================================================
+   交互实验
+   ============================================================ */
+const LAB_META = {
+  refraction: { name:'光的反射与折射', icon:'light', desc:'拖动入射角，观察反射角与折射角如何变化，验证折射规律与全反射。' },
+  lens:       { name:'凸透镜成像', icon:'light', desc:'改变物距，实时观察像的位置、大小与倒正，理解照相机、投影仪、放大镜的原理。' },
+  ohm:        { name:'欧姆定律 I-U 图像', icon:'electricity', desc:'调节电压与电阻，观察 I 与 U 的正比关系及电阻对图线斜率的影响。' }
+};
+
+const LAB_STATE = {
+  refraction: { i:35, medium:'air_water' },
+  lens:       { u:25, f:10 },
+  ohm:        { U:6, R:20 }
+};
+
+const MEDIUMS = {
+  air_water:  { label:'空气 → 水',   n1:1,    n2:1.33 },
+  air_glass:  { label:'空气 → 玻璃', n1:1,    n2:1.5  },
+  water_air:  { label:'水 → 空气',   n1:1.33, n2:1    }
+};
+
+function labCompute(key){
+  const s = LAB_STATE[key];
+  if(key === 'refraction'){
+    const med = MEDIUMS[s.medium];
+    const rad = s.i * Math.PI / 180;
+    const sinR = med.n1 * Math.sin(rad) / med.n2;
+    const total = sinR > 1;
+    const r = total ? null : Math.asin(sinR) * 180 / Math.PI;
+    const critical = med.n1 > med.n2 ? Math.asin(med.n2/med.n1) * 180 / Math.PI : null;
+    return { s, med, r, total, critical, i:s.i };
+  }
+  if(key === 'lens'){
+    const { u, f } = s;
+    const near = Math.abs(u - f) < 0.01;
+    const v = near ? Infinity : f*u/(u-f);
+    const real = u > f;
+    const m = near ? Infinity : Math.abs(v/u);
+    let kind, use;
+    if(near){ kind = '不成像（光线平行射出）'; use = 'u = f 是成实像与虚像的分界点'; }
+    else if(u > 2*f){ kind = '倒立、缩小的实像'; use = '照相机 / 摄像头'; }
+    else if(Math.abs(u-2*f) < 0.01){ kind = '倒立、等大的实像'; use = '可用来测量焦距'; }
+    else if(real){ kind = '倒立、放大的实像'; use = '投影仪 / 幻灯机'; }
+    else { kind = '正立、放大的虚像'; use = '放大镜'; }
+    return { s, u, f, v, real, m, near, kind, use };
+  }
+  // ohm
+  const I = s.U / s.R;
+  return { s, U:s.U, R:s.R, I };
+}
+
+function labSVG(key){
+  const c = labCompute(key);
+  if(key === 'refraction'){
+    const { i, r, total, med } = c;
+    const O = {x:160, y:100};
+    const rad = i*Math.PI/180;
+    const inX = O.x - 88*Math.sin(rad), inY = O.y - 88*Math.cos(rad);
+    const rfX = O.x + 88*Math.sin(rad), rfY = O.y - 88*Math.cos(rad);
+    let s = '';
+    s += '<rect x="16" y="100" width="288" height="86" fill="#DBF0FB" opacity=".8"/>';
+    s += line(16,100,304,100,{c:'#0284C7',w:2});
+    s += txt(24,24,'介质1：' + med.label.split(' → ')[0],{size:10,fill:'#64748B'});
+    s += txt(24,178,'介质2：' + med.label.split(' → ')[1],{size:10,fill:'#0284C7',bold:true});
+    s += line(160,10,160,186,{c:'#94A3B8',w:1.3,dash:'5 5'});
+    s += txt(165,18,'法线',{size:9.5});
+    s += line(inX,inY,O.x,O.y,{c:'#F59E0B',w:2.4,marker:'arwO'});
+    s += line(O.x,O.y,rfX,rfY,{c:'#4F46E5',w:2.4,marker:'arwP'});
+    if(!total){
+      const rr = r*Math.PI/180;
+      s += line(O.x,O.y,O.x + 105*Math.sin(rr),O.y + 105*Math.cos(rr),{c:'#10B981',w:2.4,marker:'arwG'});
+      s += txt(O.x + 44, O.y + 40, 'r = ' + r.toFixed(1) + '°', {size:10.5,fill:'#059669',bold:true});
+    } else {
+      s += txt(196,140,'全反射！',{size:12,fill:'#DC2626',bold:true});
+      s += txt(196,156,'无折射光线',{size:10,fill:'#DC2626'});
+    }
+    s += txt(104,O.y-46,'i = ' + i + '°',{size:10.5,fill:'#D97706',bold:true});
+    s += txt(210,O.y-46,'反射 ' + i + '°',{size:10,fill:'#4F46E5'});
+    s += '<circle cx="160" cy="100" r="3" fill="#334155"/>';
+    return svgBox(s, 192);
+  }
+
+  if(key === 'lens'){
+    const { u, f, v, real, m, near } = c;
+    const PX = x => 132 + x*2.35;
+    const AXIS = 108, oh = 40;
+    let s = '';
+    s += '<defs><clipPath id="lensClip"><rect x="16" y="6" width="290" height="188"/></clipPath></defs>';
+    s += line(16,AXIS,306,AXIS,{c:'#94A3B8',w:1.2,dash:'6 4'});
+    // 焦点与 2F
+    [-2*f,-f,f,2*f].forEach(d=>{
+      const x = PX(d);
+      if(x>18 && x<304){
+        s += line(x,AXIS-5,x,AXIS+5,{c:'#94A3B8',w:1.4});
+        s += txt(x,AXIS-9,Math.abs(d)===f?'F':'2F',{anchor:'middle',size:9.5});
+      }
+    });
+    // 透镜
+    s += '<path d="M132 34 Q152 108 132 182 Q112 108 132 34 Z" fill="#C7D7FE" stroke="#4F46E5" stroke-width="1.8" opacity=".92"/>';
+    s += txt(132,196,'凸透镜',{anchor:'middle',size:9.5,fill:'#4F46E5'});
+    // 物体
+    const ox = PX(-u);
+    s += line(ox,AXIS,ox,AXIS-oh,{c:'#EF4444',w:3,marker:'arwR'});
+    s += txt(ox,AXIS-oh-8,'物体',{anchor:'middle',size:10,fill:'#DC2626'});
+    s += txt(ox,AXIS+18,'u=' + u.toFixed(1),{anchor:'middle',size:9.5});
+    s += '<g clip-path="url(#lensClip)">';
+    // 光线1：平行主轴入射 → 折射后过焦点方向
+    s += line(ox,AXIS-oh,132,AXIS-oh,{c:'#F59E0B',w:1.3,opacity:'.85'});
+    s += line(132,AXIS-oh,306,AXIS-oh+(306-132)*oh/(f*2.35),{c:'#F59E0B',w:1.3,opacity:'.85'});
+    // 光线2：过光心方向不变
+    s += line(ox,AXIS-oh,306,AXIS+(306-132)*oh/(u*2.35),{c:'#10B981',w:1.3,opacity:'.85'});
+    // 虚像：折射光线的反向延长线
+    if(!near && !real){
+      const ix = PX(v), iy = AXIS - oh*m;
+      s += line(132,AXIS-oh,ix,iy,{c:'#94A3B8',w:1.2,dash:'4 4'});
+      s += line(132,AXIS,ix,iy,{c:'#94A3B8',w:1.2,dash:'4 4'});
+    }
+    // 像
+    if(!near){
+      const ix = PX(v), ih = oh*m;
+      const out = ix < 20 || ix > 300 || Math.abs(ih) > 88;
+      if(out){
+        s += '</g>';
+        s += txt(real?258:66, AXIS-60, '像在视野外', {anchor:'middle',size:10,fill:'#D97706',bold:true});
+        s += txt(real?258:66, AXIS-45, real?'（像距很大）':'（虚像很远且很大）', {anchor:'middle',size:9,fill:'#D97706'});
+      } else {
+        const y2 = real ? AXIS + ih : AXIS - ih;
+        s += line(ix,AXIS,ix,y2,{c:'#4F46E5',w:3,marker:'arwP',dash:real?'':'5 4'});
+        s += '</g>';
+        const ly = real ? AXIS+ih+16 : AXIS-ih-8;
+        s += '<rect x="' + (ix-34) + '" y="' + (ly-11) + '" width="68" height="15" rx="4" fill="#FAFBFF" opacity=".92"/>';
+        s += txt(ix, ly, real?'倒立实像':'正立虚像', {anchor:'middle',size:9.5,fill:'#4F46E5',bold:true});
+      }
+    } else {
+      s += '</g>';
+      s += txt(220,44,'平行光射出，不成像',{anchor:'middle',size:10,fill:'#D97706',bold:true});
+    }
+    return svgBox(s, 216);
+  }
+
+  // ohm 图
+  const { U, R, I } = c;
+  const X = u => 46 + u*21;          // U 0~12 -> 46~298
+  const Y = i => 158 - i*54;         // I 0~2.5 -> 158~23
+  let s = '';
+  // 网格
+  for(let u=0;u<=12;u+=2) s += line(X(u),158,X(u),23,{c:'#EEF1F8',w:1}) + txt(X(u),172,String(u),{anchor:'middle',size:9,fill:'#94A3B8'});
+  for(let i=0;i<=2.5;i+=0.5) s += line(46,Y(i),298,Y(i),{c:'#EEF1F8',w:1}) + txt(40,Y(i)+3,i.toFixed(1),{anchor:'end',size:9,fill:'#94A3B8'});
+  s += line(46,158,304,158,{c:'#475569',w:1.6,marker:'arwS'});
+  s += line(46,158,46,18,{c:'#475569',w:1.6,marker:'arwS'});
+  s += txt(302,182,'U / V',{anchor:'end',size:10});
+  s += txt(46,14,'I / A',{size:9.5});
+  // 参考线
+  [10,40].forEach(r=>{
+    const imax = 12/r;
+    s += line(X(0),Y(0),X(12),Y(imax),{c:'#CBD5E1',w:1.4,dash:'4 4'});
+    s += txt(X(12)-4,Y(imax)-6,r+' Ω',{anchor:'end',size:9,fill:'#94A3B8'});
+  });
+  // 当前 R 的直线
+  const icap = 12/R;
+  s += line(X(0),Y(0),X(12),Y(icap),{c:'#4F46E5',w:2.6});
+  // 当前点
+  s += line(X(U),Y(0),X(U),Y(I),{c:'#F59E0B',w:1.3,dash:'4 3'});
+  s += line(X(0),Y(I),X(U),Y(I),{c:'#F59E0B',w:1.3,dash:'4 3'});
+  s += '<circle cx="' + X(U) + '" cy="' + Y(I) + '" r="5" fill="#F59E0B" stroke="#fff" stroke-width="2"/>';
+  s += txt(170,192,'当前 R = ' + R + ' Ω，斜率 1/R 决定图线倾斜程度',{anchor:'middle',size:9.5,fill:'#334155'});
+  return svgBox(s, 200);
+}
+
+function labReadout(key){
+  const c = labCompute(key);
+  if(key === 'refraction'){
+    return '<div><b>' + c.i + '°</b><span>入射角 i</span></div>' +
+           '<div><b>' + c.i + '°</b><span>反射角</span></div>' +
+           '<div><b>' + (c.total ? '全反射' : c.r.toFixed(1) + '°') + '</b><span>折射角 r</span></div>';
+  }
+  if(key === 'lens'){
+    const v = c.near ? '∞' : (c.real ? c.v.toFixed(1) : '−' + Math.abs(c.v).toFixed(1));
+    return '<div><b>' + c.u.toFixed(1) + ' cm</b><span>物距 u</span></div>' +
+           '<div><b>' + v + '</b><span>' + (c.real?'实像像距':'虚像像距') + '</span></div>' +
+           '<div><b>' + (c.near ? '—' : c.m.toFixed(2) + '×') + '</b><span>放大率</span></div>';
+  }
+  return '<div><b>' + c.U.toFixed(1) + ' V</b><span>电压 U</span></div>' +
+         '<div><b>' + c.R + ' Ω</b><span>电阻 R</span></div>' +
+         '<div><b>' + c.I.toFixed(3) + ' A</b><span>电流 I = U/R</span></div>';
+}
+
+function labNote(key){
+  const c = labCompute(key);
+  if(key === 'refraction'){
+    let t = '<b>规律：</b>反射角始终等于入射角；光从光疏介质斜射入光密介质时折射角小于入射角，反之大于入射角。';
+    if(c.total) t += ' 当前入射角超过临界角 ' + c.critical.toFixed(1) + '°，发生<b>全反射</b>，折射光线消失（光纤通信的原理）。';
+    else if(c.med.n1 > c.med.n2) t += ' 当前从水射向空气，折射角大于入射角；继续增大入射角到 ' + c.critical.toFixed(1) + '° 以上就会发生全反射。';
+    else t += ' 试试切换到「水 → 空气」并增大入射角，观察全反射现象。';
+    return t;
+  }
+  if(key === 'lens'){
+    return '<b>' + c.kind + '</b>　·　应用：' + c.use + '。<br>' +
+      '口诀：一倍焦距分虚实，二倍焦距分大小；成实像时「物近像远像变大」。';
+  }
+  return '<b>结论：</b>电阻 R 一定时，电流 I 与电压 U 成正比（图线是过原点的直线）；电压一定时，I 与 R 成反比。<br>' +
+    '图线斜率 = 1/R，电阻越大直线越平缓。当前 I = ' + c.U.toFixed(1) + ' V / ' + c.R + ' Ω = ' + c.I.toFixed(3) + ' A。';
+}
+
+/* 实验参数控件定义 */
+const LAB_CONTROLS = {
+  refraction: [
+    { k:'i', label:'入射角 i', min:5, max:85, step:1, fmt:v => v + '°' }
+  ],
+  lens: [
+    { k:'u', label:'物距 u', min:6, max:40, step:0.5, fmt:v => Number(v).toFixed(1) + ' cm' }
+  ],
+  ohm: [
+    { k:'U', label:'电压 U', min:0, max:12, step:0.5, fmt:v => Number(v).toFixed(1) + ' V' },
+    { k:'R', label:'电阻 R', min:5, max:50, step:1, fmt:v => v + ' Ω' }
+  ]
+};
+
+/* ============================================================
+   物理小课 · 应用逻辑：状态 / 路由 / 页面 / 交互
+   ============================================================ */
+
+const STORE_KEY = 'physix_mini_v1';
+const DEFAULT_PAGE = { home:'main', learn:'list', lab:'main', quiz:'setup', me:'main' };
+
+function defaultData(){
+  return { done:[], fav:[], wrong:[], answered:0, correct:0, sessions:0, days:[], moduleStat:{} };
+}
+function loadData(){
+  try { return Object.assign(defaultData(), JSON.parse(localStorage.getItem(STORE_KEY)) || {}); }
+  catch(e){ return defaultData(); }
+}
+function saveData(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state.data)); } catch(e){}
+}
+
+function pad(n){ return n < 10 ? '0' + n : '' + n; }
+function fmtDate(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function today(){ return fmtDate(new Date()); }
+
+const state = {
+  tab:'home', page:'main', params:{}, stack:[],
+  learnTab:'topics', learnModule:'all', search:'',
+  labKey:'refraction',
+  quizCfg:{ m:'all', lv:'all', num:10 },
+  quiz:null,
+  daily:{ picked:null },
+  data: loadData()
+};
+
+/* ---------------- 通用工具 ---------------- */
+function checkIn(){
+  if(!state.data.days.includes(today())){ state.data.days.push(today()); saveData(); }
+}
+function streakDays(){
+  const set = new Set(state.data.days);
+  let n = 0, d = new Date();
+  while(set.has(fmtDate(d))){ n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+function accuracy(){
+  return state.data.answered ? Math.round(state.data.correct / state.data.answered * 100) : 0;
+}
+function greet(){
+  const h = new Date().getHours();
+  if(h < 6) return '夜深了，注意休息';
+  if(h < 11) return '早上好，开始今天的探索';
+  if(h < 14) return '中午好，来充充电';
+  if(h < 18) return '下午好，继续加油';
+  return '晚上好，复盘一下今天';
+}
+function dailyQuestion(){
+  const seed = today().split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+  return QUESTIONS[seed % QUESTIONS.length];
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+function stripTags(s){ return String(s).replace(/<[^>]+>/g,''); }
+function ringSVG(pct, r, stroke){
+  const c = 2 * Math.PI * r, size = (r + 7) * 2, cc = r + 7;
+  return '<svg viewBox="0 0 ' + size + ' ' + size + '" width="' + size + '" height="' + size + '">' +
+    '<circle cx="' + cc + '" cy="' + cc + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="6"/>' +
+    '<circle cx="' + cc + '" cy="' + cc + '" r="' + r + '" fill="none" stroke="' + (stroke||'#fff') +
+    '" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) +
+    '" stroke-dashoffset="' + (c*(1-pct)).toFixed(1) + '"/></svg>';
+}
+function modOf(id){ return MODULE_MAP[id] || MODULES[0]; }
+function modTag(id){ const m = modOf(id); return '<span class="tag" style="background:' + m.soft + ';color:' + m.color + '">' + m.name + '</span>'; }
+
+/* ---------------- 路由 ---------------- */
+function go(tab, page, params){
+  state.stack.push({ tab:state.tab, page:state.page, params:state.params });
+  state.tab = tab; state.page = page; state.params = params || {};
+  document.getElementById('view').scrollTop = 0;
+  render();
+}
+function back(){
+  if(!state.stack.length) return;
+  const p = state.stack.pop();
+  state.tab = p.tab; state.page = p.page; state.params = p.params;
+  document.getElementById('view').scrollTop = 0;
+  render();
+}
+function switchTab(tab){
+  state.stack = [];
+  state.tab = tab; state.page = DEFAULT_PAGE[tab]; state.params = {};
+  document.getElementById('view').scrollTop = 0;
+  render();
+}
+function titleFor(){
+  const p = state.page, t = state.tab;
+  if(t === 'home') return '物理小课';
+  if(t === 'learn') return p === 'detail' ? '知识点详情' : '知识地图';
+  if(t === 'lab') return '互动实验';
+  if(t === 'quiz'){
+    if(p === 'running') return '第 ' + (state.quiz ? state.quiz.idx+1 : 1) + ' 题';
+    if(p === 'result') return '练习报告';
+    return '刷题练习';
+  }
+  if(t === 'me'){
+    return { main:'我的', wrong:'错题本', fav:'我的收藏', stats:'学习统计' }[p] || '我的';
+  }
+  return '物理小课';
+}
+
+/* ---------------- 渲染入口 ---------------- */
+function render(){
+  document.getElementById('appTitle').textContent = titleFor();
+  document.getElementById('backBtn').innerHTML = state.stack.length ? icon('back') : '';
+  document.getElementById('tabbar').innerHTML = [
+    ['home','home','首页'],['learn','book','知识'],['lab','flask','实验'],['quiz','quiz','练习'],['me','user','我的']
+  ].map(t => '<button class="tab' + (state.tab===t[0]?' active':'') + '" data-act="tab" data-tab="' + t[0] + '">' + icon(t[1]) + '<span>' + t[2] + '</span></button>').join('');
+
+  const map = { home:renderHome, learn:renderLearn, lab:renderLab, quiz:renderQuiz, me:renderMe };
+  document.getElementById('view').innerHTML = map[state.tab]();
+  initSliders();
+}
+
+/* ============================================================
+   首页
+   ============================================================ */
+function renderHome(){
+  const pct = state.data.done.length / TOPICS.length;
+  const dq = dailyQuestion();
+  const picked = state.daily.picked;
+  const answered = picked !== null;
+  let h = '';
+
+  h += '<div class="hero"><div class="hero-in"><div class="hero-txt">' +
+    '<div class="hero-hi">' + greet() + '</div>' +
+    '<h1 class="hero-title">把物理，学明白</h1>' +
+    '<div class="hero-sub">声 · 光 · 热 · 力 · 电 · 磁　六大模块随时查</div>' +
+    '</div><div class="ring">' + ringSVG(pct, 31) +
+    '<div class="ring-txt">' + Math.round(pct*100) + '%<small>知识进度</small></div></div></div>' +
+    '<div class="hero-stats">' +
+      '<div><b>' + state.data.done.length + '</b><span>已学知识点</span></div>' +
+      '<div><b>' + state.data.answered + '</b><span>累计做题</span></div>' +
+      '<div><b>' + streakDays() + '</b><span>连续打卡(天)</span></div>' +
+    '</div></div>';
+
+  h += '<div class="section-title"><div class="st-left"><span>知识模块</span></div>' +
+       '<span class="section-more" data-act="tab" data-tab="learn">全部' + icon('arrow') + '</span></div>';
+  h += '<div class="module-grid">' + MODULES.map(m => {
+    const cnt = TOPICS.filter(t => t.m === m.id).length;
+    return '<button class="module-card" data-act="module" data-m="' + m.id + '">' +
+      '<div class="module-icon" style="background:' + m.soft + ';color:' + m.color + '">' + icon(m.icon) + '</div>' +
+      '<div class="module-name">' + m.name + '</div><div class="module-count">' + cnt + ' 个知识点</div></button>';
+  }).join('') + '</div>';
+
+  h += '<div class="section-title"><div class="st-left"><span>快捷入口</span></div></div>';
+  const quick = [
+    ['formula','公式速查','38 条公式','formula','#EEF0FF','#4F46E5'],
+    ['quiz','开始刷题','56 道精选题','quiz','#FFF4DF','#D97706'],
+    ['lab','互动实验','3 个模拟实验','flask','#E4F8F0','#059669'],
+    ['wrong','错题本','查漏补缺','wrong','#FEECEC','#DC2626']
+  ];
+  h += '<div class="quick-grid">' + quick.map(q =>
+    '<button class="quick-item" data-act="quick" data-to="' + q[0] + '">' +
+      '<div class="quick-ic" style="background:' + q[4] + ';color:' + q[5] + '">' + icon(q[3]) + '</div>' +
+      '<div class="quick-t"><b>' + q[1] + '</b><span>' + q[2] + '</span></div></button>'
+  ).join('') + '</div>';
+
+  h += '<div class="section-title"><div class="st-left"><span>每日一题</span></div>' +
+       '<span class="badge gray">' + modOf(dq.m).name + '</span></div>';
+  h += '<div class="daily"><div class="row"><span class="badge" style="background:#FDECC9;color:#B45309">今日推荐</span>' +
+       '<span class="badge gray">' + ['','基础','进阶','提高'][dq.lv] + '</span></div>' +
+       '<div class="q-stem">' + dq.stem + '</div><div class="daily-opts">' +
+       dq.opts.map((o,i) => {
+         let cls = 'daily-opt';
+         if(answered){ if(i === dq.ans) cls += ' ok'; else if(i === picked) cls += ' no'; }
+         return '<button class="' + cls + '" data-act="dailyOpt" data-i="' + i + '"><span class="k">' + 'ABCD'[i] + '</span><span>' + o + '</span></button>';
+       }).join('') + '</div>' +
+       '<div class="daily-exp' + (answered?' show':'') + '">' + (answered ? '<b>正确答案 ' + 'ABCD'[dq.ans] + '　</b>' + dq.exp : '') + '</div>' +
+       (answered ? '' : '<button class="btn block sm" data-act="dailyHint" style="height:34px">点击查看答案与解析</button>') +
+       '</div>';
+
+  h += '<div class="foot-tip">物理小课 · 初中物理同步学习<br>知识要点 · 公式速查 · 互动实验 · 智能刷题</div>';
+  return h;
+}
+
+function answerDaily(i){
+  if(state.daily.picked !== null) return;
+  const q = dailyQuestion();
+  state.daily.picked = i;
+  if(i >= 0){
+    state.data.answered++;
+    if(i === q.ans) state.data.correct++;
+    else if(!state.data.wrong.includes(q.id)) state.data.wrong.push(q.id);
+    saveData();
+    toast(i === q.ans ? '回答正确，真棒！' : '答错了，已加入错题本');
+  }
+  render();
+}
+
+/* ============================================================
+   知识 / 公式
+   ============================================================ */
+function renderLearn(){
+  if(state.page === 'detail') return renderTopicDetail();
+  let h = '';
+  h += '<div class="segmented"><button class="' + (state.learnTab==='topics'?'on':'') + '" data-act="seg" data-v="topics">知识点</button>' +
+       '<button class="' + (state.learnTab==='formulas'?'on':'') + '" data-act="seg" data-v="formulas">公式速查</button></div>';
+  h += '<div class="search-box">' + icon('search') +
+       '<input id="searchInput" type="search" placeholder="搜索知识点、公式或关键词" value="' + esc(state.search) + '">' +
+       '<button class="search-clear" id="searchClear" data-act="searchClear" style="display:' + (state.search?'block':'none') + '">' + icon('close') + '</button></div>';
+  h += '<div class="chips" id="moduleChips">' + moduleChipsHTML() + '</div>';
+  h += '<div id="listArea">' + learnListHTML() + '</div>';
+  return h;
+}
+function moduleChipsHTML(){
+  return '<button class="chip' + (state.learnModule==='all'?' on':'') + '" data-act="chip" data-m="all">全部</button>' +
+    MODULES.map(m => '<button class="chip' + (state.learnModule===m.id?' on':'') + '" data-act="chip" data-m="' + m.id + '">' + m.name + '</button>').join('');
+}
+function learnListHTML(){
+  const kw = state.search.trim().toLowerCase();
+  if(state.learnTab === 'formulas'){
+    const list = FORMULAS.map((f,i) => ({f,i})).filter(o =>
+      (state.learnModule==='all' || o.f.m===state.learnModule) &&
+      (!kw || (o.f.n + o.f.e + o.f.v + o.f.note).toLowerCase().includes(kw))
+    );
+    if(!list.length) return emptyHTML('没有找到相关公式', '换个关键词或模块试试');
+    return list.map(o => {
+      const f = o.f;
+      return '<div class="formula-card" id="fc' + o.i + '" data-act="formula" data-i="' + o.i + '">' +
+        '<div class="fc-top"><div class="fc-name">' + f.n + '</div>' + modTag(f.m) + '</div>' +
+        '<div class="fc-expr">' + f.e + '</div>' +
+        '<div class="fc-meta">' + f.v + '　·　单位：<span class="fc-unit">' + f.u + '</span></div>' +
+        '<div class="fc-note">' + f.note + '</div></div>';
+    }).join('') + '<div class="foot-tip">点击公式卡片可展开说明 · 共 ' + list.length + ' 条</div>';
+  }
+  const list = TOPICS.filter(t =>
+    (state.learnModule==='all' || t.m===state.learnModule) &&
+    (!kw || (t.title + t.sum + t.points.join('') + (t.pitfall||[]).join('')).toLowerCase().includes(kw))
+  );
+  if(!list.length) return emptyHTML('没有找到相关知识点', '换个关键词或模块试试');
+  return list.map((t,i) => {
+    const done = state.data.done.includes(t.id);
+    return '<button class="topic-item' + (done?' done':'') + '" data-act="topic" data-id="' + t.id + '">' +
+      '<div class="topic-idx">' + (done ? '✓' : String(i+1).padStart(2,'0')) + '</div>' +
+      '<div class="grow"><div class="topic-tt">' + t.title + '</div><div class="topic-ss">' + t.sum + '</div></div>' +
+      '<div class="topic-arrow">' + icon('arrow') + '</div></button>';
+  }).join('') + '<div class="foot-tip">共 ' + list.length + ' 个知识点 · 已学 ' + list.filter(t=>state.data.done.includes(t.id)).length + ' 个</div>';
+}
+function emptyHTML(title, sub){
+  return '<div class="empty">' + icon('search') + '<p><b>' + title + '</b><br>' + sub + '</p></div>';
+}
+function refreshLearnList(){
+  const area = document.getElementById('listArea');
+  if(area) area.innerHTML = learnListHTML();
+  const chips = document.getElementById('moduleChips');
+  if(chips) chips.innerHTML = moduleChipsHTML();
+  const clr = document.getElementById('searchClear');
+  if(clr) clr.style.display = state.search ? 'block' : 'none';
+}
+
+function renderTopicDetail(){
+  const id = state.params.id;
+  const t = TOPICS.find(x => x.id === id) || TOPICS[0];
+  const m = modOf(t.m);
+  if(!state.data.done.includes(t.id)){ state.data.done.push(t.id); saveData(); }
+  const fav = state.data.fav.includes(t.id);
+  const idx = TOPICS.findIndex(x => x.id === t.id);
+  const same = TOPICS.filter(x => x.m === t.m);
+  const pos = same.findIndex(x => x.id === t.id);
+
+  let h = '';
+  h += '<div class="detail-head"><span class="dh-tag">' + m.name + ' · 知识点 ' + (pos+1) + '/' + same.length + '</span>' +
+       '<h2 class="dh-title">' + t.title + '</h2><div class="dh-sum">' + t.sum + '</div>' +
+       '<div class="dh-actions">' +
+         '<button class="' + (fav?'on':'') + '" data-act="fav" data-id="' + t.id + '">' + icon('star') + (fav?'已收藏':'收藏') + '</button>' +
+         '<button class="' + (state.data.done.includes(t.id)?'on':'') + '" data-act="toggleDone" data-id="' + t.id + '">' + icon('check') + (state.data.done.includes(t.id)?'已学完':'标记已学') + '</button>' +
+       '</div></div>';
+
+  h += '<div class="d-sec"><div class="d-h"><i class="dot"></i>核心要点</div><ul class="point-list">' +
+       t.points.map(p => '<li>' + p + '</li>').join('') + '</ul></div>';
+
+  if(t.formulas && t.formulas.length){
+    h += '<div class="d-sec"><div class="d-h"><i class="dot orange"></i>相关公式</div>' +
+      t.formulas.map(f => '<div class="expr-line">' + f.e + '</div><div class="expr-note">' + f.n + '</div>').join('') + '</div>';
+  }
+  if(t.diagram){
+    h += '<div class="d-sec"><div class="d-h"><i class="dot green"></i>图解示意</div>' +
+      '<div class="diagram-box">' + diagram(t.diagram) + '<div class="diagram-cap">示意图 · 帮助理解关键规律</div></div></div>';
+  }
+  if(t.pitfall && t.pitfall.length){
+    h += '<div class="d-sec"><div class="d-h"><i class="dot orange"></i>易错提醒</div>' +
+      '<div class="callout warn">' + t.pitfall.map((p,i) => (i+1) + '. ' + p).join('<br><br>') + '</div></div>';
+  }
+  if(t.example){
+    h += '<div class="d-sec"><div class="d-h"><i class="dot"></i>典型例题</div><div class="example">' + t.example + '</div></div>';
+  }
+  h += '<div class="callout info">' + icon('bulb') + ' 学完就练一练：本模块共有 ' +
+       QUESTIONS.filter(q => q.m === t.m).length + ' 道配套练习，趁热打铁记得更牢。</div>';
+  h += '<div class="nav-bottom">' +
+    '<button class="btn gray" data-act="topicNav" data-id="' + (pos>0?same[pos-1].id:'') + '" ' + (pos>0?'':'disabled') + '>上一个</button>' +
+    '<button class="btn ghost" data-act="quizModule" data-m="' + t.m + '">练本模块</button>' +
+    '<button class="btn gray" data-act="topicNav" data-id="' + (pos<same.length-1?same[pos+1].id:'') + '" ' + (pos<same.length-1?'':'disabled') + '>下一个</button>' +
+    '</div>';
+  h += '<div class="foot-tip">知识点 ' + (idx+1) + ' / ' + TOPICS.length + '</div>';
+  return h;
+}
+
+/* ============================================================
+   互动实验
+   ============================================================ */
+function renderLab(){
+  const key = state.labKey;
+  const meta = LAB_META[key];
+  let h = '';
+  h += '<div class="lab-intro">' + icon('bulb') + ' 拖动下方滑块，观察图形与数据如何实时变化。这些实验对应课本重点规律，边玩边记最有效。</div>';
+  h += '<div class="chips">' + Object.keys(LAB_META).map(k =>
+    '<button class="chip' + (k===key?' on':'') + '" data-act="labTab" data-k="' + k + '">' + LAB_META[k].name + '</button>'
+  ).join('') + '</div>';
+
+  let opts = '';
+  if(key === 'refraction'){
+    opts = '<div class="seg-mini">' + Object.keys(MEDIUMS).map(k =>
+      '<button class="' + (LAB_STATE.refraction.medium===k?'on':'') + '" data-act="labOpt" data-key="medium" data-val="' + k + '">' + MEDIUMS[k].label + '</button>'
+    ).join('') + '</div>';
+  } else if(key === 'lens'){
+    opts = '<div class="seg-mini">' + [10,15].map(f =>
+      '<button class="' + (LAB_STATE.lens.f===f?'on':'') + '" data-act="labOpt" data-key="f" data-val="' + f + '">焦距 f = ' + f + ' cm</button>'
+    ).join('') + '</div>';
+  }
+
+  const controls = LAB_CONTROLS[key].map(c => {
+    const v = LAB_STATE[key][c.k];
+    return '<div class="slider-row"><label>' + c.label + '<b data-labval="' + c.k + '">' + c.fmt(v) + '</b></label>' +
+      '<input type="range" data-labkey="' + key + '" data-k="' + c.k + '" min="' + c.min + '" max="' + c.max + '" step="' + c.step + '" value="' + v + '"></div>';
+  }).join('');
+
+  h += '<div class="lab-card">' +
+    '<div class="lab-h"><div class="lab-ic">' + icon(meta.icon) + '</div>' + meta.name + '</div>' +
+    '<div class="lab-desc">' + meta.desc + '</div>' +
+    '<div class="lab-stage" id="labStage">' + labSVG(key) + '</div>' +
+    opts + controls +
+    '<div class="readout" id="labReadout">' + labReadout(key) + '</div>' +
+    '<div class="lab-note" id="labNote">' + labNote(key) + '</div>' +
+    '</div>';
+  h += '<div class="callout tip"><b>小提示：</b>实验中的规律都能在「知识 → 对应模块」里找到完整讲解，配合题目练习效果更好。</div>';
+  h += '<div class="foot-tip">图形与数值均根据物理公式实时计算</div>';
+  return h;
+}
+function initSliders(){
+  document.querySelectorAll('input[type=range][data-labkey]').forEach(el => {
+    const min = +el.min, max = +el.max, val = +el.value;
+    el.style.setProperty('--p', ((val-min)/(max-min)*100) + '%');
+  });
+}
+function updateLabView(){
+  const stage = document.getElementById('labStage');
+  if(!stage) return;
+  const key = state.labKey;
+  stage.innerHTML = labSVG(key);
+  const ro = document.getElementById('labReadout'); if(ro) ro.innerHTML = labReadout(key);
+  const nt = document.getElementById('labNote'); if(nt) nt.innerHTML = labNote(key);
+  document.querySelectorAll('[data-labval]').forEach(el => {
+    const k = el.getAttribute('data-labval');
+    const def = LAB_CONTROLS[key].find(c => c.k === k);
+    if(def) el.textContent = def.fmt(LAB_STATE[key][k]);
+  });
+}
+
+/* ============================================================
+   刷题练习
+   ============================================================ */
+function renderQuiz(){
+  if(state.page === 'running') return renderQuizRunning();
+  if(state.page === 'result') return renderQuizResult();
+  return renderQuizSetup();
+}
+function renderQuizSetup(){
+  const cfg = state.quizCfg;
+  let h = '';
+  h += '<div class="qs-info">' +
+    '<div><b>' + QUESTIONS.length + '</b><span>题库总量</span></div>' +
+    '<div><b>' + accuracy() + '%</b><span>我的正确率</span></div>' +
+    '<div><b>' + state.data.sessions + '</b><span>完成练习组数</span></div></div>';
+
+  h += '<div class="quiz-setup"><div class="qs-card"><div class="qs-title">① 选择模块</div><div class="chips" style="margin:0;padding:0">' +
+    '<button class="chip' + (cfg.m==='all'?' on':'') + '" data-act="cfg" data-k="m" data-v="all">全部</button>' +
+    MODULES.map(m => '<button class="chip' + (cfg.m===m.id?' on':'') + '" data-act="cfg" data-k="m" data-v="' + m.id + '">' + m.name + '</button>').join('') +
+    '</div></div>';
+  h += '<div class="qs-card"><div class="qs-title">② 难度与题量</div>' +
+    '<div class="small muted" style="margin-bottom:7px">难度</div><div class="qs-num">' +
+    [['all','全部'],['1','基础'],['2','进阶'],['3','提高']].map(o =>
+      '<button class="' + (String(cfg.lv)===o[0]?'on':'') + '" data-act="cfg" data-k="lv" data-v="' + o[0] + '">' + o[1] + '</button>').join('') + '</div>' +
+    '<div class="small muted" style="margin:14px 0 7px">题量</div><div class="qs-num">' +
+    [5,10,20,50].map(n => '<button class="' + (cfg.num===n?'on':'') + '" data-act="cfg" data-k="num" data-v="' + n + '">' + n + ' 题</button>').join('') + '</div></div></div>';
+
+  const cnt = QUESTIONS.filter(q => (cfg.m==='all'||q.m===cfg.m) && (cfg.lv==='all'||q.lv===+cfg.lv)).length;
+  h += '<div class="callout info" style="margin-bottom:14px">当前条件下可用 <b>' + cnt + '</b> 道题，将随机抽取 ' + Math.min(cfg.num,cnt) + ' 道。</div>';
+  h += '<button class="btn block" data-act="quizStart"' + (cnt?'':' disabled') + '>' + icon('play') + '开始练习</button>';
+
+  h += '<div class="section-title"><div class="st-left"><span>更多练习</span></div></div>';
+  h += '<div class="menu-list">' +
+    '<button class="menu-item" data-act="quizWrong"><div class="mi-ic" style="background:#FEECEC;color:#DC2626">' + icon('wrong') + '</div><div class="mi-t">错题重练</div><div class="mi-v">' + state.data.wrong.length + ' 题</div><div class="mi-arrow">' + icon('arrow') + '</div></button>' +
+    '<button class="menu-item" data-act="quizDaily"><div class="mi-ic" style="background:#FFF4DF;color:#D97706">' + icon('fire') + '</div><div class="mi-t">每日 5 题速练</div><div class="mi-v">随机组卷</div><div class="mi-arrow">' + icon('arrow') + '</div></button>' +
+    '</div>';
+  return h;
+}
+function startQuiz(list){
+  if(!list.length){ toast('暂无可用题目'); return; }
+  state.quiz = { list, idx:0, picked:null, checked:false, right:0, wrongIds:[] };
+  state.stack = [];
+  state.tab = 'quiz'; state.page = 'running'; state.params = {};
+  render();
+}
+function quizStart(){
+  const cfg = state.quizCfg;
+  let list = QUESTIONS.filter(q => (cfg.m==='all'||q.m===cfg.m) && (cfg.lv==='all'||q.lv===+cfg.lv));
+  list = shuffle(list).slice(0, cfg.num);
+  startQuiz(list);
+}
+function renderQuizRunning(){
+  const qz = state.quiz;
+  if(!qz){ state.page='setup'; return renderQuizSetup(); }
+  const q = qz.list[qz.idx];
+  const letters = ['A','B','C','D'];
+  const opts = q.opts.map((o,i) => {
+    let cls = 'option';
+    if(qz.checked){
+      if(i === q.ans) cls += ' correct';
+      else if(i === qz.picked) cls += ' wrong';
+      else cls += ' dim';
+    } else if(i === qz.picked) cls += ' selected';
+    return '<button class="' + cls + '" data-act="quizOpt" data-i="' + i + '"><span class="k">' + letters[i] + '</span><span>' + o + '</span></button>';
+  }).join('');
+  const ok = qz.picked === q.ans;
+
+  let h = '<div class="quiz-head"><span>第 ' + (qz.idx+1) + ' / ' + qz.list.length + ' 题</span>' +
+    '<span>' + modOf(q.m).name + ' · ' + ['','基础','进阶','提高'][q.lv] + '</span></div>' +
+    '<div class="quiz-bar"><i style="width:' + ((qz.idx+1)/qz.list.length*100) + '%"></i></div>' +
+    '<div class="q-card"><div class="q-meta">' + modTag(q.m) + '<span class="badge gray">单选题</span></div>' +
+    '<div class="q-stem">' + q.stem + '</div><div class="options">' + opts + '</div>' +
+    '<div class="explain-box ' + (qz.checked ? (ok?'ok':'no') : '') + (qz.checked?' show':'') + '">' +
+      (qz.checked ? '<div class="eh">' + (ok ? '✓ 回答正确' : '✗ 回答错误') + '</div>' +
+        '<div>正确答案：<span class="ans">' + letters[q.ans] + '. ' + q.opts[q.ans] + '</span></div>' +
+        '<div style="margin-top:6px">' + q.exp + '</div>' : '') +
+    '</div></div>';
+
+  h += '<div class="quiz-foot">';
+  if(!qz.checked){
+    h += '<button class="btn block" data-act="quizConfirm"' + (qz.picked===null?' disabled':'') + '>确认答案</button>';
+  } else {
+    h += '<button class="btn ghost" style="flex:0 0 34%" data-act="quizFav" data-id="' + q.id + '">' + icon('star') + '收藏题</button>';
+    h += '<button class="btn block" data-act="quizNext">' + (qz.idx+1===qz.list.length?'查看报告':'下一题') + '</button>';
+  }
+  h += '</div>';
+  h += '<div class="foot-tip">答错的题目会自动进入错题本，方便集中复盘</div>';
+  return h;
+}
+function quizConfirm(){
+  const qz = state.quiz; if(!qz || qz.checked || qz.picked===null) return;
+  const q = qz.list[qz.idx];
+  const ok = qz.picked === q.ans;
+  qz.checked = true;
+  state.data.answered++;
+  if(ok){ qz.right++; state.data.correct++; }
+  else {
+    qz.wrongIds.push(q.id);
+    if(!state.data.wrong.includes(q.id)) state.data.wrong.push(q.id);
+  }
+  const st = state.data.moduleStat[q.m] || {a:0,c:0};
+  st.a++; if(ok) st.c++;
+  state.data.moduleStat[q.m] = st;
+  saveData();
+  render();
+}
+function quizNext(){
+  const qz = state.quiz; if(!qz) return;
+  if(qz.idx + 1 >= qz.list.length){
+    state.data.sessions++;
+    saveData();
+    state.page = 'result';
+  } else {
+    qz.idx++; qz.picked = null; qz.checked = false;
+  }
+  render();
+}
+function renderQuizResult(){
+  const qz = state.quiz;
+  if(!qz){ state.page='setup'; return renderQuizSetup(); }
+  const total = qz.list.length, pct = qz.right/total;
+  const title = pct === 1 ? '满分！太厉害了' : pct >= 0.8 ? '掌握得很不错' : pct >= 0.6 ? '继续加油，快到手了' : '别灰心，回头看看知识点';
+  let h = '<div class="result-hero"><div class="result-ring">' + ringSVG(pct, 48) +
+    '<div class="rr"><b>' + Math.round(pct*100) + '</b><small>分</small></div></div>' +
+    '<div class="result-title">' + title + '</div><div class="result-sub">共 ' + total + ' 题，答对 ' + qz.right + ' 题</div></div>';
+  h += '<div class="result-stats"><div><b style="color:#10B981">' + qz.right + '</b><span>答对</span></div>' +
+       '<div><b style="color:#EF4444">' + (total-qz.right) + '</b><span>答错</span></div>' +
+       '<div><b>' + Math.round(pct*100) + '%</b><span>正确率</span></div>' +
+       '<div><b>' + state.data.sessions + '</b><span>累计组数</span></div></div>';
+
+  if(qz.wrongIds.length){
+    h += '<div class="section-title"><div class="st-left"><span>本组错题</span></div><span class="badge gray">' + qz.wrongIds.length + ' 题</span></div>';
+    h += qz.wrongIds.map(id => {
+      const q = QUESTIONS.find(x=>x.id===id);
+      return q ? '<div class="wrong-item open"><div class="wi-stem">' + q.stem + '</div>' +
+        '<div class="wi-ans">正确答案：' + 'ABCD'[q.ans] + '. ' + q.opts[q.ans] + '</div>' +
+        '<div class="wi-exp">' + q.exp + '</div></div>' : '';
+    }).join('');
+  } else {
+    h += '<div class="callout tip">本组全部答对，没有错题。可以换个模块或提高难度继续挑战。</div>';
+  }
+  h += '<div class="nav-bottom" style="margin-top:16px">' +
+    '<button class="btn gray" data-act="quizAgain">再来一组</button>' +
+    '<button class="btn primary grow" data-act="quizWrong"' + (state.data.wrong.length?'':' disabled') + '>错题重练</button></div>';
+  h += '<button class="btn outline block" style="margin-top:10px" data-act="tab" data-tab="home">返回首页</button>';
+  return h;
+}
+
+/* ============================================================
+   我的
+   ============================================================ */
+function renderMe(){
+  if(state.page !== 'main') return renderMeSub();
+  const lvl = state.data.answered >= 100 ? '物理达人' : state.data.answered >= 40 ? '进阶探索者' : state.data.answered >= 10 ? '入门学徒' : '新手上路';
+  let h = '<div class="profile"><div class="avatar">⚛️</div><div class="grow">' +
+    '<b>物理探索者</b><span>每天进步一点点</span><div class="lv">' + lvl + ' · 连续打卡 ' + streakDays() + ' 天</div></div></div>';
+  h += '<div class="stat-grid">' +
+    '<div><b>' + state.data.done.length + '</b><span>已学知识点</span></div>' +
+    '<div><b>' + state.data.answered + '</b><span>累计做题</span></div>' +
+    '<div><b>' + accuracy() + '%</b><span>正确率</span></div>' +
+    '<div><b>' + state.data.wrong.length + '</b><span>错题</span></div></div>';
+
+  h += '<div class="card"><div class="d-h" style="margin-bottom:4px"><i class="dot"></i>最近 7 天打卡</div>' +
+    '<div class="heat">' + (function(){
+      const set = new Set(state.data.days); let s = '';
+      for(let i=6;i>=0;i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        const key = fmtDate(d);
+        s += '<i class="' + (set.has(key)?'on':'') + '">' + (d.getMonth()+1) + '/' + d.getDate() + '</i>';
+      }
+      return s;
+    })() + '</div></div>';
+
+  const menu = [
+    ['wrong','错题本','#FEECEC','#DC2626', state.data.wrong.length + ' 题'],
+    ['fav','我的收藏','#FFF4DF','#D97706', state.data.fav.length + ' 个'],
+    ['stats','学习统计','#EEF0FF','#4F46E5','查看报告'],
+    ['clear','清空学习数据','#F1F3F9','#7A8198','']
+  ];
+  h += '<div class="menu-list">' + menu.map(m =>
+    '<button class="menu-item" data-act="mePage" data-p="' + m[0] + '"><div class="mi-ic" style="background:' + m[2] + ';color:' + m[3] + '">' +
+    icon(m[0]==='clear'?'trash':m[0]==='stats'?'chart':m[0]==='fav'?'star':'wrong') + '</div>' +
+    '<div class="mi-t">' + m[1] + '</div><div class="mi-v">' + m[4] + '</div><div class="mi-arrow">' + icon('arrow') + '</div></button>'
+  ).join('') + '</div>';
+  h += '<div class="foot-tip">学习数据保存在本机浏览器，不会上传<br>物理小课 v1.0 · 初中物理同步</div>';
+  return h;
+}
+function renderMeSub(){
+  const p = state.page;
+  if(p === 'wrong'){
+    const list = state.data.wrong.map(id => QUESTIONS.find(q=>q.id===id)).filter(Boolean);
+    if(!list.length) return emptyHTML('错题本是空的', '保持得不错，继续刷题吧') +
+      '<button class="btn block" data-act="tab" data-tab="quiz">去练习</button>';
+    return '<div class="callout info" style="margin-bottom:14px">共 ' + list.length + ' 道错题。点击卡片展开解析，也可以集中重练一遍。</div>' +
+      list.map(q => '<div class="wrong-item" id="wi' + q.id + '"><div class="row" style="margin-bottom:8px">' + modTag(q.m) + '<span class="badge gray">' + q.id.toUpperCase() + '</span></div>' +
+        '<div class="wi-stem" data-act="wrongToggle" data-id="' + q.id + '">' + q.stem + '</div>' +
+        '<div class="wi-ans">正确答案：' + 'ABCD'[q.ans] + '. ' + q.opts[q.ans] + '</div>' +
+        '<div class="wi-exp">' + q.exp + '</div>' +
+        '<div class="wi-foot"><button class="btn gray sm" data-act="wrongRemove" data-id="' + q.id + '">已掌握，移除</button>' +
+        '<button class="btn ghost sm" data-act="wrongToggle" data-id="' + q.id + '">查看解析</button></div></div>').join('') +
+      '<button class="btn block" style="margin-top:6px" data-act="quizWrong">重练全部错题</button>';
+  }
+  if(p === 'fav'){
+    const items = state.data.fav.map(fid => {
+      const t = TOPICS.find(x => x.id === fid); if(t) return { type:'topic', t };
+      const q = QUESTIONS.find(x => x.id === fid); if(q) return { type:'quiz', q };
+      return null;
+    }).filter(Boolean);
+    if(!items.length) return emptyHTML('还没有收藏', '在知识点详情页或练习解析里点击「收藏」即可加入') +
+      '<button class="btn block" data-act="tab" data-tab="learn">去看知识点</button>';
+    return '<div class="callout info" style="margin-bottom:14px">共 ' + items.length + ' 条收藏。点击知识点可查看详情，点击题目可单独重做。</div>' +
+      items.map(o => {
+        if(o.type === 'topic'){
+          return '<button class="topic-item" data-act="topic" data-id="' + o.t.id + '">' +
+            '<div class="topic-idx" style="background:#FFF4DF;color:#D97706">★</div>' +
+            '<div class="grow"><div class="topic-tt">' + o.t.title + '</div><div class="topic-ss">' + o.t.sum + '</div></div>' +
+            '<div class="topic-arrow">' + icon('arrow') + '</div></button>';
+        }
+        return '<button class="topic-item" data-act="favQuiz" data-id="' + o.q.id + '">' +
+          '<div class="topic-idx" style="background:#EEF0FF;color:#4F46E5">题</div>' +
+          '<div class="grow"><div class="topic-tt">' + o.q.stem + '</div><div class="topic-ss">' + modOf(o.q.m).name + ' · 点击单独重做</div></div>' +
+          '<div class="topic-arrow">' + icon('arrow') + '</div></button>';
+      }).join('');
+  }
+  // stats
+  const donePct = Math.round(state.data.done.length/TOPICS.length*100);
+  const weak = MODULES.map(m => {
+    const st = state.data.moduleStat[m.id] || {a:0,c:0};
+    return { m, rate: st.a ? Math.round(st.c/st.a*100) : null, n:st.a };
+  }).sort((a,b) => (a.rate===null?101:a.rate) - (b.rate===null?101:b.rate));
+  let h = '<div class="card"><div class="d-h"><i class="dot"></i>知识点掌握进度</div>' +
+    '<div class="spread small"><span>已学 ' + state.data.done.length + ' / ' + TOPICS.length + ' 个</span><b>' + donePct + '%</b></div>' +
+    '<div class="quiz-bar" style="margin-top:8px"><i style="width:' + donePct + '%"></i></div>' +
+    MODULES.map(m => {
+      const total = TOPICS.filter(t=>t.m===m.id).length;
+      const got = TOPICS.filter(t=>t.m===m.id && state.data.done.includes(t.id)).length;
+      return '<div style="margin-top:12px"><div class="spread small"><span>' + m.name + '</span><span class="muted">' + got + '/' + total + '</span></div>' +
+        '<div class="quiz-bar" style="height:5px;margin-top:5px;margin-bottom:0"><i style="width:' + (got/total*100) + '%;background:' + m.color + '"></i></div></div>';
+    }).join('') + '</div>';
+  h += '<div class="card"><div class="d-h"><i class="dot orange"></i>各模块答题表现</div>' +
+    MODULES.map(m => {
+      const st = state.data.moduleStat[m.id] || {a:0,c:0};
+      const r = st.a ? Math.round(st.c/st.a*100) : 0;
+      return '<div class="spread" style="padding:7px 0;border-bottom:1px solid var(--line)">' +
+        '<span class="small">' + m.name + '</span><span class="small"><b>' + st.a + '</b> 题 · 正确率 <b style="color:' + (r>=80?'#10B981':r>=60?'#D97706':'#EF4444') + '">' + (st.a?r+'%':'—') + '</b></span></div>';
+    }).join('') + '</div>';
+  const w = weak.find(x => x.rate !== null && x.rate < 80);
+  h += '<div class="callout ' + (w?'warn':'tip') + '">' +
+    (w ? '<b>学习建议：</b>「' + w.m.name + '」正确率约 ' + w.rate + '%，建议回到知识地图重看该模块要点，再做几道配套练习。'
+       : '<b>学习建议：</b>各模块表现稳定，可以试试「提高」难度的题目挑战一下。') + '</div>';
+  return h;
+}
+
+/* ============================================================
+   事件
+   ============================================================ */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el) return;
+  const a = el.getAttribute('data-act');
+  const id = el.getAttribute('data-id');
+  const m = el.getAttribute('data-m');
+  switch(a){
+    case 'tab': switchTab(el.getAttribute('data-tab')); break;
+    case 'back': back(); break;
+    case 'module':
+      state.learnModule = m; state.learnTab = 'topics'; state.search = '';
+      switchTab('learn'); break;
+    case 'quick': {
+      const to = el.getAttribute('data-to');
+      if(to === 'formula'){ state.learnTab='formulas'; state.learnModule='all'; state.search=''; switchTab('learn'); }
+      else if(to === 'quiz') switchTab('quiz');
+      else if(to === 'lab') switchTab('lab');
+      else if(to === 'wrong'){ go('me','wrong',{}); }
+      break;
+    }
+    case 'dailyOpt': answerDaily(+el.getAttribute('data-i')); break;
+    case 'dailyHint': answerDaily(-1); break;
+
+    case 'seg': state.learnTab = el.getAttribute('data-v'); state.search=''; render(); break;
+    case 'chip': state.learnModule = m; refreshLearnList(); break;
+    case 'searchClear':
+      state.search = '';
+      document.getElementById('searchInput').value = '';
+      refreshLearnList(); break;
+    case 'formula': {
+      const fc = document.getElementById('fc' + el.getAttribute('data-i'));
+      if(fc) fc.classList.toggle('open');
+      break;
+    }
+    case 'topic': go('learn','detail',{id:id}); break;
+    case 'topicNav': if(id) { state.params = {id:id}; render(); } break;
+    case 'fav': {
+      const i = state.data.fav.indexOf(id);
+      if(i >= 0){ state.data.fav.splice(i,1); toast('已取消收藏'); }
+      else { state.data.fav.push(id); toast('已加入收藏'); }
+      saveData(); render(); break;
+    }
+    case 'toggleDone': {
+      const i = state.data.done.indexOf(id);
+      if(i >= 0){ state.data.done.splice(i,1); toast('已标记为未学'); }
+      else { state.data.done.push(id); toast('已标记为学完'); }
+      saveData(); render(); break;
+    }
+    case 'quizModule': {
+      state.quizCfg.m = m; state.quizCfg.lv = 'all'; state.quizCfg.num = 10;
+      switchTab('quiz'); toast('已切换到「' + modOf(m).name + '」练习'); break;
+    }
+
+    case 'labTab': state.labKey = el.getAttribute('data-k'); render(); break;
+    case 'labOpt': {
+      const k = el.getAttribute('data-key'), v = el.getAttribute('data-val');
+      LAB_STATE[state.labKey][k] = (k === 'f') ? +v : v;
+      render(); break;
+    }
+
+    case 'cfg': {
+      const k = el.getAttribute('data-k'), v = el.getAttribute('data-v');
+      state.quizCfg[k] = (k === 'num') ? +v : v;
+      render(); break;
+    }
+    case 'quizStart': quizStart(); break;
+    case 'quizWrong': {
+      const list = shuffle(state.data.wrong.map(qid => QUESTIONS.find(q=>q.id===qid)).filter(Boolean));
+      startQuiz(list); break;
+    }
+    case 'quizDaily': startQuiz(shuffle(QUESTIONS).slice(0,5)); break;
+    case 'favQuiz': {
+      const q = QUESTIONS.find(x => x.id === id);
+      if(q) startQuiz([q]);
+      break;
+    }
+    case 'quizOpt': {
+      if(!state.quiz || state.quiz.checked) return;
+      state.quiz.picked = +el.getAttribute('data-i');
+      render(); break;
+    }
+    case 'quizConfirm': quizConfirm(); break;
+    case 'quizNext': quizNext(); break;
+    case 'quizFav': {
+      const qi = state.data.fav.indexOf(id);
+      if(qi >= 0){ state.data.fav.splice(qi,1); toast('已取消收藏'); }
+      else { state.data.fav.push(id); toast('已收藏（可在「我的」查看）'); }
+      saveData(); break;
+    }
+    case 'quizAgain': state.page='setup'; state.quiz=null; render(); break;
+
+    case 'mePage': {
+      const p = el.getAttribute('data-p');
+      if(p === 'clear'){
+        if(confirm('确定要清空全部学习数据吗？已学记录、收藏、错题和做题统计都会被删除，且无法恢复。')){
+          state.data = defaultData();
+          saveData();
+          toast('学习数据已清空');
+          render();
+        }
+      } else { state.stack.push({tab:state.tab,page:state.page,params:state.params}); state.page = p; render(); }
+      break;
+    }
+    case 'wrongToggle': {
+      const wi = document.getElementById('wi' + id);
+      if(wi) wi.classList.toggle('open');
+      break;
+    }
+    case 'wrongRemove': {
+      const i = state.data.wrong.indexOf(id);
+      if(i >= 0){ state.data.wrong.splice(i,1); saveData(); toast('已移出错题本'); render(); }
+      break;
+    }
+  }
+});
+
+/* 输入事件：搜索 / 实验滑块 */
+document.addEventListener('input', e => {
+  const t = e.target;
+  if(t.matches && t.matches('input[type=range][data-labkey]')){
+    const key = t.getAttribute('data-labkey'), k = t.getAttribute('data-k');
+    LAB_STATE[key][k] = Number(t.value);
+    const min = +t.min, max = +t.max;
+    t.style.setProperty('--p', ((+t.value-min)/(max-min)*100) + '%');
+    updateLabView();
+    return;
+  }
+  if(t.id === 'searchInput'){
+    state.search = t.value;
+    refreshLearnList();
+  }
+});
+
+/* 返回按钮 & 初始化 */
+document.getElementById('backBtn').addEventListener('click', back);
+(function init(){
+  checkIn();
+  const now = new Date();
+  document.getElementById('sbTime').textContent = now.getHours() + ':' + pad(now.getMinutes());
+  render();
+})();
+
+</script>
+</body>
+</html>
