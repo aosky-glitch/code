@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#5B6BF0">
+<title>初中数学学习小程序</title>
+<style>
+/* 初中数学学习小程序 —— 界面样式 */
+:root {
+  --bg: #F3F5FB;
+  --card: #FFFFFF;
+  --card2: #F8F9FE;
+  --text: #1E2440;
+  --sub: #858DAA;
+  --line: #EAEDF6;
+  --primary: #5B6BF0;
+  --primary2: #8C6BF6;
+  --accent: #FF9E45;
+  --ok: #20B183;
+  --bad: #F05C63;
+  --shadow: 0 6px 22px rgba(38, 50, 110, .08);
+  --shadow2: 0 12px 34px rgba(38, 50, 110, .14);
+  --grad: linear-gradient(135deg, #5B6BF0 0%, #8C6BF6 100%);
+}
+body[data-theme='dark'] {
+  --bg: #11152A;
+  --card: #1C2240;
+  --card2: #232A4C;
+  --text: #EEF1FF;
+  --sub: #8C95B8;
+  --line: #2C3357;
+  --primary: #7B8AFF;
+  --primary2: #A98BFF;
+  --accent: #FFB063;
+  --ok: #3ACB98;
+  --bad: #FF7379;
+  --shadow: 0 6px 22px rgba(0, 0, 0, .28);
+  --shadow2: 0 12px 34px rgba(0, 0, 0, .4);
+  --grad: linear-gradient(135deg, #5468E8 0%, #8B63E8 100%);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(160deg, #E7EBFA 0%, #F5F0FC 55%, #EAF3FA 100%);
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+body[data-theme='dark'] { background: linear-gradient(160deg, #0B0E1E 0%, #14182F 60%, #101426 100%); }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input { font-family: inherit; }
+
+/* ---------- 手机外框 ---------- */
+.phone {
+  position: relative;
+  width: 420px; height: min(880px, 94vh);
+  background: var(--bg);
+  border-radius: 34px;
+  box-shadow: 0 30px 80px rgba(30, 36, 80, .26), 0 0 0 9px rgba(255,255,255,.55);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+body[data-theme='dark'] .phone { box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 9px rgba(255,255,255,.07); }
+@media (max-width: 520px) {
+  body { display: block; }
+  .phone { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; box-shadow: none; }
+}
+
+/* ---------- 状态栏 ---------- */
+.statusbar {
+  height: 34px; flex: 0 0 34px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; font-weight: 700; color: var(--text);
+  background: var(--card); letter-spacing: .3px;
+}
+.statusbar .sb-right { display: flex; align-items: center; gap: 5px; }
+.sb-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+.sb-bars i { width: 3px; background: var(--text); border-radius: 1px; display: block; }
+.sb-bars i:nth-child(1) { height: 4px; } .sb-bars i:nth-child(2) { height: 6px; }
+.sb-bars i:nth-child(3) { height: 8px; } .sb-bars i:nth-child(4) { height: 10px; }
+.sb-battery { width: 20px; height: 10px; border: 1.5px solid var(--text); border-radius: 3px; position: relative; }
+.sb-battery::after { content:''; position:absolute; right:-4px; top:2px; width:2px; height:4px; background:var(--text); border-radius:0 1px 1px 0; }
+.sb-battery i { position: absolute; inset: 1.5px; width: 70%; background: var(--text); border-radius: 1px; }
+
+/* ---------- 导航栏 ---------- */
+.navbar {
+  flex: 0 0 50px; height: 50px; background: var(--card);
+  display: flex; align-items: center; padding: 0 14px;
+  border-bottom: 1px solid var(--line); position: relative; z-index: 5;
+}
+.navbar .nav-title { font-size: 16px; font-weight: 700; flex: 1; text-align: center; }
+.navbar .nav-left, .navbar .nav-right { width: 60px; display: flex; align-items: center; }
+.navbar .nav-right { justify-content: flex-end; }
+.nav-btn {
+  width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 17px; color: var(--text); background: var(--card2); transition: .15s;
+}
+.nav-btn:active { transform: scale(.9); }
+.nav-btn.plain { background: transparent; font-size: 14px; font-weight: 600; color: var(--primary); width: auto; padding: 0 4px; }
+
+/* ---------- 内容区 ---------- */
+.scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 16px 30px; scrollbar-width: thin; }
+.scroll::-webkit-scrollbar { width: 4px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+.scroll.nopad { padding: 0 0 30px; }
+.view { animation: fadeUp .3s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---------- tabBar ---------- */
+.tabbar {
+  flex: 0 0 62px; height: 62px; background: var(--card);
+  border-top: 1px solid var(--line); display: flex; align-items: stretch;
+  padding-bottom: env(safe-area-inset-bottom, 0); z-index: 6;
+}
+.tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; color: var(--sub); font-size: 10.5px; font-weight: 600; transition: .2s; position: relative;
+}
+.tab .ti { font-size: 21px; line-height: 22px; height: 22px; display: block; }
+.tab.active { color: var(--primary); }
+.tab.active .ti { transform: translateY(-1px) scale(1.08); }
+.tab.active::before { content:''; position:absolute; top:0; width:26px; height:3px; border-radius:0 0 3px 3px; background:var(--primary); }
+.tab:active { opacity: .7; }
+
+/* ---------- 通用组件 ---------- */
+.card { background: var(--card); border-radius: 18px; padding: 16px; box-shadow: var(--shadow); margin-bottom: 14px; }
+.card.tight { padding: 13px 14px; }
+.section-title { font-size: 15px; font-weight: 800; margin: 18px 2px 11px; display: flex; align-items: center; justify-content: space-between; }
+.section-title .more { font-size: 12px; color: var(--sub); font-weight: 600; }
+.muted { color: var(--sub); }
+.tiny { font-size: 11px; }
+.mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 44px; padding: 0 18px; border-radius: 13px; font-size: 14px; font-weight: 700;
+  background: var(--card2); color: var(--text); transition: .16s;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--grad); color: #fff; box-shadow: 0 6px 16px rgba(91,107,240,.32); }
+.btn-ghost { background: var(--card2); color: var(--primary); border: 1px solid var(--line); }
+.btn-block { width: 100%; }
+.btn-sm { height: 32px; padding: 0 13px; font-size: 12px; border-radius: 10px; }
+.btn-lg { height: 48px; font-size: 15px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; background: var(--card2); color: var(--sub); border: 1px solid var(--line);
+}
+.chip.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chip.ok { background: rgba(32,177,131,.12); color: var(--ok); border-color: transparent; }
+.chip.warn { background: rgba(255,158,69,.14); color: #E8892B; border-color: transparent; }
+.row { display: flex; align-items: center; gap: 10px; }
+.spread { display: flex; align-items: center; justify-content: space-between; }
+.divider { height: 1px; background: var(--line); margin: 12px 0; }
+.tag-cat { font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: 700; color: #fff; }
+
+/* ---------- 首页 ---------- */
+.hero {
+  background: var(--grad); border-radius: 20px; padding: 18px; color: #fff;
+  box-shadow: 0 10px 26px rgba(91,107,240,.3); margin-bottom: 14px; position: relative; overflow: hidden;
+}
+.hero::after { content:''; position:absolute; right:-40px; top:-50px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,.09); }
+.hero::before { content:''; position:absolute; right:20px; bottom:-60px; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,.07); }
+.hero h2 { margin: 0 0 4px; font-size: 19px; font-weight: 800; position: relative; z-index: 1; }
+.hero p { margin: 0; font-size: 12px; opacity: .85; position: relative; z-index: 1; }
+.hero .hero-ring { position: absolute; right: 18px; top: 16px; z-index: 1; }
+.hero-stats { display: flex; gap: 22px; margin-top: 18px; position: relative; z-index: 1; }
+.hero-stats div b { font-size: 20px; display: block; line-height: 1.1; }
+.hero-stats div span { font-size: 10.5px; opacity: .8; }
+.ring-wrap { position: relative; width: 72px; height: 72px; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-wrap .ring-txt { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; }
+.ring-wrap .ring-txt small { font-size: 8px; font-weight: 600; opacity: .8; }
+
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 4px; }
+.quick {
+  background: var(--card); border-radius: 15px; padding: 13px 4px 11px; text-align: center;
+  box-shadow: var(--shadow); transition: .16s;
+}
+.quick:active { transform: scale(.94); }
+.quick .qi { width: 38px; height: 38px; margin: 0 auto 7px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 19px; color: #fff; }
+.quick span { font-size: 10.5px; font-weight: 700; color: var(--text); }
+
+.task-card { display: flex; align-items: center; gap: 12px; }
+.task-ic { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 21px; flex: 0 0 44px; }
+.task-card b { font-size: 13.5px; display: block; }
+.task-card p { margin: 3px 0 0; font-size: 11px; color: var(--sub); }
+
+.kp-mini { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.kp-mini:last-child { border-bottom: none; }
+.kp-mini .km-ic { width: 34px; height: 34px; border-radius: 11px; flex: 0 0 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; }
+.kp-mini .km-body { flex: 1; min-width: 0; }
+.kp-mini b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kp-mini small { color: var(--sub); font-size: 10.5px; }
+.kp-mini .arrow { color: var(--sub); font-size: 15px; }
+
+.cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cat-box { border-radius: 14px; padding: 12px 4px; text-align: center; color: #fff; font-size: 12px; font-weight: 700; transition: .16s; }
+.cat-box:active { transform: scale(.94); }
+.cat-box i { display: block; font-size: 20px; font-style: normal; margin-bottom: 5px; }
+.cat-box small { display: block; font-size: 9px; opacity: .85; font-weight: 600; margin-top: 2px; }
+
+/* ---------- 分段控件 / 搜索 ---------- */
+.seg { display: flex; background: var(--card2); border-radius: 12px; padding: 3px; gap: 2px; margin-bottom: 12px; }
+.seg button { flex: 1; height: 32px; border-radius: 9px; font-size: 12.5px; font-weight: 700; color: var(--sub); transition: .2s; }
+.seg button.on { background: var(--card); color: var(--primary); box-shadow: 0 2px 8px rgba(40,50,100,.1); }
+.search { display: flex; align-items: center; gap: 8px; background: var(--card); border-radius: 12px; padding: 0 12px; height: 38px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.search input { flex: 1; border: none; outline: none; background: transparent; color: var(--text); font-size: 13px; }
+.search input::placeholder { color: var(--sub); }
+.search .si { color: var(--sub); font-size: 14px; }
+
+/* ---------- 章节 / 知识点列表 ---------- */
+.chapter { background: var(--card); border-radius: 16px; margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow); }
+.ch-head { display: flex; align-items: center; gap: 10px; padding: 13px 14px; }
+.ch-num { width: 28px; height: 28px; border-radius: 9px; background: var(--card2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--primary); flex: 0 0 28px; }
+.ch-head b { font-size: 13.5px; flex: 1; }
+.ch-head .ch-count { font-size: 10.5px; color: var(--sub); }
+.ch-head .ch-arrow { color: var(--sub); font-size: 12px; transition: transform .2s; }
+.chapter.open .ch-arrow { transform: rotate(90deg); }
+.ch-body { display: none; padding: 0 14px 8px; }
+.chapter.open .ch-body { display: block; animation: fadeUp .22s ease both; }
+.kp-row { display: flex; align-items: center; gap: 9px; padding: 11px 2px; border-top: 1px solid var(--line); }
+.kp-row .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); flex: 0 0 7px; }
+.kp-row .dot.done { background: var(--ok); box-shadow: 0 0 0 3px rgba(32,177,131,.14); }
+.kp-row span { flex: 1; font-size: 12.5px; }
+.kp-row .go { color: var(--sub); font-size: 13px; }
+
+/* ---------- 知识点详情 ---------- */
+.kp-hero { background: var(--grad); border-radius: 18px; padding: 17px; color: #fff; margin-bottom: 14px; box-shadow: 0 8px 22px rgba(91,107,240,.25); }
+.kp-hero .chips { display: flex; gap: 6px; margin-bottom: 10px; }
+.kp-hero .chips span { background: rgba(255,255,255,.22); border-radius: 999px; padding: 3px 9px; font-size: 10px; font-weight: 700; }
+.kp-hero h2 { margin: 0 0 6px; font-size: 19px; font-weight: 800; }
+.kp-hero p { margin: 0; font-size: 12px; line-height: 1.7; opacity: .9; }
+.block-title { font-size: 13.5px; font-weight: 800; margin: 0 0 10px; display: flex; align-items: center; gap: 7px; }
+.block-title i { width: 4px; height: 14px; border-radius: 2px; background: var(--primary); }
+.point { display: flex; gap: 9px; margin-bottom: 9px; font-size: 12.5px; line-height: 1.7; }
+.point:last-child { margin-bottom: 0; }
+.point .pn { width: 18px; height: 18px; border-radius: 6px; background: var(--card2); color: var(--primary); font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: 0 0 18px; margin-top: 2px; }
+.formula-line { background: var(--card2); border-left: 3px solid var(--primary); border-radius: 0 9px 9px 0; padding: 9px 11px; margin-bottom: 8px; font-size: 12.5px; line-height: 1.6; }
+.example-q { font-size: 13px; font-weight: 700; line-height: 1.7; margin-bottom: 10px; }
+.step { display: flex; gap: 9px; font-size: 12.5px; line-height: 1.7; margin-bottom: 7px; }
+.step .sn { width: 18px; height: 18px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: 0 0 18px; margin-top: 2px; }
+.answer-box { background: rgba(32,177,131,.1); color: var(--ok); border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+.action-bar { display: flex; gap: 9px; margin-top: 16px; }
+.action-bar .btn { flex: 1; }
+
+/* ---------- 练习 ---------- */
+.mode-card { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow); margin-bottom: 10px; transition: .16s; }
+.mode-card:active { transform: scale(.98); }
+.mode-ic { width: 44px; height: 44px; border-radius: 14px; flex: 0 0 44px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; }
+.mode-card b { font-size: 13.5px; display: block; }
+.mode-card p { margin: 3px 0 0; font-size: 11px; color: var(--sub); }
+.mode-card .arrow { color: var(--sub); }
+.quiz-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 11.5px; color: var(--sub); font-weight: 600; }
+.quiz-top b { color: var(--primary); font-size: 13px; }
+.progress { height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+.progress i { display: block; height: 100%; background: var(--grad); border-radius: 6px; transition: width .3s; }
+.q-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.q-text { font-size: 15px; font-weight: 700; line-height: 1.75; margin-bottom: 16px; }
+.opt {
+  display: flex; align-items: center; gap: 11px; width: 100%; text-align: left;
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 13px;
+  padding: 12px 13px; margin-bottom: 9px; font-size: 13px; line-height: 1.5; transition: .18s;
+}
+.opt:active { transform: scale(.985); }
+.opt .ol { width: 26px; height: 26px; border-radius: 9px; background: var(--card2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--sub); flex: 0 0 26px; }
+.opt.sel { border-color: var(--primary); background: rgba(91,107,240,.07); }
+.opt.sel .ol { background: var(--primary); color: #fff; }
+.opt.right { border-color: var(--ok); background: rgba(32,177,131,.1); }
+.opt.right .ol { background: var(--ok); color: #fff; }
+.opt.wrong { border-color: var(--bad); background: rgba(240,92,99,.1); animation: shake .3s; }
+.opt.wrong .ol { background: var(--bad); color: #fff; }
+.opt:disabled { cursor: default; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+.fill-input { width: 100%; height: 46px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); padding: 0 13px; font-size: 14px; color: var(--text); outline: none; transition: .18s; }
+.fill-input:focus { border-color: var(--primary); }
+.fill-input.right { border-color: var(--ok); background: rgba(32,177,131,.08); }
+.fill-input.wrong { border-color: var(--bad); background: rgba(240,92,99,.08); }
+.feedback { border-radius: 13px; padding: 12px 13px; margin-top: 12px; font-size: 12.5px; line-height: 1.7; animation: fadeUp .25s ease both; }
+.feedback.ok { background: rgba(32,177,131,.1); color: var(--ok); }
+.feedback.no { background: rgba(240,92,99,.1); color: var(--bad); }
+.feedback b { display: block; font-size: 13px; margin-bottom: 4px; }
+.feedback .sol { color: var(--text); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+.quiz-foot { margin-top: 16px; }
+
+/* ---------- 结算 ---------- */
+.result-head { text-align: center; padding: 22px 0 8px; }
+.result-head .big { font-size: 40px; font-weight: 800; color: var(--primary); line-height: 1; }
+.result-head .big small { font-size: 15px; color: var(--sub); }
+.result-head p { margin: 8px 0 0; font-size: 12.5px; color: var(--sub); }
+.result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; }
+.result-grid div { background: var(--card2); border-radius: 12px; padding: 12px 4px; text-align: center; }
+.result-grid b { display: block; font-size: 18px; color: var(--text); }
+.result-grid span { font-size: 10px; color: var(--sub); }
+.wrong-review { border-left: 3px solid var(--bad); padding: 9px 11px; background: var(--card2); border-radius: 0 9px 9px 0; margin-bottom: 8px; font-size: 12px; line-height: 1.6; }
+
+/* ---------- 公式 / 错题 ---------- */
+.formula-cat { font-size: 12px; font-weight: 800; color: var(--primary); margin: 14px 2px 8px; }
+.f-item { background: var(--card); border-radius: 13px; padding: 11px 13px; margin-bottom: 8px; box-shadow: var(--shadow); }
+.f-item .fn { font-size: 12.5px; font-weight: 800; margin-bottom: 5px; }
+.f-item .fe { font-size: 13px; color: var(--primary); background: var(--card2); border-radius: 8px; padding: 8px 10px; line-height: 1.6; word-break: break-all; }
+.f-item .fd { font-size: 10.5px; color: var(--sub); margin-top: 6px; line-height: 1.5; }
+.wrong-item { background: var(--card); border-radius: 14px; padding: 13px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.wrong-item .wq { font-size: 12.5px; font-weight: 700; line-height: 1.6; }
+.wrong-item .wa { font-size: 11.5px; margin-top: 8px; color: var(--ok); }
+.wrong-item .ws { font-size: 11.5px; margin-top: 5px; color: var(--sub); line-height: 1.6; }
+.empty { text-align: center; padding: 44px 20px; color: var(--sub); }
+.empty .ei { font-size: 42px; display: block; margin-bottom: 12px; opacity: .55; }
+.empty b { display: block; font-size: 14px; color: var(--text); margin-bottom: 6px; }
+.empty p { font-size: 12px; margin: 0 0 16px; }
+
+/* ---------- 我的 ---------- */
+.profile-head { background: var(--grad); border-radius: 0 0 24px 24px; padding: 20px 18px 24px; color: #fff; display: flex; align-items: center; gap: 13px; margin: -14px -16px 14px; }
+.avatar { width: 54px; height: 54px; border-radius: 18px; background: rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center; font-size: 26px; }
+.profile-head b { font-size: 17px; display: block; }
+.profile-head span { font-size: 11px; opacity: .85; }
+.stat-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.stat-4 div { text-align: center; }
+.stat-4 b { display: block; font-size: 19px; font-weight: 800; }
+.stat-4 span { font-size: 10px; color: var(--sub); }
+.chart { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; height: 96px; margin-top: 10px; }
+.chart .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+.chart .bar { width: 100%; max-width: 26px; border-radius: 6px 6px 3px 3px; background: var(--grad); min-height: 3px; transition: height .4s; }
+.chart .bar.zero { background: var(--line); }
+.chart .bl { font-size: 9.5px; color: var(--sub); }
+.menu-item { display: flex; align-items: center; gap: 11px; padding: 13px 2px; border-bottom: 1px solid var(--line); }
+.menu-item:last-child { border-bottom: none; }
+.menu-item .mi { width: 32px; height: 32px; border-radius: 10px; background: var(--card2); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--primary); }
+.menu-item b { flex: 1; font-size: 13px; font-weight: 600; }
+.menu-item .mv { font-size: 11.5px; color: var(--sub); }
+.menu-item .arrow { color: var(--sub); font-size: 14px; }
+.switch { width: 42px; height: 24px; border-radius: 999px; background: var(--line); position: relative; transition: .2s; }
+.switch i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: .2s; }
+.switch.on { background: var(--primary); }
+.switch.on i { left: 21px; }
+
+/* ---------- Toast / Modal ---------- */
+.toast {
+  position: absolute; left: 50%; bottom: 84px; transform: translate(-50%, 12px);
+  background: rgba(28,34,64,.92); color: #fff; padding: 10px 16px; border-radius: 11px;
+  font-size: 12.5px; font-weight: 600; z-index: 30; opacity: 0; pointer-events: none; transition: .25s;
+  max-width: 82%; text-align: center; box-shadow: var(--shadow2);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.mask { position: absolute; inset: 0; background: rgba(15,20,45,.5); z-index: 40; display: flex; align-items: center; justify-content: center; padding: 30px; animation: fadeUp .2s; }
+.modal { background: var(--card); border-radius: 18px; padding: 20px; width: 100%; max-width: 320px; box-shadow: var(--shadow2); }
+.modal h3 { margin: 0 0 8px; font-size: 16px; }
+.modal p { margin: 0 0 18px; font-size: 12.5px; color: var(--sub); line-height: 1.7; }
+.modal .mbtns { display: flex; gap: 9px; }
+.modal .mbtns .btn { flex: 1; height: 40px; font-size: 13px; }
+.btn-danger { background: rgba(240,92,99,.12); color: var(--bad); }
+
+</style>
+</head>
+<body data-theme="light">
+<div class="phone">
+  <div class="statusbar">
+    <span id="status-time">08:00</span>
+    <div class="sb-right">
+      <div class="sb-bars"><i></i><i></i><i></i><i></i></div>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.5px">5G</span>
+      <div class="sb-battery"><i></i></div>
+    </div>
+  </div>
+  <div class="navbar">
+    <div class="nav-left" id="nav-left"></div>
+    <div class="nav-title" id="nav-title">初中数学 · 学习助手</div>
+    <div class="nav-right" id="nav-right"></div>
+  </div>
+  <div class="scroll" id="scroll"></div>
+  <div class="tabbar">
+    <button class="tab active" data-act="tab" data-t="home"><span class="ti">⌂</span>首页</button>
+    <button class="tab" data-act="tab" data-t="learn"><span class="ti">▤</span>学习</button>
+    <button class="tab" data-act="tab" data-t="practice"><span class="ti">✎</span>练习</button>
+    <button class="tab" data-act="tab" data-t="profile"><span class="ti">◉</span>我的</button>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div id="modal-host"></div>
+</div>
+<script>
+/* 初中数学学习小程序 —— 知识库 / 题库 / 公式手册数据 */
+window.MATH_DATA = (function () {
+  // k: id, g: 年级, c: 章节, t: 标题, cat: 分类, s: 简介, p: 要点, f: 公式定理, e: 例题
+  const K = [
+    { id:'k01', g:7, c:'有理数', t:'有理数的概念与运算', cat:'代数',
+      s:'整数和分数统称有理数，数轴、相反数、绝对值是有理数学习的基础工具。',
+      p:['正数、负数表示具有相反意义的量；0 既不是正数也不是负数。','绝对值表示数轴上该数到原点的距离，恒为非负数。','加减乘除与乘方混合运算时，先乘方、再乘除、后加减，有括号先算括号内。'],
+      f:['|a| = a (a>0)；|a| = 0 (a=0)；|a| = -a (a<0)','互为相反数的两数之和为 0；互为倒数的两数之积为 1'],
+      e:{ q:'计算：(-3) + 5 - (-2) - 2²', st:['先算乘方：2² = 4','去括号：-(-2) = +2','原式 = -3 + 5 + 2 - 4 = 0'], a:'0' } },
+    { id:'k02', g:7, c:'整式的加减', t:'合并同类项与去括号', cat:'代数',
+      s:'所含字母相同、且相同字母的指数也相同的项叫同类项，整式加减的本质就是合并同类项。',
+      p:['同类项只与字母及字母的指数有关，与系数、字母顺序无关。','括号前是「+」号，去括号后各项符号不变；括号前是「-」号，去括号后各项都变号。','合并同类项时系数相加，字母和字母的指数保持不变。'],
+      f:['a + (b - c) = a + b - c','a - (b - c) = a - b + c'],
+      e:{ q:'化简：3a²b - 2ab² + a²b - ab²', st:['把同类项分组：(3a²b + a²b) + (-2ab² - ab²)','系数相加：4a²b + (-3ab²)'], a:'4a²b - 3ab²' } },
+    { id:'k03', g:7, c:'一元一次方程', t:'解法与实际应用', cat:'代数',
+      s:'只含一个未知数、未知数次数为 1 的等式叫一元一次方程，解法核心是等式的基本性质。',
+      p:['解方程五步：去分母、去括号、移项、合并同类项、系数化为 1。','移项必须变号；去分母时不含分母的项也要乘公倍数。','应用题关键是找等量关系，常见类型有行程、工程、销售利润问题。'],
+      f:['等式性质：a = b → a ± c = b ± c；a = b → ac = bc (c≠0)','利润 = 售价 - 进价；利润率 = 利润 ÷ 进价 × 100%'],
+      e:{ q:'解方程：2(x - 1) = 3x + 4', st:['去括号：2x - 2 = 3x + 4','移项：2x - 3x = 4 + 2','合并：-x = 6，系数化为 1'], a:'x = -6' } },
+    { id:'k04', g:7, c:'几何图形初步', t:'线段、角与余角补角', cat:'几何',
+      s:'点、线、面、体构成几何图形，线段与角是最基本的几何对象。',
+      p:['两点确定一条直线；两点之间线段最短，线段的长度叫两点间的距离。','若两角之和为 90° 互为余角，之和为 180° 互为补角。','同角（等角）的余角相等，同角（等角）的补角相等。'],
+      f:['1° = 60′，1′ = 60″','∠α 的余角 = 90° - ∠α；补角 = 180° - ∠α'],
+      e:{ q:'一个角的补角等于它本身的 3 倍，求这个角的度数。', st:['设这个角为 x°，则补角为 180° - x°','依题意：180 - x = 3x','解得 4x = 180，x = 45'], a:'45°' } },
+    { id:'k05', g:7, c:'相交线与平行线', t:'平行线的判定与性质', cat:'几何',
+      s:'同位角、内错角、同旁内角是判断两直线位置关系的核心角。',
+      p:['判定：同位角相等 / 内错角相等 / 同旁内角互补 → 两直线平行。','性质：两直线平行 → 同位角相等、内错角相等、同旁内角互补。','平行于同一直线的两直线互相平行；过直线外一点有且只有一条直线与已知直线平行。'],
+      f:['判定与性质互为逆命题：由角的关系推平行，由平行推角的关系','两直线平行，同旁内角之和 = 180°'],
+      e:{ q:'两直线平行，一个同旁内角为 70°，求另一个同旁内角。', st:['两直线平行，同旁内角互补','180° - 70° = 110°'], a:'110°' } },
+    { id:'k06', g:7, c:'实数', t:'平方根、立方根与无理数', cat:'代数',
+      s:'无限不循环小数叫无理数，有理数与无理数统称实数，实数与数轴上的点一一对应。',
+      p:['正数有两个互为相反数的平方根，0 的平方根是 0，负数没有平方根。','算术平方根 √a (a≥0) 恒为非负；任意实数都有唯一立方根。','常见无理数：开方开不尽的数、π、有规律但不循环的小数。'],
+      f:['(√a)² = a (a≥0)；√(a²) = |a|','³√(-a) = -³√a'],
+      e:{ q:'√16 的算术平方根是多少？', st:['先算 √16 = 4','题目求的是 4 的算术平方根','√4 = 2'], a:'2（易错：不是 4）' } },
+    { id:'k07', g:7, c:'平面直角坐标系', t:'点的坐标特征', cat:'函数',
+      s:'在平面内画两条互相垂直、原点重合的数轴，就建立了平面直角坐标系。',
+      p:['第一象限 (+,+)，第二象限 (-,+)，第三象限 (-,-)，第四象限 (+,-)。','关于 x 轴对称：横坐标不变、纵坐标变号；关于 y 轴对称：纵坐标不变、横坐标变号。','关于原点对称：横纵坐标都变号；坐标轴上的点不属于任何象限。'],
+      f:['点 P(x, y) 到 x 轴距离 = |y|，到 y 轴距离 = |x|','P(x,y) 关于原点对称点为 (-x, -y)'],
+      e:{ q:'点 A(2, -3) 关于 x 轴对称的点坐标是？', st:['关于 x 轴对称，横坐标不变','纵坐标取相反数：-3 → 3'], a:'(2, 3)' } },
+    { id:'k08', g:7, c:'二元一次方程组', t:'代入消元与加减消元', cat:'代数',
+      s:'含有两个未知数、每个未知数次数都是 1 的方程组，基本思路是「消元」转化为一元一次方程。',
+      p:['代入消元法：用一个未知数表示另一个未知数，再代入另一个方程。','加减消元法：把某未知数系数化为相同或相反，两式相减或相加。','实际应用注意检验解是否符合实际意义（如人数、件数为非负整数）。'],
+      f:['代入法适合某个系数为 ±1 的方程组','加减法适合同一未知数系数成倍数关系的方程组'],
+      e:{ q:'解方程组：x + y = 5，x - y = 1', st:['两式相加消去 y：2x = 6，得 x = 3','代入第一式：3 + y = 5，得 y = 2'], a:'x = 3，y = 2' } },
+    { id:'k09', g:7, c:'一元一次不等式', t:'解法与数轴表示', cat:'代数',
+      s:'用不等号表示不等关系的式子叫不等式，解法与方程类似，但要特别注意变号规则。',
+      p:['不等式两边同乘或同除以一个负数，不等号方向必须改变。','解集在数轴上表示：大于向右，小于向左；含等号画实心点，不含等号画空心圈。','不等式组的解集是各不等式解集的公共部分，口诀：大大取大、小小取小、大小小大中间找。'],
+      f:['a > b，c < 0 → ac < bc','大小小大中间找：x > a 且 x < b (a<b) → a < x < b'],
+      e:{ q:'解不等式：-2x > 6', st:['两边同除以 -2（负数）','不等号方向改变'], a:'x < -3' } },
+    { id:'k10', g:7, c:'数据的收集与整理', t:'频数分布与统计图', cat:'统计',
+      s:'收集数据后用统计表和统计图描述，才能直观看出数据的分布规律。',
+      p:['频数是落在各组内的数据个数，频率 = 频数 ÷ 数据总数，各组频率之和为 1。','条形图看数量多少，折线图看变化趋势，扇形图看各部分占总体的百分比。','扇形图中某部分圆心角 = 该部分百分比 × 360°。'],
+      f:['频率 = 频数 / 总数','圆心角 = 频率 × 360°'],
+      e:{ q:'50 个数据中某组频数为 10，求该组频率和扇形图圆心角。', st:['频率 = 10 ÷ 50 = 0.2','圆心角 = 0.2 × 360° = 72°'], a:'频率 0.2，圆心角 72°' } },
+
+    { id:'k11', g:8, c:'三角形', t:'三边关系与内角和', cat:'几何',
+      s:'由不在同一直线上的三条线段首尾顺次相接组成的图形叫三角形。',
+      p:['任意两边之和大于第三边，任意两边之差小于第三边（判断能否构成三角形）。','三角形内角和等于 180°；一个外角等于与它不相邻的两个内角之和。','三角形具有稳定性；按角分为锐角、直角、钝角三角形。'],
+      f:['|a - b| < c < a + b','∠A + ∠B + ∠C = 180°'],
+      e:{ q:'三角形两边长为 3 和 7，第三边 x 的取值范围？', st:['两边之差 < 第三边：7 - 3 = 4','两边之和 > 第三边：7 + 3 = 10'], a:'4 < x < 10' } },
+    { id:'k12', g:8, c:'全等三角形', t:'全等的判定 SSS/SAS/ASA/AAS/HL', cat:'几何',
+      s:'能够完全重合的两个三角形叫全等三角形，对应边、对应角分别相等。',
+      p:['一般三角形判定：SSS、SAS、ASA、AAS；直角三角形另有 HL。','SSA（两边及其中一边的对角）和 AAA（三个角）不能判定全等。','证全等时常需先找隐含条件：公共边、公共角、对顶角、平行带来的等角。'],
+      f:['HL：斜边和一条直角边对应相等的两个直角三角形全等','全等三角形对应边相等、对应角相等、面积相等'],
+      e:{ q:'下列条件中，不能判定两个三角形全等的是？', st:['SSS、SAS、ASA、AAS 均可判定全等','三个角对应相等（AAA）只能判定相似，大小可能不同'], a:'AAA（三个角对应相等）' } },
+    { id:'k13', g:8, c:'轴对称与等腰三角形', t:'性质与判定', cat:'几何',
+      s:'等腰三角形是轴对称图形，顶角平分线、底边上的中线和高「三线合一」。',
+      p:['等边对等角：两底角相等；等角对等边可判定等腰三角形。','三线合一：顶角平分线、底边中线、底边上的高互相重合。','已知等腰三角形边长时，必须用三边关系检验能否构成三角形。'],
+      f:['等腰三角形底角 = (180° - 顶角) ÷ 2','等边三角形每个内角 = 60°，有 3 条对称轴'],
+      e:{ q:'等腰三角形两边长为 3 和 7，求周长。', st:['若腰为 3：3 + 3 = 6 < 7，不能构成三角形','只能腰为 7、底为 3：7 + 7 > 3 成立','周长 = 7 + 7 + 3 = 17'], a:'17' } },
+    { id:'k14', g:8, c:'整式的乘法与因式分解', t:'乘法公式与因式分解', cat:'代数',
+      s:'整式乘法与因式分解是互逆变形，乘法公式是化简与分解的核心工具。',
+      p:['同底数幂相乘底数不变、指数相加；幂的乘方指数相乘。','平方差与完全平方公式要能正用、逆用、变形用。','因式分解顺序：先提公因式，再套公式，最后检查是否分解彻底。'],
+      f:['(a + b)(a - b) = a² - b²','(a ± b)² = a² ± 2ab + b²'],
+      e:{ q:'把 x² - 6x + 9 分解因式。', st:['观察：首项 x²，末项 9 = 3²，中间项 -6x = -2 · x · 3','符合完全平方公式 a² - 2ab + b² = (a - b)²'], a:'(x - 3)²' } },
+    { id:'k15', g:8, c:'分式', t:'分式运算与分式方程', cat:'代数',
+      s:'分母中含有字母的式子叫分式，分式有意义的条件是分母不为零。',
+      p:['分式值为 0 的条件：分子为 0 且分母不为 0。','约分、通分的依据是分式的基本性质；异分母相加减要先通分。','解分式方程必须验根：使最简公分母为 0 的根是增根，要舍去。'],
+      f:['A/B = (A·M)/(B·M) (M ≠ 0)','a/b ± c/d = (ad ± bc)/bd'],
+      e:{ q:'解方程：2/x = 1/(x - 1)', st:['两边同乘 x(x-1)：2(x - 1) = x','2x - 2 = x，解得 x = 2','检验：x = 2 时分母都不为 0，是原方程的解'], a:'x = 2' } },
+    { id:'k16', g:8, c:'二次根式', t:'化简与运算', cat:'代数',
+      s:'形如 √a (a≥0) 的式子叫二次根式，结果要化为最简二次根式。',
+      p:['被开方数不含分母、且不含能开得尽方的因数或因式，才是最简形式。','同类二次根式（化简后被开方数相同）才能合并。','分母有理化常用平方差公式：分子分母同乘分母的有理化因式。'],
+      f:['√a · √b = √(ab) (a≥0, b≥0)','√a / √b = √(a/b) (a≥0, b>0)'],
+      e:{ q:'化简：√12 × √2', st:['先化简：√12 = √(4×3) = 2√3','√12 × √2 = √24 = √(4×6) = 2√6','或先相乘再化简，结果一致'], a:'2√6' } },
+    { id:'k17', g:8, c:'勾股定理', t:'定理及逆定理', cat:'几何',
+      s:'直角三角形两直角边的平方和等于斜边的平方，是最经典的几何定理之一。',
+      p:['已知两边求第三边时用 a² + b² = c²，注意先判断哪条是斜边。','逆定理：若 a² + b² = c²，则该三角形是直角三角形。','常见勾股数：3,4,5；5,12,13；6,8,10；7,24,25；8,15,17。'],
+      f:['a² + b² = c²（c 为斜边）','c = √(a² + b²)；a = √(c² - b²)'],
+      e:{ q:'直角三角形斜边 13，一条直角边 5，求另一条直角边。', st:['设另一条直角边为 b','b² = 13² - 5² = 169 - 25 = 144'], a:'b = 12' } },
+    { id:'k18', g:8, c:'平行四边形', t:'性质与判定', cat:'几何',
+      s:'两组对边分别平行的四边形叫平行四边形，是特殊平行四边形的基础。',
+      p:['性质：对边平行且相等、对角相等、邻角互补、对角线互相平分。','判定：两组对边分别平行/相等、一组对边平行且相等、对角线互相平分。','平行四边形是中心对称图形，对称中心是两条对角线的交点。'],
+      f:['周长 = 2(a + b)（a、b 为邻边）','邻角互补：∠A + ∠B = 180°'],
+      e:{ q:'平行四边形周长为 40，两邻边之比为 3:2，求两边长。', st:['设两邻边为 3t 和 2t','2(3t + 2t) = 40，得 10t = 40，t = 4'], a:'12 和 8' } },
+    { id:'k19', g:8, c:'特殊的平行四边形', t:'矩形、菱形、正方形', cat:'几何',
+      s:'在平行四边形基础上加一个角或一组邻边的特殊条件，得到矩形、菱形、正方形。',
+      p:['矩形：有一个角是直角，四个角都是直角，对角线相等且互相平分。','菱形：一组邻边相等，四边相等，对角线互相垂直平分且平分一组对角。','正方形兼具矩形和菱形的全部性质；菱形面积 = 对角线乘积的一半。'],
+      f:['矩形对角线相等；菱形对角线互相垂直','S菱形 = (d₁ × d₂) ÷ 2'],
+      e:{ q:'菱形两条对角线长为 6 和 8，求面积。', st:['菱形面积等于两对角线乘积的一半','S = (6 × 8) ÷ 2 = 24'], a:'24' } },
+    { id:'k20', g:8, c:'一次函数', t:'图象与性质', cat:'函数',
+      s:'形如 y = kx + b (k≠0) 的函数叫一次函数，图象是一条直线。',
+      p:['k 决定增减性和倾斜方向：k>0 时 y 随 x 增大而增大；k<0 时减小。','b 是与 y 轴交点的纵坐标，图象过点 (0, b)。','求解析式用待定系数法：代入两点坐标解关于 k、b 的方程组。'],
+      f:['y = kx + b，与 y 轴交于 (0, b)，与 x 轴交于 (-b/k, 0)','b = 0 时为正比例函数，图象过原点'],
+      e:{ q:'一次函数 y = kx + b 图象过 (0, 2) 和 (1, 5)，求解析式。', st:['把 (0, 2) 代入：b = 2','把 (1, 5) 代入：k + 2 = 5，得 k = 3'], a:'y = 3x + 2' } },
+    { id:'k21', g:8, c:'数据的分析', t:'平均数、中位数、众数与方差', cat:'统计',
+      s:'用集中趋势和离散程度两类统计量刻画一组数据的整体特征。',
+      p:['中位数要先排序；数据个数为偶数时取中间两个数的平均数；众数可能不唯一。','平均数易受极端值影响，中位数和众数不受极端值影响。','方差越小，数据越稳定、波动越小。'],
+      f:['平均数 x̄ = (x₁ + x₂ + … + xₙ) / n','方差 s² = [(x₁-x̄)² + … + (xₙ-x̄)²] / n'],
+      e:{ q:'求数据 2, 3, 3, 5, 7 的平均数、中位数和众数。', st:['平均数 = (2+3+3+5+7) ÷ 5 = 20 ÷ 5 = 4','已排序，中间第 3 个数是 3，中位数 = 3','3 出现 2 次最多，众数 = 3'], a:'平均数 4，中位数 3，众数 3' } },
+    { id:'k22', g:8, c:'多边形及其内角和', t:'内角和与外角和', cat:'几何',
+      s:'n 边形内角和随边数变化，外角和恒为 360°。',
+      p:['从 n 边形一个顶点出发可引 (n-3) 条对角线，把多边形分成 (n-2) 个三角形。','任意多边形的外角和都等于 360°，与边数无关。','正 n 边形每个外角 = 360°/n，每个内角 = (n-2)×180°/n。'],
+      f:['n 边形内角和 = (n - 2) × 180°','外角和 = 360°'],
+      e:{ q:'求八边形的内角和。', st:['代入公式 (n - 2) × 180°','n = 8：(8 - 2) × 180° = 6 × 180°'], a:'1080°' } },
+
+    { id:'k23', g:9, c:'一元二次方程', t:'解法、判别式与根与系数关系', cat:'代数',
+      s:'只含一个未知数且未知数最高次数为 2 的整式方程，常用四种解法。',
+      p:['解法：直接开平方法、配方法、公式法、因式分解法，优先试因式分解。','判别式 Δ = b² - 4ac：Δ>0 两不等实根，Δ=0 两相等实根，Δ<0 无实根。','韦达定理：x₁ + x₂ = -b/a，x₁ · x₂ = c/a。'],
+      f:['求根公式 x = [-b ± √(b² - 4ac)] / (2a)','Δ = b² - 4ac'],
+      e:{ q:'解方程 x² - 5x + 6 = 0', st:['因式分解：(x - 2)(x - 3) = 0','由 x - 2 = 0 或 x - 3 = 0'], a:'x₁ = 2，x₂ = 3' } },
+    { id:'k24', g:9, c:'旋转与中心对称', t:'旋转的性质', cat:'几何',
+      s:'把一个图形绕某点转动一个角度的变换叫旋转，旋转 180° 即中心对称。',
+      p:['旋转前后图形全等，对应点到旋转中心的距离相等，对应点与中心连线夹角等于旋转角。','中心对称图形：绕某点旋转 180° 后与自身重合，如平行四边形、圆。','关于原点对称的点坐标横纵坐标都变号。'],
+      f:['点 (x, y) 关于原点对称点为 (-x, -y)','旋转三要素：旋转中心、旋转方向、旋转角'],
+      e:{ q:'点 P(2, -3) 关于原点对称的点坐标是？', st:['关于原点对称，横、纵坐标都取相反数','2 → -2，-3 → 3'], a:'(-2, 3)' } },
+    { id:'k25', g:9, c:'圆', t:'垂径定理与圆周角', cat:'几何',
+      s:'圆是到定点距离等于定长的点的集合，垂直于弦的直径平分这条弦。',
+      p:['垂径定理：垂直于弦的直径平分弦，并且平分弦所对的两条弧。','同弧所对圆周角等于圆心角的一半；直径所对的圆周角是直角。','半径 r、弦长 a、弦心距 d 满足 r² = d² + (a/2)²。'],
+      f:['圆周角 = 同弧圆心角 ÷ 2','r² = d² + (a/2)²'],
+      e:{ q:'圆半径为 5，一条弦长为 8，求弦心距。', st:['半弦长 = 8 ÷ 2 = 4','由勾股定理：d = √(5² - 4²) = √(25 - 16) = √9'], a:'3' } },
+    { id:'k26', g:9, c:'直线与圆', t:'位置关系与切线', cat:'几何',
+      s:'设圆心到直线距离为 d、半径为 r，比较 d 与 r 即可判定位置关系。',
+      p:['d > r 相离（0 个交点），d = r 相切（1 个），d < r 相交（2 个）。','切线性质：圆的切线垂直于过切点的半径。','切线判定：经过半径外端且垂直于这条半径的直线是圆的切线。'],
+      f:['d = r ⟺ 相切；d < r ⟺ 相交；d > r ⟺ 相离','切线长定理：从圆外一点引的两条切线长相等'],
+      e:{ q:'圆的半径为 5，圆心到直线 l 的距离为 5，判断位置关系。', st:['比较 d 与 r：d = 5，r = 5','d = r'], a:'直线与圆相切' } },
+    { id:'k27', g:9, c:'概率初步', t:'列举法求概率', cat:'统计',
+      s:'刻画随机事件发生可能性大小的数值叫概率，必然事件概率为 1，不可能事件为 0。',
+      p:['P(A) = 事件 A 包含的结果数 ÷ 所有等可能结果总数，且 0 ≤ P(A) ≤ 1。','用列表法或树状图法列举两步及以上试验的所有结果，做到不重不漏。','注意区分「有放回」与「无放回」，两者结果总数不同。'],
+      f:['P(A) = m / n（n 为等可能结果总数）','P(A) + P(A 不发生) = 1'],
+      e:{ q:'袋中有 3 个红球、2 个白球（除颜色外相同），任取 1 球，求取到红球的概率。', st:['所有等可能结果数 n = 3 + 2 = 5','取到红球的结果数 m = 3'], a:'3/5' } },
+    { id:'k28', g:9, c:'反比例函数', t:'图象与性质', cat:'函数',
+      s:'形如 y = k/x (k≠0) 的函数叫反比例函数，图象是双曲线。',
+      p:['k>0 时图象在第一、三象限，每个象限内 y 随 x 增大而减小。','k<0 时图象在第二、四象限，每个象限内 y 随 x 增大而增大。','k 的几何意义：图象上一点向两坐标轴作垂线，所得矩形面积 = |k|。'],
+      f:['y = k/x 等价于 xy = k (k ≠ 0)','S矩形 = |x · y| = |k|'],
+      e:{ q:'反比例函数 y = k/x 图象过点 (1, -2)，求 k 并说明所在象限。', st:['代入得 -2 = k / 1，所以 k = -2','k < 0，图象位于第二、四象限'], a:'k = -2，图象在第二、四象限' } },
+    { id:'k29', g:9, c:'二次函数', t:'图象与性质', cat:'函数',
+      s:'形如 y = ax² + bx + c (a≠0) 的函数，图象是一条抛物线。',
+      p:['a>0 开口向上有最小值，a<0 开口向下有最大值；|a| 越大开口越小。','顶点式 y = a(x - h)² + k，顶点 (h, k)，对称轴 x = h。','一般式顶点横坐标 x = -b/(2a)，配方后可得顶点式。'],
+      f:['对称轴 x = -b/(2a)；顶点 (-b/(2a), (4ac - b²)/(4a))','顶点式 y = a(x - h)² + k'],
+      e:{ q:'求抛物线 y = x² - 2x + 3 的顶点坐标。', st:['配方：y = (x² - 2x + 1) + 2','y = (x - 1)² + 2'], a:'顶点 (1, 2)' } },
+    { id:'k30', g:9, c:'二次函数与方程', t:'交点、最值与实际应用', cat:'函数',
+      s:'抛物线与 x 轴交点的横坐标就是对应一元二次方程的根。',
+      p:['令 y = 0 解 ax² + bx + c = 0，Δ>0 有两个交点，Δ=0 有一个，Δ<0 无交点。','实际问题求最值要先求顶点，再检验自变量取值范围是否包含顶点横坐标。','交点式 y = a(x - x₁)(x - x₂)，x₁、x₂ 为与 x 轴交点横坐标。'],
+      f:['与 x 轴交点横坐标 = ax² + bx + c = 0 的根','a>0 时 x = -b/(2a) 处取最小值'],
+      e:{ q:'求抛物线 y = x² - 2x - 3 与 x 轴的交点。', st:['令 y = 0：x² - 2x - 3 = 0','因式分解：(x - 3)(x + 1) = 0','得 x = 3 或 x = -1'], a:'(3, 0) 和 (-1, 0)' } },
+    { id:'k31', g:9, c:'相似三角形', t:'判定与性质', cat:'几何',
+      s:'对应角相等、对应边成比例的两个三角形叫相似三角形。',
+      p:['判定：两角对应相等、两边成比例且夹角相等、三边成比例；平行于三角形一边的直线截得的小三角形与原三角形相似。','性质：对应角相等、对应边成比例，周长比 = 相似比，面积比 = 相似比的平方。','相似与全等的区别：全等要求相似比为 1。'],
+      f:['相似比 k → 周长比 = k，面积比 = k²','相似三角形对应高的比 = 相似比'],
+      e:{ q:'两个相似三角形相似比为 2:3，求它们的面积比。', st:['面积比等于相似比的平方','(2/3)² = 4/9'], a:'4 : 9' } },
+    { id:'k32', g:9, c:'锐角三角函数', t:'正弦、余弦、正切', cat:'几何',
+      s:'在直角三角形中，锐角的三角函数把「角」与「边」联系起来。',
+      p:['sinA = 对边/斜边，cosA = 邻边/斜边，tanA = 对边/邻边。','三角函数值只与角的大小有关，与三角形大小无关。','特殊角要记牢：30°、45°、60° 的三角函数值。'],
+      f:['sin30° = 1/2，cos60° = 1/2，tan45° = 1','sin²A + cos²A = 1；tanA = sinA / cosA'],
+      e:{ q:'直角三角形中 ∠A 的对边为 3、邻边为 4、斜边为 5，求 sinA 和 tanA。', st:['sinA = 对边 ÷ 斜边 = 3/5','tanA = 对边 ÷ 邻边 = 3/4'], a:'sinA = 3/5，tanA = 3/4' } },
+    { id:'k33', g:9, c:'解直角三角形', t:'实际应用', cat:'几何',
+      s:'利用三角函数由已知边角求未知边角，常用于测高、坡度、航海等问题。',
+      p:['仰角、俯角都是视线与水平线的夹角；坡度 i = 铅直高度 / 水平宽度 = tanα。','解题先画示意图，把实际问题转化为直角三角形。','结果按要求保留小数位数，注意单位统一。'],
+      f:['坡度 i = h / l = tanα','对边 = 邻边 × tanα；斜边 = 邻边 ÷ cosα'],
+      e:{ q:'在距旗杆 30 m 处测得杆顶仰角为 30°，求旗杆高度（忽略测量仪高度）。', st:['设旗杆高 h，tan30° = h / 30','h = 30 × tan30° = 30 × (√3/3) = 10√3'], a:'10√3 m ≈ 17.3 m' } },
+    { id:'k34', g:9, c:'投影与视图', t:'三视图与展开图', cat:'几何',
+      s:'从正面、左面、上面三个方向看物体得到的平面图形叫三视图。',
+      p:['主视图反映长和高，左视图反映宽和高，俯视图反映长和宽。','口诀：长对正、高平齐、宽相等。','平行投影（太阳光线）与中心投影（灯光）的区别：同一时刻物高与影长成比例。'],
+      f:['长对正、高平齐、宽相等','同一时刻平行投影：物高₁/影长₁ = 物高₂/影长₂'],
+      e:{ q:'一个几何体的主视图、左视图、俯视图都是圆，这个几何体是？', st:['三个方向看都是圆，说明各方向截面轮廓都是圆','只有球满足条件'], a:'球' } }
+  ];
+
+  // 题库：id, k=知识点id, ty=c(选择)/f(填空), q=题干, o=选项, a=答案(选择为索引/填空为标准答案), acc=可接受写法, sol=解析, lv=难度
+  const Q = [
+    { id:'q001', k:'k01', ty:'c', lv:1, q:'下列各数中，属于负分数的是（ ）', o:['-3','0','-1/2','2.5'], a:2, sol:'-3 是负整数，0 既不正也不负，2.5 是正分数，-1/2 是负分数。' },
+    { id:'q002', k:'k01', ty:'f', lv:2, q:'计算：(-3) + 5 - (-2) = ____', a:'4', acc:['4'], sol:'-3 + 5 = 2，减去 -2 等于加 2，所以 2 + 2 = 4。' },
+    { id:'q003', k:'k01', ty:'c', lv:2, q:'|-3| + (-2)² 的值是（ ）', o:['1','7','-1','5'], a:1, sol:'|-3| = 3，(-2)² = 4，3 + 4 = 7。注意 (-2)² = 4 而 -2² = -4。' },
+    { id:'q004', k:'k02', ty:'c', lv:1, q:'下列各组项中，属于同类项的是（ ）', o:['3a²b 与 3ab²','2x²y 与 -5x²y','4m 与 4mn','7 与 7x'], a:1, sol:'同类项要求所含字母相同且相同字母的指数也相同，2x²y 与 -5x²y 满足。' },
+    { id:'q005', k:'k02', ty:'f', lv:2, q:'若 3xᵐy² 与 -2x³yⁿ 是同类项，则 m + n = ____', a:'5', acc:['5'], sol:'同类项对应字母指数相同，所以 m = 3，n = 2，m + n = 5。' },
+    { id:'q006', k:'k03', ty:'c', lv:1, q:'方程 2(x - 1) = 3x + 4 的解是（ ）', o:['x = 6','x = -6','x = 2','x = -2'], a:1, sol:'2x - 2 = 3x + 4 → 2x - 3x = 4 + 2 → -x = 6 → x = -6。' },
+    { id:'q007', k:'k03', ty:'f', lv:2, q:'某商品打八折后售价 160 元，设原价为 x 元，则原价是 ____ 元', a:'200', acc:['200','200元'], sol:'0.8x = 160，解得 x = 200。' },
+    { id:'q008', k:'k04', ty:'c', lv:1, q:'一个角等于 35°，则它的余角是（ ）', o:['45°','55°','65°','145°'], a:1, sol:'余角 = 90° - 35° = 55°；补角才是 145°。' },
+    { id:'q009', k:'k04', ty:'f', lv:2, q:'一个角的补角比它本身大 60°，这个角是 ____ 度', a:'60', acc:['60','60°'], sol:'设角为 x，则 180 - x = x + 60 → 2x = 120 → x = 60。' },
+    { id:'q010', k:'k05', ty:'c', lv:1, q:'两直线平行，若一个同旁内角为 68°，则另一个同旁内角为（ ）', o:['68°','22°','112°','180°'], a:2, sol:'两直线平行，同旁内角互补：180° - 68° = 112°。' },
+    { id:'q011', k:'k05', ty:'c', lv:2, q:'下列说法中，能判定两直线平行的是（ ）', o:['同位角互补','内错角相等','同旁内角相等','对顶角相等'], a:1, sol:'判定定理：同位角相等、内错角相等、同旁内角互补，两直线平行。' },
+    { id:'q012', k:'k06', ty:'c', lv:2, q:'√16 的算术平方根是（ ）', o:['4','±4','2','±2'], a:2, sol:'√16 = 4，4 的算术平方根是 2。注意题目问的是「√16 的」算术平方根。' },
+    { id:'q013', k:'k06', ty:'c', lv:1, q:'估算 √10 的值在（ ）', o:['1 与 2 之间','2 与 3 之间','3 与 4 之间','4 与 5 之间'], a:2, sol:'3² = 9 < 10 < 16 = 4²，所以 3 < √10 < 4。' },
+    { id:'q014', k:'k07', ty:'c', lv:1, q:'点 P(-3, 2) 在（ ）', o:['第一象限','第二象限','第三象限','第四象限'], a:1, sol:'横坐标为负、纵坐标为正，在第二象限。' },
+    { id:'q015', k:'k07', ty:'c', lv:2, q:'点 A(2, -3) 关于 y 轴对称的点是（ ）', o:['(-2, -3)','(2, 3)','(-2, 3)','(3, -2)'], a:0, sol:'关于 y 轴对称：纵坐标不变，横坐标变号，得 (-2, -3)。' },
+    { id:'q016', k:'k08', ty:'c', lv:1, q:'方程组 x + y = 5，x - y = 1 的解是（ ）', o:['x=2, y=3','x=3, y=2','x=4, y=1','x=1, y=4'], a:1, sol:'两式相加得 2x = 6，x = 3，代入得 y = 2。' },
+    { id:'q017', k:'k08', ty:'f', lv:2, q:'若 2x + y = 7 且 x - y = 2，则 x = ____', a:'3', acc:['3','x=3'], sol:'两式相加消去 y：3x = 9，x = 3。' },
+    { id:'q018', k:'k09', ty:'c', lv:2, q:'不等式 -2x > 6 的解集是（ ）', o:['x > -3','x < -3','x > 3','x < 3'], a:1, sol:'两边同除以负数 -2，不等号方向改变，得 x < -3。' },
+    { id:'q019', k:'k09', ty:'c', lv:1, q:'不等式组 x > 1 且 x ≤ 3 的解集是（ ）', o:['x > 1','x ≤ 3','1 < x ≤ 3','无解'], a:2, sol:'取两个解集的公共部分：1 < x ≤ 3。' },
+    { id:'q020', k:'k10', ty:'f', lv:1, q:'50 个数据中某组频数为 10，该组频率是 ____', a:'0.2', acc:['0.2','1/5','20%'], sol:'频率 = 频数 ÷ 总数 = 10 ÷ 50 = 0.2。' },
+    { id:'q021', k:'k10', ty:'c', lv:2, q:'扇形统计图中某部分占 25%，其圆心角为（ ）', o:['25°','45°','90°','180°'], a:2, sol:'360° × 25% = 90°。' },
+
+    { id:'q022', k:'k11', ty:'c', lv:2, q:'下列长度的三条线段能组成三角形的是（ ）', o:['1, 2, 3','3, 4, 8','5, 6, 10','2, 2, 5'], a:2, sol:'需满足两小边之和大于最大边：5 + 6 = 11 > 10 成立；其余都不成立。' },
+    { id:'q023', k:'k11', ty:'f', lv:2, q:'三角形三个内角之比为 1:2:3，最大角是 ____ 度', a:'90', acc:['90','90°'], sol:'总份数 6，每份 180° ÷ 6 = 30°，最大角 3 × 30° = 90°，是直角三角形。' },
+    { id:'q024', k:'k12', ty:'c', lv:1, q:'下列条件不能判定两个三角形全等的是（ ）', o:['SSS','SAS','AAA','ASA'], a:2, sol:'AAA 只能判定相似，不能确定大小，故不能判定全等；SSA 同样不能。' },
+    { id:'q025', k:'k12', ty:'c', lv:2, q:'判定两个直角三角形全等特有的方法是（ ）', o:['SSS','SAS','HL','AAS'], a:2, sol:'HL（斜边、直角边）是直角三角形特有的全等判定方法。' },
+    { id:'q026', k:'k13', ty:'f', lv:1, q:'等腰三角形顶角为 80°，一个底角是 ____ 度', a:'50', acc:['50','50°'], sol:'(180° - 80°) ÷ 2 = 50°。' },
+    { id:'q027', k:'k13', ty:'c', lv:2, q:'等腰三角形两边长为 3 和 7，则周长为（ ）', o:['13','17','13 或 17','无法确定'], a:1, sol:'若腰为 3，则 3+3=6<7 不能构成三角形；只能腰 7 底 3，周长 17。' },
+    { id:'q028', k:'k14', ty:'c', lv:1, q:'计算 (x + 3)(x - 2) 的结果是（ ）', o:['x² + x - 6','x² - x - 6','x² + 5x - 6','x² - 6'], a:0, sol:'x² - 2x + 3x - 6 = x² + x - 6。' },
+    { id:'q029', k:'k14', ty:'c', lv:2, q:'把 x² - 9 分解因式，结果是（ ）', o:['(x - 3)²','(x + 3)(x - 3)','(x + 9)(x - 1)','x(x - 9)'], a:1, sol:'平方差公式 a² - b² = (a+b)(a-b)，此处 b = 3。' },
+    { id:'q030', k:'k15', ty:'c', lv:1, q:'分式 (x - 1)/(x + 2) 有意义，则 x 满足（ ）', o:['x ≠ 1','x ≠ -2','x ≠ 0','x 为任意实数'], a:1, sol:'分母不为零：x + 2 ≠ 0，即 x ≠ -2。' },
+    { id:'q031', k:'k15', ty:'c', lv:2, q:'解分式方程 2/x = 1/(x-1) 的结果是（ ）', o:['x = 1','x = 2','x = 0','无解'], a:1, sol:'同乘 x(x-1) 得 2x - 2 = x，x = 2；检验分母不为 0，是原方程的解。解分式方程务必验根。' },
+    { id:'q032', k:'k16', ty:'c', lv:1, q:'化简 √12 的结果是（ ）', o:['2√3','3√2','4√3','6'], a:0, sol:'√12 = √(4×3) = 2√3。' },
+    { id:'q033', k:'k16', ty:'f', lv:2, q:'计算：√8 × √2 = ____', a:'4', acc:['4'], sol:'√8 × √2 = √16 = 4。' },
+    { id:'q034', k:'k17', ty:'f', lv:1, q:'直角三角形两直角边为 3 和 4，斜边长为 ____', a:'5', acc:['5'], sol:'√(3² + 4²) = √25 = 5。' },
+    { id:'q035', k:'k17', ty:'c', lv:2, q:'下列各组数作为三角形三边，能构成直角三角形的是（ ）', o:['2, 3, 4','5, 12, 13','4, 5, 6','7, 8, 9'], a:1, sol:'5² + 12² = 25 + 144 = 169 = 13²，满足勾股定理逆定理。' },
+    { id:'q036', k:'k18', ty:'c', lv:1, q:'平行四边形中，∠A : ∠B = 2 : 3，则 ∠A =（ ）', o:['36°','72°','108°','60°'], a:1, sol:'邻角互补：2t + 3t = 180°，t = 36°，∠A = 2 × 36° = 72°。' },
+    { id:'q037', k:'k18', ty:'c', lv:2, q:'下列不属于平行四边形判定条件的是（ ）', o:['两组对边分别相等','一组对边平行且相等','对角线互相平分','对角线相等'], a:3, sol:'对角线相等是矩形的性质，不能作为平行四边形的判定条件。' },
+    { id:'q038', k:'k19', ty:'f', lv:2, q:'菱形两条对角线长为 6 和 8，面积是 ____', a:'24', acc:['24'], sol:'S = (6 × 8) ÷ 2 = 24。' },
+    { id:'q039', k:'k19', ty:'c', lv:1, q:'下列说法正确的是（ ）', o:['矩形对角线互相垂直','菱形对角线相等','正方形四条边相等','菱形四个角都是直角'], a:2, sol:'正方形兼具矩形与菱形性质，四边相等；矩形对角线相等但不一定垂直，菱形对角线垂直但不一定相等。' },
+    { id:'q040', k:'k20', ty:'c', lv:1, q:'一次函数 y = -2x + 3 的图象与 y 轴交于（ ）', o:['(0, 3)','(0, -2)','(3, 0)','(-2, 0)'], a:0, sol:'令 x = 0，y = 3，交点为 (0, 3)。k = -2 < 0，y 随 x 增大而减小。' },
+    { id:'q041', k:'k20', ty:'c', lv:2, q:'一次函数 y = kx + b 过 (0, 2) 与 (1, 5)，则解析式为（ ）', o:['y = 2x + 3','y = 3x + 2','y = 5x','y = -3x + 2'], a:1, sol:'b = 2；k + 2 = 5 得 k = 3，所以 y = 3x + 2。' },
+    { id:'q042', k:'k21', ty:'c', lv:1, q:'数据 2, 3, 3, 5, 7 的众数和中位数分别是（ ）', o:['3 和 3','3 和 4','4 和 3','3 和 5'], a:0, sol:'3 出现 2 次最多，众数为 3；排序后第 3 个数为 3，中位数为 3；平均数为 4。' },
+    { id:'q043', k:'k21', ty:'f', lv:2, q:'数据 1, 2, 3, 4, 5 的方差是 ____', a:'2', acc:['2'], sol:'平均数为 3，偏差平方和 = 4+1+0+1+4 = 10，方差 = 10 ÷ 5 = 2。' },
+    { id:'q044', k:'k22', ty:'f', lv:1, q:'八边形的内角和是 ____ 度', a:'1080', acc:['1080','1080°'], sol:'(8 - 2) × 180° = 1080°。' },
+    { id:'q045', k:'k22', ty:'c', lv:2, q:'正十边形的每个外角是（ ）', o:['18°','36°','72°','144°'], a:1, sol:'任意多边形外角和为 360°，360° ÷ 10 = 36°。' },
+
+    { id:'q046', k:'k23', ty:'c', lv:1, q:'方程 x² - 5x + 6 = 0 的两根是（ ）', o:['2 和 3','-2 和 -3','1 和 6','-1 和 -6'], a:0, sol:'(x-2)(x-3) = 0，得 x₁ = 2，x₂ = 3。' },
+    { id:'q047', k:'k23', ty:'c', lv:2, q:'方程 x² - 4x + 4 = 0 的根的情况是（ ）', o:['两个不相等实根','两个相等实根','没有实数根','无法确定'], a:1, sol:'Δ = (-4)² - 4×1×4 = 16 - 16 = 0，有两个相等的实根 x₁ = x₂ = 2。' },
+    { id:'q048', k:'k23', ty:'f', lv:2, q:'方程 x² + 2x - 3 = 0 的两根之和是 ____', a:'-2', acc:['-2'], sol:'韦达定理 x₁ + x₂ = -b/a = -2/1 = -2（两根之积为 -3）。' },
+    { id:'q049', k:'k24', ty:'c', lv:1, q:'点 (2, -3) 关于原点对称的点是（ ）', o:['(-2, 3)','(2, 3)','(-2, -3)','(3, -2)'], a:0, sol:'关于原点对称，横纵坐标都变号，得 (-2, 3)。' },
+    { id:'q050', k:'k24', ty:'c', lv:2, q:'下列图形中，是中心对称图形但不是轴对称图形的是（ ）', o:['等边三角形','平行四边形','矩形','圆'], a:1, sol:'平行四边形绕对角线交点旋转 180° 与自身重合（中心对称），但一般没有对称轴。' },
+    { id:'q051', k:'k25', ty:'c', lv:2, q:'一条弧所对的圆周角为 40°，则它所对的圆心角为（ ）', o:['20°','40°','80°','140°'], a:2, sol:'同弧所对圆周角等于圆心角的一半，圆心角 = 2 × 40° = 80°。' },
+    { id:'q052', k:'k25', ty:'f', lv:2, q:'圆半径为 5，一条弦长为 8，则弦心距是 ____', a:'3', acc:['3'], sol:'半弦长 4，d = √(5² - 4²) = √9 = 3。' },
+    { id:'q053', k:'k26', ty:'c', lv:1, q:'圆半径为 5，圆心到直线 l 的距离为 5，则 l 与圆（ ）', o:['相离','相切','相交','无法确定'], a:1, sol:'d = r 时相切，只有一个公共点。' },
+    { id:'q054', k:'k26', ty:'c', lv:2, q:'圆的切线与过切点的半径的位置关系是（ ）', o:['平行','垂直','成 45°','重合'], a:1, sol:'切线的性质定理：圆的切线垂直于过切点的半径。' },
+    { id:'q055', k:'k27', ty:'c', lv:1, q:'掷一枚均匀骰子，点数为偶数的概率是（ ）', o:['1/6','1/3','1/2','2/3'], a:2, sol:'6 个等可能结果中偶数有 2、4、6 共 3 个，P = 3/6 = 1/2。' },
+    { id:'q056', k:'k27', ty:'c', lv:2, q:'同时抛掷两枚均匀硬币，两枚都是正面朝上的概率是（ ）', o:['1/4','1/3','1/2','3/4'], a:0, sol:'所有结果：正正、正反、反正、反反共 4 种，正正只有 1 种，P = 1/4。' },
+    { id:'q057', k:'k28', ty:'c', lv:1, q:'反比例函数 y = 6/x 的图象经过点（ ）', o:['(2, 3)','(2, -3)','(1, 3)','(3, 3)'], a:0, sol:'需满足 xy = 6，2 × 3 = 6 成立。' },
+    { id:'q058', k:'k28', ty:'c', lv:2, q:'反比例函数 y = k/x 中 k < 0，图象位于（ ）', o:['第一、三象限','第二、四象限','第一、二象限','第三、四象限'], a:1, sol:'k < 0 时 xy < 0，x 与 y 异号，图象在第二、四象限。' },
+    { id:'q059', k:'k29', ty:'c', lv:2, q:'抛物线 y = x² - 2x + 3 的顶点坐标是（ ）', o:['(1, 2)','(-1, 2)','(1, 3)','(2, 3)'], a:0, sol:'配方 y = (x - 1)² + 2，顶点 (1, 2)，对称轴 x = 1。' },
+    { id:'q060', k:'k29', ty:'c', lv:1, q:'抛物线 y = -2(x - 1)² + 3 的开口方向和最值是（ ）', o:['向上，最小值 3','向下，最大值 3','向上，最小值 -2','向下，最大值 1'], a:1, sol:'a = -2 < 0 开口向下，顶点 (1, 3) 处取最大值 3。' },
+    { id:'q061', k:'k30', ty:'c', lv:2, q:'抛物线 y = x² - 2x - 3 与 x 轴的交点个数是（ ）', o:['0 个','1 个','2 个','3 个'], a:2, sol:'令 y = 0 得 x² - 2x - 3 = 0，Δ = 4 + 12 = 16 > 0，有两个交点 (3,0) 与 (-1,0)。' },
+    { id:'q062', k:'k30', ty:'f', lv:2, q:'抛物线 y = x² - 4x + 1 的对称轴是直线 x = ____', a:'2', acc:['2','x=2'], sol:'对称轴 x = -b/(2a) = 4/2 = 2；也可配方 y = (x - 2)² - 3。' },
+    { id:'q063', k:'k31', ty:'c', lv:2, q:'两个相似三角形的相似比为 2:3，则面积比为（ ）', o:['2:3','3:2','4:9','√2:√3'], a:2, sol:'面积比等于相似比的平方：(2/3)² = 4/9。周长比才等于相似比。' },
+    { id:'q064', k:'k31', ty:'c', lv:1, q:'下列条件能判定两个三角形相似的是（ ）', o:['三组边对应相等','两角对应相等','一组边对应相等','一组角相等'], a:1, sol:'两角对应相等（AA）可判定相似；三组边对应相等是全等（相似比为 1）。' },
+    { id:'q065', k:'k32', ty:'c', lv:1, q:'在直角三角形中，∠A 对边 3、斜边 5，则 sinA =（ ）', o:['3/4','3/5','4/5','4/3'], a:1, sol:'sinA = 对边/斜边 = 3/5；cosA = 4/5，tanA = 3/4。' },
+    { id:'q066', k:'k32', ty:'c', lv:2, q:'tan45° 的值是（ ）', o:['1/2','√2/2','1','√3'], a:2, sol:'等腰直角三角形两直角边相等，tan45° = 1；sin30° = 1/2，cos60° = 1/2。' },
+    { id:'q067', k:'k33', ty:'c', lv:2, q:'坡度 i = 1:√3，则坡角 α 为（ ）', o:['30°','45°','60°','90°'], a:0, sol:'tanα = 1/√3 = √3/3，故 α = 30°。' },
+    { id:'q068', k:'k33', ty:'f', lv:2, q:'在距旗杆 30 m 处测得杆顶仰角 30°，旗杆高为 ____ m（结果保留根号，写成 10√3 形式）', a:'10√3', acc:['10√3','10√3 m','10*√3','17.3'], sol:'h = 30 × tan30° = 30 × (√3/3) = 10√3 ≈ 17.3 m。' },
+    { id:'q069', k:'k34', ty:'c', lv:1, q:'一个几何体的主视图、左视图、俯视图都是圆，该几何体是（ ）', o:['圆柱','圆锥','球','正方体'], a:2, sol:'只有球从三个方向看都是圆；圆柱的俯视图是圆但主视图是矩形。' },
+    { id:'q070', k:'k34', ty:'c', lv:2, q:'画三视图时应遵循的规律是（ ）', o:['长对正、高平齐、宽相等','长相等、高相等、宽相等','长对正、宽平齐、高相等','随意绘制'], a:0, sol:'主视图与俯视图长对正，主视图与左视图高平齐，俯视图与左视图宽相等。' }
+  ];
+
+  // 公式速查手册
+  const F = [
+    { cat:'代数与方程', n:'绝对值', e:'|a| = a (a≥0)；|a| = -a (a<0)', d:'数轴上到原点的距离，恒非负' },
+    { cat:'代数与方程', n:'同类项合并', e:'ma + na = (m+n)a', d:'系数相加，字母及指数不变' },
+    { cat:'代数与方程', n:'去括号法则', e:'a-(b-c) = a-b+c', d:'括号前是负号，各项都变号' },
+    { cat:'代数与方程', n:'同底数幂相乘', e:'aᵐ · aⁿ = aᵐ⁺ⁿ', d:'底数不变，指数相加' },
+    { cat:'代数与方程', n:'幂的乘方', e:'(aᵐ)ⁿ = aᵐⁿ', d:'底数不变，指数相乘' },
+    { cat:'代数与方程', n:'平方差公式', e:'(a+b)(a-b) = a² - b²', d:'因式分解时逆用：a²-b² = (a+b)(a-b)' },
+    { cat:'代数与方程', n:'完全平方公式', e:'(a±b)² = a² ± 2ab + b²', d:'注意中间项 2ab 不能漏' },
+    { cat:'代数与方程', n:'一元一次方程', e:'ax + b = 0 → x = -b/a (a≠0)', d:'移项要变号' },
+    { cat:'代数与方程', n:'一元二次方程求根公式', e:'x = [-b ± √(b²-4ac)] / (2a)', d:'仅当 Δ = b²-4ac ≥ 0 时有实根' },
+    { cat:'代数与方程', n:'根的判别式', e:'Δ = b² - 4ac', d:'Δ>0 两不等实根；Δ=0 两相等实根；Δ<0 无实根' },
+    { cat:'代数与方程', n:'韦达定理', e:'x₁+x₂ = -b/a；x₁x₂ = c/a', d:'适用于 ax²+bx+c=0 (a≠0)' },
+    { cat:'代数与方程', n:'不等式变号规则', e:'a>b，c<0 → ac<bc', d:'同乘除负数，不等号方向改变' },
+    { cat:'代数与方程', n:'利润率', e:'利润率 = (售价-进价)/进价 × 100%', d:'打 n 折即售价 = 原价 × n/10' },
+    { cat:'几何', n:'余角与补角', e:'余角 = 90°-α；补角 = 180°-α', d:'同角的余角相等，同角的补角相等' },
+    { cat:'几何', n:'三角形三边关系', e:'|a-b| < c < a+b', d:'判断三条线段能否构成三角形' },
+    { cat:'几何', n:'三角形内角和', e:'∠A+∠B+∠C = 180°', d:'外角等于不相邻两内角之和' },
+    { cat:'几何', n:'多边形内角和', e:'(n-2) × 180°', d:'任意多边形外角和恒为 360°' },
+    { cat:'几何', n:'勾股定理', e:'a² + b² = c²（c 为斜边）', d:'逆定理可判定直角三角形' },
+    { cat:'几何', n:'全等判定', e:'SSS / SAS / ASA / AAS / HL', d:'SSA、AAA 不能判定全等' },
+    { cat:'几何', n:'等腰三角形底角', e:'(180° - 顶角) ÷ 2', d:'三线合一：顶角平分线、底边中线、底边上的高重合' },
+    { cat:'几何', n:'平行四边形', e:'对边平行且相等，对角相等，邻角互补', d:'对角线互相平分，周长 = 2(a+b)' },
+    { cat:'几何', n:'菱形面积', e:'S = (d₁ × d₂) ÷ 2', d:'d₁、d₂ 为两条对角线，且互相垂直平分' },
+    { cat:'几何', n:'矩形与正方形', e:'矩形对角线相等；正方形四边相等', d:'正方形兼具矩形与菱形全部性质' },
+    { cat:'几何', n:'垂径定理', e:'r² = d² + (a/2)²', d:'r 半径，d 弦心距，a 弦长' },
+    { cat:'几何', n:'圆周角定理', e:'圆周角 = 同弧圆心角 ÷ 2', d:'直径所对圆周角为 90°' },
+    { cat:'几何', n:'直线与圆', e:'d>r 相离；d=r 相切；d<r 相交', d:'切线垂直于过切点的半径' },
+    { cat:'几何', n:'相似三角形', e:'周长比 = k；面积比 = k²', d:'k 为相似比' },
+    { cat:'几何', n:'锐角三角函数', e:'sinA=对/斜；cosA=邻/斜；tanA=对/邻', d:'sin²A + cos²A = 1' },
+    { cat:'几何', n:'特殊角三角函数值', e:'sin30°=1/2；cos60°=1/2；tan45°=1', d:'sin45°=√2/2；tan30°=√3/3' },
+    { cat:'几何', n:'坡度', e:'i = h/l = tanα', d:'α 为坡角，h 铅直高度，l 水平宽度' },
+    { cat:'函数', n:'一次函数', e:'y = kx + b (k≠0)', d:'k>0 递增，k<0 递减；与 y 轴交于 (0,b)' },
+    { cat:'函数', n:'待定系数法', e:'代入两点坐标解 k、b', d:'求一次函数解析式的通用方法' },
+    { cat:'函数', n:'反比例函数', e:'y = k/x ⟺ xy = k', d:'矩形面积 |xy| = |k|；k>0 在一、三象限' },
+    { cat:'函数', n:'二次函数顶点式', e:'y = a(x-h)² + k', d:'顶点 (h,k)，对称轴 x = h' },
+    { cat:'函数', n:'二次函数对称轴', e:'x = -b/(2a)', d:'顶点纵坐标 (4ac-b²)/(4a)' },
+    { cat:'函数', n:'抛物线与 x 轴交点', e:'令 y=0 解 ax²+bx+c=0', d:'Δ>0 两交点，Δ=0 一交点，Δ<0 无交点' },
+    { cat:'统计与概率', n:'平均数', e:'x̄ = (x₁+…+xₙ)/n', d:'易受极端值影响' },
+    { cat:'统计与概率', n:'中位数与众数', e:'排序取中间；出现次数最多', d:'偶数个数据取中间两数平均值' },
+    { cat:'统计与概率', n:'方差', e:'s² = Σ(xᵢ - x̄)² / n', d:'方差越小，数据越稳定' },
+    { cat:'统计与概率', n:'频率', e:'频率 = 频数 ÷ 总数', d:'各组频率之和为 1' },
+    { cat:'统计与概率', n:'扇形圆心角', e:'圆心角 = 频率 × 360°', d:'扇形图表示部分占总体的百分比' },
+    { cat:'统计与概率', n:'概率', e:'P(A) = m / n', d:'n 为所有等可能结果数，0 ≤ P(A) ≤ 1' }
+  ];
+
+  const CATS = [
+    { n:'代数', icon:'∑', color:'#6C6BF3' },
+    { n:'几何', icon:'△', color:'#F39B4A' },
+    { n:'函数', icon:'∿', color:'#2FAE8B' },
+    { n:'统计', icon:'▤', color:'#E46A9B' }
+  ];
+
+  return { knowledge: K, bank: Q, formulas: F, cats: CATS };
+})();
+
+</script>
+<script>
+/* 扩充题库 —— 在原有 70 题基础上新增 150 题
+   字段：id / k=知识点 / ty=c选择|f填空 / q=题干 / o=选项 / a=答案 / acc=可接受写法 / sol=解析 / lv=难度(1基础 2进阶 3挑战) */
+window.MATH_EXTRA_BANK = [
+
+  /* ===== 七年级 ===== */
+  // k01 有理数
+  { id:'q071', k:'k01', ty:'c', lv:1, q:'数轴上表示 -2 的点与表示 3 的点之间的距离是（ ）', o:['1','5','-5','6'], a:1, sol:'两点间距离等于两数之差的绝对值：|3 - (-2)| = 5。' },
+  { id:'q072', k:'k01', ty:'f', lv:2, q:'计算：(-2)³ + (-3)² = ____', a:'1', acc:['1'], sol:'(-2)³ = -8，(-3)² = 9，-8 + 9 = 1。注意负数的奇次幂为负、偶次幂为正。' },
+  { id:'q073', k:'k01', ty:'c', lv:2, q:'若 |a| = 5，则 a 的值是（ ）', o:['5','-5','5 或 -5','0'], a:2, sol:'绝对值等于 5 的数在数轴上有两个，到原点距离都是 5，即 ±5。' },
+  { id:'q074', k:'k01', ty:'c', lv:3, q:'已知 |x - 2| + (y + 3)² = 0，则 x + y =（ ）', o:['-1','1','5','-5'], a:0, sol:'绝对值与平方都是非负数，和为 0 只能各自为 0：x = 2，y = -3，所以 x + y = -1。' },
+
+  // k02 整式的加减
+  { id:'q075', k:'k02', ty:'c', lv:1, q:'下列计算正确的是（ ）', o:['3a + 2b = 5ab','3a + 2a = 5a','5a - 3a = 2','3a² + 2a³ = 5a⁵'], a:1, sol:'只有同类项才能合并：3a + 2a = 5a；5a - 3a = 2a 而不是 2；字母或指数不同的项不能合并。' },
+  { id:'q076', k:'k02', ty:'f', lv:2, q:'化简：2(3x - 1) - 3(x - 2) = ____', a:'3x+4', acc:['3x+4','3x + 4'], sol:'去括号得 6x - 2 - 3x + 6，合并同类项得 3x + 4。注意 -3 乘进括号时 -2 变为 +6。' },
+  { id:'q077', k:'k02', ty:'c', lv:2, q:'多项式 3x²y - 2xy² + 5 的次数是（ ）', o:['2','3','4','5'], a:1, sol:'3x²y 的次数为 2+1 = 3，-2xy² 也是 3，常数项次数为 0，故多项式次数为 3。' },
+  { id:'q078', k:'k02', ty:'c', lv:3, q:'若 A = 2x² - 3x + 1，B = x² + 2x - 3，则 A - 2B =（ ）', o:['-7x + 7','-7x - 5','3x² - 7x + 7','4x² + x - 5'], a:0, sol:'A - 2B = 2x² - 3x + 1 - 2x² - 4x + 6 = -7x + 7，二次项恰好抵消。' },
+
+  // k03 一元一次方程
+  { id:'q079', k:'k03', ty:'f', lv:1, q:'方程 3x - 6 = 0 的解是 x = ____', a:'2', acc:['2','x=2'], sol:'3x = 6，两边同除以 3 得 x = 2。' },
+  { id:'q080', k:'k03', ty:'c', lv:2, q:'方程 (x-1)/2 = (2x+1)/3 的解是（ ）', o:['x = 5','x = -5','x = 1','x = -1'], a:1, sol:'去分母（两边乘 6）：3(x-1) = 2(2x+1) → 3x - 3 = 4x + 2 → x = -5。' },
+  { id:'q081', k:'k03', ty:'c', lv:2, q:'若 x = 2 是方程 ax - 3 = 5 的解，则 a =（ ）', o:['1','2','4','8'], a:2, sol:'把 x = 2 代入：2a - 3 = 5 → 2a = 8 → a = 4。' },
+  { id:'q082', k:'k03', ty:'f', lv:3, q:'某商品进价 100 元、标价 200 元，打 x 折销售后利润率为 20%，则 x = ____', a:'6', acc:['6','6折'], sol:'售价 = 100 × (1 + 20%) = 120 元；200 × x/10 = 120，解得 x = 6，即六折。' },
+
+  // k04 几何图形初步
+  { id:'q083', k:'k04', ty:'c', lv:1, q:'关于直线、射线与线段，下列说法正确的是（ ）', o:['两点之间直线最短','两点之间线段最短','过三点一定能画一条直线','射线可以度量长度'], a:1, sol:'两点之间线段最短，线段的长度叫两点间的距离；直线向两方无限延伸，无法度量。' },
+  { id:'q084', k:'k04', ty:'f', lv:2, q:'计算：32°15′ + 28°45′ = ____ 度', a:'61', acc:['61','61°'], sol:'15′ + 45′ = 60′ = 1°，32° + 28° + 1° = 61°。角度是六十进制。' },
+  { id:'q085', k:'k04', ty:'c', lv:2, q:'一个角的余角是 27°，则它的补角是（ ）', o:['63°','117°','153°','27°'], a:1, sol:'这个角 = 90° - 27° = 63°，补角 = 180° - 63° = 117°。' },
+  { id:'q086', k:'k04', ty:'c', lv:3, q:'时钟 3 点整时，时针与分针的夹角是（ ）', o:['30°','60°','90°','120°'], a:2, sol:'钟面 12 大格每格 30°，3 点整分针指向 12、时针指向 3，相隔 3 格即 90°。' },
+
+  // k05 相交线与平行线
+  { id:'q087', k:'k05', ty:'c', lv:1, q:'关于同位角，下列说法正确的是（ ）', o:['同位角一定相等','两直线平行时同位角相等','同位角一定互补','同位角是对顶角'], a:1, sol:'同位角只是一种位置关系，只有在两直线平行的前提下才相等。' },
+  { id:'q088', k:'k05', ty:'f', lv:2, q:'两直线平行，一个内错角为 55°，则另一个内错角为 ____ 度', a:'55', acc:['55','55°'], sol:'两直线平行，内错角相等，所以也是 55°。' },
+  { id:'q089', k:'k05', ty:'c', lv:2, q:'两条平行线间的距离是指（ ）', o:['两平行线间任意线段的长度','两平行线间垂线段的长度','一条直线上两点间的距离','两平行线间斜线段的长度'], a:1, sol:'公垂线段最短且其长度处处相等，这个长度定义为两平行线间的距离。' },
+  { id:'q090', k:'k05', ty:'c', lv:3, q:'两直线平行，∠1 与 ∠2 是同旁内角且 ∠1 = 2∠2，则 ∠1 =（ ）', o:['60°','90°','120°','150°'], a:2, sol:'同旁内角互补：∠1 + ∠2 = 180°，即 3∠2 = 180°，∠2 = 60°，∠1 = 120°。' },
+
+  // k06 实数
+  { id:'q091', k:'k06', ty:'c', lv:1, q:'下列各数中，是无理数的是（ ）', o:['0.5','-3','22/7','√2'], a:3, sol:'√2 是开方开不尽的数，为无限不循环小数；22/7 是分数，属于有理数。' },
+  { id:'q092', k:'k06', ty:'f', lv:2, q:'计算：³√(-27) = ____', a:'-3', acc:['-3'], sol:'(-3)³ = -27，所以 -27 的立方根是 -3；负数没有平方根但有立方根。' },
+  { id:'q093', k:'k06', ty:'c', lv:2, q:'√((-5)²) 的值是（ ）', o:['-5','5','±5','25'], a:1, sol:'先算 (-5)² = 25，再算 √25 = 5；也可直接用 √(a²) = |a| = 5。' },
+  { id:'q094', k:'k06', ty:'c', lv:3, q:'若 √(a-1) + |b+2| = 0，则 a + b =（ ）', o:['-1','1','3','-3'], a:0, sol:'算术平方根与绝对值都非负，和为 0 则各自为 0：a = 1，b = -2，a + b = -1。' },
+
+  // k07 平面直角坐标系
+  { id:'q095', k:'k07', ty:'c', lv:1, q:'点 (0, -4) 在（ ）', o:['x 轴正半轴','x 轴负半轴','y 轴正半轴','y 轴负半轴'], a:3, sol:'横坐标为 0 说明在 y 轴上，纵坐标为负说明在 y 轴负半轴；坐标轴上的点不属于任何象限。' },
+  { id:'q096', k:'k07', ty:'f', lv:2, q:'点 P(-3, 4) 到 x 轴的距离是 ____', a:'4', acc:['4'], sol:'点到 x 轴的距离等于纵坐标的绝对值 |4| = 4；到 y 轴的距离才是 |−3| = 3。' },
+  { id:'q097', k:'k07', ty:'c', lv:2, q:'点 A(1, -2) 向右平移 3 个单位、再向上平移 2 个单位后的坐标是（ ）', o:['(4, 0)','(-2, 0)','(4, -4)','(-2, -4)'], a:0, sol:'右移横坐标加 3：1 + 3 = 4；上移纵坐标加 2：-2 + 2 = 0，得 (4, 0)。' },
+  { id:'q098', k:'k07', ty:'c', lv:3, q:'若点 P(a-1, a+2) 在 y 轴上，则 a =（ ）', o:['-2','0','1','2'], a:2, sol:'y 轴上的点横坐标为 0：a - 1 = 0，得 a = 1，此时 P(0, 3)。' },
+
+  // k08 二元一次方程组
+  { id:'q099', k:'k08', ty:'f', lv:1, q:'已知 x = 2 且 x + y = 5，则 y = ____', a:'3', acc:['3','y=3'], sol:'把 x = 2 代入 x + y = 5，得 y = 3。' },
+  { id:'q100', k:'k08', ty:'c', lv:2, q:'方程组 2x + y = 7，x + 2y = 8 的解是（ ）', o:['x=2, y=3','x=3, y=2','x=1, y=5','x=4, y=-1'], a:0, sol:'两式相加得 3x + 3y = 15 即 x + y = 5；与 2x + y = 7 相减得 x = 2，y = 3。' },
+  { id:'q101', k:'k08', ty:'c', lv:2, q:'若 x = 1，y = -1 是方程 2x - ay = 5 的解，则 a =（ ）', o:['-3','3','1','-1'], a:1, sol:'代入得 2 - a×(-1) = 5，即 2 + a = 5，a = 3。' },
+  { id:'q102', k:'k08', ty:'f', lv:3, q:'若 2x + y = 10 且 x - y = 2，则 x = ____', a:'4', acc:['4','x=4'], sol:'两式相加消去 y：3x = 12，x = 4，代回得 y = 2。' },
+
+  // k09 一元一次不等式
+  { id:'q103', k:'k09', ty:'c', lv:1, q:'不等式 2x - 4 ≥ 0 的解集是（ ）', o:['x ≥ 2','x ≤ 2','x > 2','x ≥ 4'], a:0, sol:'2x ≥ 4，两边同除以正数 2，不等号方向不变，得 x ≥ 2。' },
+  { id:'q104', k:'k09', ty:'f', lv:2, q:'不等式 3x - 2 < 7 的正整数解共有 ____ 个', a:'2', acc:['2','2个'], sol:'3x < 9 → x < 3，正整数解为 1 和 2，共 2 个。' },
+  { id:'q105', k:'k09', ty:'c', lv:2, q:'若 a < b，下列不等式一定成立的是（ ）', o:['a - 3 > b - 3','-2a < -2b','a - 3 < b - 3','a² < b²'], a:2, sol:'两边同减 3 不改变不等号方向；同乘 -2 应变号；a² < b² 在 a、b 含负数时不一定成立。' },
+  { id:'q106', k:'k09', ty:'c', lv:3, q:'若不等式组 x > m 且 x ≤ 3 有解，则 m 满足（ ）', o:['m > 3','m ≥ 3','m < 3','m ≤ 0'], a:2, sol:'要有公共部分，需 m < 3，此时解集为 m < x ≤ 3；m = 3 时 x > 3 与 x ≤ 3 无公共部分。' },
+
+  // k10 数据的收集与整理
+  { id:'q107', k:'k10', ty:'c', lv:1, q:'要清楚表示各部分占总体的百分比，最适合的统计图是（ ）', o:['条形统计图','折线统计图','扇形统计图','频数分布直方图'], a:2, sol:'扇形图用圆心角大小表示各部分占比；条形图看数量，折线图看变化趋势。' },
+  { id:'q108', k:'k10', ty:'f', lv:2, q:'一组数据共 200 个，某组频率为 0.15，则该组频数为 ____', a:'30', acc:['30'], sol:'频数 = 总数 × 频率 = 200 × 0.15 = 30。' },
+  { id:'q109', k:'k10', ty:'c', lv:2, q:'在频数分布直方图中，各小长方形的高之比等于（ ）', o:['组距之比','频数之比','频率之和','数据总数'], a:1, sol:'组距相等时，小长方形的高与频数成正比，故高之比等于频数之比。' },
+  { id:'q110', k:'k10', ty:'c', lv:3, q:'扇形统计图中某部分圆心角为 72°，则该部分占总体的（ ）', o:['10%','20%','25%','30%'], a:1, sol:'72° ÷ 360° = 0.2 = 20%。' },
+
+  /* ===== 八年级 ===== */
+  // k11 三角形
+  { id:'q111', k:'k11', ty:'c', lv:1, q:'三角形一个外角为 120°，与它不相邻的一个内角为 50°，则另一个不相邻内角为（ ）', o:['50°','60°','70°','110°'], a:2, sol:'外角等于与它不相邻的两个内角之和：120° - 50° = 70°。' },
+  { id:'q112', k:'k11', ty:'f', lv:2, q:'三角形两边长为 5 和 9，第三边长为整数，则第三边最大可取 ____', a:'13', acc:['13'], sol:'由三边关系 4 < c < 14，最大整数为 13。' },
+  { id:'q113', k:'k11', ty:'c', lv:2, q:'三角形三个内角之比为 2:3:4，则最大角为（ ）', o:['40°','60°','80°','100°'], a:2, sol:'总份数 9，每份 180° ÷ 9 = 20°，最大角 4 × 20° = 80°。' },
+  { id:'q114', k:'k11', ty:'c', lv:3, q:'三角形三个内角之比为 3:4:5，则这个三角形是（ ）', o:['锐角三角形','直角三角形','钝角三角形','等腰三角形'], a:0, sol:'每份 180° ÷ 12 = 15°，三角分别为 45°、60°、75°，都小于 90°，是锐角三角形。' },
+
+  // k12 全等三角形
+  { id:'q115', k:'k12', ty:'c', lv:1, q:'两个全等三角形的对应边（ ）', o:['相等','成比例','互相垂直','和为 180°'], a:0, sol:'全等即能够完全重合，对应边相等、对应角相等、面积相等。' },
+  { id:'q116', k:'k12', ty:'c', lv:2, q:'下列条件能判定 △ABC ≌ △DEF 的是（ ）', o:['AB=DE，∠A=∠D，AC=DF','AB=DE，BC=EF，∠A=∠D','∠A=∠D，∠B=∠E，∠C=∠F','AB=DE，AC=DF，∠B=∠E'], a:0, sol:'两边及其夹角对应相等（SAS）可判定全等；其余分别是 SSA、AAA、SSA，均不能判定。' },
+  { id:'q117', k:'k12', ty:'c', lv:2, q:'用尺规作一个角等于已知角，其理论依据是（ ）', o:['SSS','SAS','ASA','AAS'], a:0, sol:'作图时保证三边对应相等，由 SSS 判定两个三角形全等，从而对应角相等。' },
+  { id:'q118', k:'k12', ty:'c', lv:3, q:'关于全等与面积，下列说法正确的是（ ）', o:['面积相等的两个三角形一定全等','全等三角形面积一定相等','周长相等的两个三角形一定全等','三个角相等的两个三角形一定全等'], a:1, sol:'全等则面积必相等；反之不成立，等底等高的三角形面积相等但形状可以不同。' },
+
+  // k13 轴对称与等腰三角形
+  { id:'q119', k:'k13', ty:'c', lv:1, q:'下列图形中，对称轴条数最多的是（ ）', o:['等腰三角形','等边三角形','正方形','圆'], a:3, sol:'圆有无数条对称轴（每条直径所在直线）；正方形 4 条，等边三角形 3 条，等腰三角形 1 条。' },
+  { id:'q120', k:'k13', ty:'f', lv:2, q:'等腰三角形的一个角为 100°，则它的底角是 ____ 度', a:'40', acc:['40','40°'], sol:'100° 只能是顶角（底角为 100° 会超过内角和），底角 = (180° - 100°) ÷ 2 = 40°。' },
+  { id:'q121', k:'k13', ty:'c', lv:2, q:'等边三角形共有对称轴（ ）', o:['1 条','2 条','3 条','6 条'], a:2, sol:'等边三角形每条边上的高所在直线都是对称轴，共 3 条。' },
+  { id:'q122', k:'k13', ty:'c', lv:3, q:'等腰三角形底边上的高把顶角平分成 25°，则它的底角为（ ）', o:['25°','50°','65°','130°'], a:2, sol:'顶角 = 2 × 25° = 50°，底角 = (180° - 50°) ÷ 2 = 65°，体现三线合一。' },
+
+  // k14 整式的乘法与因式分解
+  { id:'q123', k:'k14', ty:'c', lv:1, q:'计算 (2a)³ 的结果是（ ）', o:['2a³','6a³','8a³','8a'], a:2, sol:'积的乘方等于各因式乘方的积：2³ × a³ = 8a³。' },
+  { id:'q124', k:'k14', ty:'f', lv:2, q:'把 x² - 4x 分解因式，结果是 ____', a:'x(x-4)', acc:['x(x-4)','x(x - 4)'], sol:'提取公因式 x，得 x(x - 4)。因式分解要先提公因式。' },
+  { id:'q125', k:'k14', ty:'c', lv:2, q:'化简 (a - b)² + 2ab 的结果是（ ）', o:['a² + b²','a² - b²','(a + b)²','a² - 2ab + b²'], a:0, sol:'(a² - 2ab + b²) + 2ab = a² + b²。' },
+  { id:'q126', k:'k14', ty:'f', lv:3, q:'已知 a + b = 5，ab = 3，则 a² + b² = ____', a:'19', acc:['19'], sol:'a² + b² = (a+b)² - 2ab = 25 - 6 = 19，这是完全平方公式的常用变形。' },
+
+  // k15 分式
+  { id:'q127', k:'k15', ty:'c', lv:1, q:'当 x 取何值时，分式 (x+1)/(x-3) 无意义（ ）', o:['x = -1','x = 0','x = 3','任意实数'], a:2, sol:'分母为 0 时分式无意义：x - 3 = 0，即 x = 3。' },
+  { id:'q128', k:'k15', ty:'f', lv:2, q:'化简：(a² - 1)/(a + 1) = ____', a:'a-1', acc:['a-1','a - 1'], sol:'分子用平方差公式分解为 (a+1)(a-1)，约去公因式 a+1 得 a - 1。' },
+  { id:'q129', k:'k15', ty:'c', lv:2, q:'计算 1/x + 1/(2x) 的结果是（ ）', o:['1/(3x)','2/(3x)','3/(2x)','1/(2x²)'], a:2, sol:'通分为 2/(2x) + 1/(2x) = 3/(2x)。' },
+  { id:'q130', k:'k15', ty:'c', lv:3, q:'若分式 (x²-4)/(x-2) 的值为 0，则 x =（ ）', o:['2','-2','±2','0'], a:1, sol:'分子为 0 得 x = ±2，但 x = 2 使分母为 0 必须舍去，故 x = -2。分式值为 0 要同时满足分子为 0 且分母不为 0。' },
+
+  // k16 二次根式
+  { id:'q131', k:'k16', ty:'c', lv:1, q:'要使 √(x-3) 有意义，则 x 满足（ ）', o:['x > 3','x ≥ 3','x < 3','x ≠ 3'], a:1, sol:'二次根式的被开方数必须非负：x - 3 ≥ 0，即 x ≥ 3。' },
+  { id:'q132', k:'k16', ty:'f', lv:2, q:'计算：√18 - √8 = ____', a:'√2', acc:['√2','1√2'], sol:'√18 = 3√2，√8 = 2√2，同类二次根式相减得 √2。' },
+  { id:'q133', k:'k16', ty:'c', lv:2, q:'下列与 √3 是同类二次根式的是（ ）', o:['√6','√9','√12','√18'], a:2, sol:'√12 = 2√3，化简后被开方数为 3，与 √3 是同类二次根式；√9 = 3，√18 = 3√2。' },
+  { id:'q134', k:'k16', ty:'f', lv:3, q:'计算：(√5 + 2)(√5 - 2) = ____', a:'1', acc:['1'], sol:'用平方差公式：(√5)² - 2² = 5 - 4 = 1。' },
+
+  // k17 勾股定理
+  { id:'q135', k:'k17', ty:'c', lv:1, q:'直角三角形两直角边为 6 和 8，斜边长为（ ）', o:['10','12','14','100'], a:0, sol:'√(6² + 8²) = √100 = 10，是常见勾股数 6,8,10。' },
+  { id:'q136', k:'k17', ty:'f', lv:2, q:'直角三角形斜边为 25，一条直角边为 7，另一条直角边为 ____', a:'24', acc:['24'], sol:'√(25² - 7²) = √(625 - 49) = √576 = 24，勾股数 7,24,25。' },
+  { id:'q137', k:'k17', ty:'c', lv:2, q:'等腰直角三角形的直角边为 1，则斜边为（ ）', o:['1','√2','2','√3'], a:1, sol:'√(1² + 1²) = √2。' },
+  { id:'q138', k:'k17', ty:'c', lv:3, q:'直角三角形两直角边为 5 和 12，则斜边上的高为（ ）', o:['60/13','30/13','12','13'], a:0, sol:'斜边 13，面积 = 5×12÷2 = 30，又面积 = 13×h÷2，故 h = 60/13。' },
+
+  // k18 平行四边形
+  { id:'q139', k:'k18', ty:'c', lv:1, q:'平行四边形的对角线（ ）', o:['相等','互相垂直','互相平分','平分一组对角'], a:2, sol:'平行四边形对角线互相平分；对角线相等是矩形性质，互相垂直是菱形性质。' },
+  { id:'q140', k:'k18', ty:'f', lv:2, q:'平行四边形 ABCD 中，∠A = 65°，则 ∠C = ____ 度', a:'65', acc:['65','65°'], sol:'平行四边形对角相等，∠C = ∠A = 65°；邻角 ∠B 才是 115°。' },
+  { id:'q141', k:'k18', ty:'c', lv:2, q:'平行四边形周长为 30，一边长为 8，则其邻边长为（ ）', o:['6','7','8','11'], a:1, sol:'周长 = 2(a + b)，即 2(8 + b) = 30，b = 7。' },
+  { id:'q142', k:'k18', ty:'c', lv:3, q:'平行四边形两条对角线长 6 和 10，则它的一边长 x 满足（ ）', o:['2 < x < 8','4 < x < 16','3 < x < 5','1 < x < 4'], a:0, sol:'对角线互相平分，半对角线 3 和 5 与一边构成三角形，由三边关系 5 - 3 < x < 5 + 3，即 2 < x < 8。' },
+
+  // k19 特殊的平行四边形
+  { id:'q143', k:'k19', ty:'c', lv:1, q:'矩形的对角线（ ）', o:['互相垂直','相等且互相平分','平分一组对角','长度等于边长'], a:1, sol:'矩形是有一个角为直角的平行四边形，对角线相等且互相平分。' },
+  { id:'q144', k:'k19', ty:'f', lv:2, q:'菱形边长为 5，一条对角线长为 6，则另一条对角线长为 ____', a:'8', acc:['8'], sol:'菱形对角线互相垂直平分，半对角线与边构成直角三角形：(6/2)² + (d/2)² = 5² → 9 + (d/2)² = 25 → d/2 = 4，d = 8。' },
+  { id:'q145', k:'k19', ty:'c', lv:2, q:'正方形对角线长为 4，则它的面积为（ ）', o:['4','8','16','2√2'], a:1, sol:'正方形面积 = 对角线² ÷ 2 = 16 ÷ 2 = 8；边长 = 4/√2 = 2√2，边长平方也是 8。' },
+  { id:'q146', k:'k19', ty:'c', lv:3, q:'顺次连接矩形四边中点所得的四边形是（ ）', o:['矩形','菱形','正方形','平行四边形'], a:1, sol:'由三角形中位线定理，新四边形四边都等于矩形对角线的一半，故四边相等为菱形。' },
+
+  // k20 一次函数
+  { id:'q147', k:'k20', ty:'c', lv:1, q:'一次函数 y = 3x - 6 与 x 轴的交点是（ ）', o:['(0, -6)','(2, 0)','(0, 2)','(-2, 0)'], a:1, sol:'令 y = 0：3x - 6 = 0，x = 2，交点为 (2, 0)；与 y 轴交点才是 (0, -6)。' },
+  { id:'q148', k:'k20', ty:'f', lv:2, q:'一次函数 y = -x + 4 中，当 x = 3 时，y = ____', a:'1', acc:['1'], sol:'y = -3 + 4 = 1。' },
+  { id:'q149', k:'k20', ty:'c', lv:2, q:'直线 y = 2x - 1 不经过（ ）', o:['第一象限','第二象限','第三象限','第四象限'], a:1, sol:'k > 0 图象上升，b = -1 < 0 与 y 轴交于负半轴，图象经过第一、三、四象限，不经过第二象限。' },
+  { id:'q150', k:'k20', ty:'c', lv:3, q:'把直线 y = 2x + 1 向下平移 3 个单位，所得解析式为（ ）', o:['y = 2x + 4','y = 2x - 2','y = 5x + 1','y = 2(x-3) + 1'], a:1, sol:'上下平移只改变 b：1 - 3 = -2，得 y = 2x - 2，斜率不变。' },
+
+  // k21 数据的分析
+  { id:'q151', k:'k21', ty:'c', lv:1, q:'数据 3, 5, 7, 9 的平均数是（ ）', o:['5','6','7','8'], a:1, sol:'(3 + 5 + 7 + 9) ÷ 4 = 24 ÷ 4 = 6。' },
+  { id:'q152', k:'k21', ty:'f', lv:2, q:'数据 2, 4, 4, 6, 9 的中位数是 ____', a:'4', acc:['4'], sol:'已按从小到大排列，共 5 个数，中间第 3 个是 4。' },
+  { id:'q153', k:'k21', ty:'c', lv:2, q:'数据 1, 2, 3, 4, 5 的极差是（ ）', o:['2','3','4','5'], a:2, sol:'极差 = 最大值 - 最小值 = 5 - 1 = 4。' },
+  { id:'q154', k:'k21', ty:'c', lv:3, q:'甲乙两组数据平均数相同，甲方差 0.5、乙方差 1.2，则（ ）', o:['甲组数据更稳定','乙组数据更稳定','两组一样稳定','无法比较'], a:0, sol:'方差越小说明波动越小、数据越稳定，0.5 < 1.2，故甲更稳定。' },
+
+  // k22 多边形及其内角和
+  { id:'q155', k:'k22', ty:'c', lv:1, q:'五边形的内角和是（ ）', o:['360°','540°','720°','900°'], a:1, sol:'(5 - 2) × 180° = 3 × 180° = 540°。' },
+  { id:'q156', k:'k22', ty:'f', lv:2, q:'一个多边形的内角和为 1260°，则它的边数是 ____', a:'9', acc:['9'], sol:'(n-2) × 180 = 1260 → n - 2 = 7 → n = 9。' },
+  { id:'q157', k:'k22', ty:'c', lv:2, q:'从九边形的一个顶点出发，可以引出对角线（ ）', o:['5 条','6 条','7 条','9 条'], a:1, sol:'从 n 边形一个顶点可引 (n - 3) 条对角线，9 - 3 = 6 条。' },
+  { id:'q158', k:'k22', ty:'c', lv:3, q:'正多边形每个外角为 24°，则它的边数为（ ）', o:['12','15','18','20'], a:1, sol:'任意多边形外角和为 360°，360° ÷ 24° = 15。' },
+
+  /* ===== 九年级 ===== */
+  // k23 一元二次方程
+  { id:'q159', k:'k23', ty:'c', lv:1, q:'方程 x² = 4 的根是（ ）', o:['x = 2','x = -2','x = ±2','x = 4'], a:2, sol:'直接开平方得 x = ±2，注意不要漏掉负根。' },
+  { id:'q160', k:'k23', ty:'f', lv:2, q:'方程 x² - 3x = 0 的较大根是 ____', a:'3', acc:['3'], sol:'因式分解 x(x - 3) = 0，得 x₁ = 0，x₂ = 3，较大根为 3。' },
+  { id:'q161', k:'k23', ty:'c', lv:2, q:'用配方法解 x² - 6x + 5 = 0，配方后得到（ ）', o:['(x - 3)² = 4','(x - 3)² = 14','(x - 6)² = 4','(x + 3)² = 4'], a:0, sol:'x² - 6x = -5，两边加 9：x² - 6x + 9 = 4，即 (x - 3)² = 4。' },
+  { id:'q162', k:'k23', ty:'c', lv:3, q:'若方程 x² - 2x + m = 0 有两个相等的实数根，则 m =（ ）', o:['0','1','2','4'], a:1, sol:'Δ = (-2)² - 4m = 4 - 4m = 0，解得 m = 1，此时根为 x = 1。' },
+
+  // k24 旋转与中心对称
+  { id:'q163', k:'k24', ty:'c', lv:1, q:'下列图形中，既是轴对称图形又是中心对称图形的是（ ）', o:['等边三角形','平行四边形','矩形','正五边形'], a:2, sol:'矩形有两条对称轴，且绕对角线交点旋转 180° 与自身重合；一般平行四边形不是轴对称图形。' },
+  { id:'q164', k:'k24', ty:'f', lv:2, q:'点 (3, 0) 绕原点逆时针旋转 90° 后的坐标是 ____（写成 (a, b) 形式）', a:'(0,3)', acc:['(0,3)','(0, 3)'], sol:'点 (x, y) 逆时针旋转 90° 变为 (-y, x)，故 (3, 0) → (0, 3)。' },
+  { id:'q165', k:'k24', ty:'c', lv:2, q:'时钟的分针走 20 分钟，转过的角度是（ ）', o:['60°','90°','120°','180°'], a:2, sol:'分针每分钟转 6°，20 × 6° = 120°。' },
+  { id:'q166', k:'k24', ty:'c', lv:3, q:'正三角形绕其中心至少旋转多少度能与自身重合（ ）', o:['60°','90°','120°','180°'], a:2, sol:'360° ÷ 3 = 120°，正 n 边形绕中心旋转 360°/n 的整数倍与自身重合。' },
+
+  // k25 圆
+  { id:'q167', k:'k25', ty:'c', lv:1, q:'圆中最长的弦是（ ）', o:['半径','直径','弦心距','弧'], a:1, sol:'直径是经过圆心的弦，长度为 2r，是圆中最长的弦。' },
+  { id:'q168', k:'k25', ty:'f', lv:2, q:'半径为 6 的圆中，60° 圆心角所对的弧长为 ____（结果保留 π）', a:'2π', acc:['2π','2PI','2*pi'], sol:'弧长 l = (60/360) × 2πr = (1/6) × 12π = 2π。' },
+  { id:'q169', k:'k25', ty:'c', lv:2, q:'圆内接四边形的对角（ ）', o:['相等','互补','互余','和为 90°'], a:1, sol:'圆内接四边形对角互补，且任一外角等于它的内对角。' },
+  { id:'q170', k:'k25', ty:'c', lv:3, q:'半径为 4 的圆中，弦 AB 长为 4√2，则弦 AB 所对的圆周角为（ ）', o:['30°','45°','45° 或 135°','90°'], a:2, sol:'半弦 2√2、半径 4，弦心距 = √(16-8) = 2√2，故圆心角为 90°；优弧与劣弧所对圆周角分别为 135° 和 45°，两答案都要考虑。' },
+
+  // k26 直线与圆
+  { id:'q171', k:'k26', ty:'c', lv:1, q:'圆的半径为 4，圆心到直线 l 的距离为 6，则 l 与圆（ ）', o:['相离','相切','相交','无法确定'], a:0, sol:'d = 6 > r = 4，直线与圆相离，没有公共点。' },
+  { id:'q172', k:'k26', ty:'f', lv:2, q:'圆半径为 3，圆心到直线的距离为 3，则直线与圆的公共点有 ____ 个', a:'1', acc:['1','1个'], sol:'d = r 时直线与圆相切，只有一个公共点。' },
+  { id:'q173', k:'k26', ty:'c', lv:2, q:'三角形内切圆的圆心是（ ）', o:['三边垂直平分线的交点','三条角平分线的交点','三条中线的交点','三条高的交点'], a:1, sol:'内心是三条角平分线的交点，到三边距离相等；外心才是三边垂直平分线的交点。' },
+  { id:'q174', k:'k26', ty:'c', lv:3, q:'从圆外一点 P 引圆的两条切线，切线长为 6，圆半径为 4，则 OP =（ ）', o:['10','2√13','√52','2√5'], a:1, sol:'半径垂直切线，由勾股定理 OP = √(6² + 4²) = √52 = 2√13。' },
+
+  // k27 概率初步
+  { id:'q175', k:'k27', ty:'c', lv:1, q:'必然事件的概率是（ ）', o:['0','0.5','1','无法确定'], a:2, sol:'必然事件一定发生，概率为 1；不可能事件概率为 0；随机事件概率在 0 与 1 之间。' },
+  { id:'q176', k:'k27', ty:'f', lv:2, q:'袋中有 2 个红球和 3 个白球（除颜色外相同），任取 1 球是白球的概率为 ____', a:'3/5', acc:['3/5','0.6'], sol:'共 5 个等可能结果，白球 3 个，P = 3/5。' },
+  { id:'q177', k:'k27', ty:'c', lv:2, q:'同时掷两枚均匀骰子，点数之和为 2 的概率是（ ）', o:['1/36','1/18','1/12','1/6'], a:0, sol:'共 6 × 6 = 36 种等可能结果，和为 2 只有 (1,1) 一种，P = 1/36。' },
+  { id:'q178', k:'k27', ty:'c', lv:3, q:'袋中有 2 红 1 白共 3 个球，不放回连续取 2 次，两次都是红球的概率是（ ）', o:['1/3','4/9','2/3','1/2'], a:0, sol:'第一次取红概率 2/3，不放回后剩 1 红 1 白，第二次取红概率 1/2，相乘得 1/3。' },
+
+  // k28 反比例函数
+  { id:'q179', k:'k28', ty:'c', lv:1, q:'下列函数中是反比例函数的是（ ）', o:['y = 3x','y = 3/x','y = x²','y = 3x + 1'], a:1, sol:'形如 y = k/x (k ≠ 0) 的函数是反比例函数，等价于 xy = k。' },
+  { id:'q180', k:'k28', ty:'f', lv:2, q:'反比例函数 y = k/x 的图象过点 (2, -3)，则 k = ____', a:'-6', acc:['-6'], sol:'k = xy = 2 × (-3) = -6。' },
+  { id:'q181', k:'k28', ty:'c', lv:2, q:'反比例函数 y = 4/x 图象上一点向两坐标轴作垂线，所得矩形面积为（ ）', o:['2','4','8','16'], a:1, sol:'S = |x · y| = |k| = 4，这是 k 的几何意义。' },
+  { id:'q182', k:'k28', ty:'c', lv:3, q:'反比例函数 y = -2/x 图象上有 A(x₁,y₁)、B(x₂,y₂)，且 x₁ < 0 < x₂，则（ ）', o:['y₁ < y₂','y₁ > y₂','y₁ = y₂','无法比较'], a:1, sol:'k < 0 时图象在第二、四象限：x₁ < 0 时 y₁ > 0，x₂ > 0 时 y₂ < 0，故 y₁ > y₂。' },
+
+  // k29 二次函数
+  { id:'q183', k:'k29', ty:'c', lv:1, q:'抛物线 y = (x - 2)² + 1 的对称轴是（ ）', o:['x = -2','x = 2','y = 1','x = 1'], a:1, sol:'顶点式 y = a(x-h)² + k 的对称轴为 x = h = 2，顶点 (2, 1)。' },
+  { id:'q184', k:'k29', ty:'f', lv:2, q:'抛物线 y = x² + 2x - 3 的顶点横坐标是 ____', a:'-1', acc:['-1','x=-1'], sol:'对称轴 x = -b/(2a) = -2/2 = -1；配方 y = (x+1)² - 4 也可看出。' },
+  { id:'q185', k:'k29', ty:'c', lv:2, q:'把抛物线 y = x² 向右平移 2 个单位、再向上平移 3 个单位，所得解析式为（ ）', o:['y = (x+2)² + 3','y = (x-2)² + 3','y = (x-2)² - 3','y = x² + 5'], a:1, sol:'左加右减、上加下减：右移 2 得 y = (x-2)²，上移 3 得 y = (x-2)² + 3。' },
+  { id:'q186', k:'k29', ty:'c', lv:3, q:'二次函数 y = x² - 4x + 3，当 0 ≤ x ≤ 3 时的最小值为（ ）', o:['-1','0','3','-4'], a:0, sol:'对称轴 x = 2 在区间内，开口向上，顶点取最小值 y = 4 - 8 + 3 = -1。' },
+
+  // k30 二次函数与方程
+  { id:'q187', k:'k30', ty:'c', lv:1, q:'抛物线 y = x² - 1 与 x 轴的交点是（ ）', o:['(0, -1)','(1, 0)','(1, 0) 和 (-1, 0)','(0, 1) 和 (0, -1)'], a:2, sol:'令 y = 0：x² = 1，x = ±1，交点为 (1, 0) 与 (-1, 0)。' },
+  { id:'q188', k:'k30', ty:'f', lv:2, q:'抛物线 y = x² - 3x + 2 与 x 轴两交点横坐标之和为 ____', a:'3', acc:['3'], sol:'交点是方程 x² - 3x + 2 = 0 的两根，由韦达定理和为 -b/a = 3（两根为 1 和 2）。' },
+  { id:'q189', k:'k30', ty:'c', lv:2, q:'若抛物线 y = ax² + 2x + 1 与 x 轴只有一个交点，则 a =（ ）', o:['0','1','2','4'], a:1, sol:'Δ = 4 - 4a = 0 得 a = 1；a = 0 时退化为一次函数，不再是抛物线。' },
+  { id:'q190', k:'k30', ty:'c', lv:3, q:'二次函数 y = -x² + 2x + 3 的最大值是（ ）', o:['3','4','5','6'], a:1, sol:'开口向下，顶点横坐标 x = -2/(2×(-1)) = 1，y = -1 + 2 + 3 = 4。' },
+
+  // k31 相似三角形
+  { id:'q191', k:'k31', ty:'c', lv:1, q:'两个相似三角形的对应角（ ）', o:['相等','互补','成比例','和为 180°'], a:0, sol:'相似三角形对应角相等、对应边成比例。' },
+  { id:'q192', k:'k31', ty:'f', lv:2, q:'两个相似三角形相似比为 3:5，较小三角形面积为 9，则较大三角形面积为 ____', a:'25', acc:['25'], sol:'面积比 = 相似比的平方 = 9:25，故较大面积为 9 × 25/9 = 25。' },
+  { id:'q193', k:'k31', ty:'c', lv:2, q:'△ABC 中 DE∥BC 交 AB、AC 于 D、E，若 AD:DB = 1:2，则 DE:BC =（ ）', o:['1:2','1:3','2:3','1:4'], a:1, sol:'由 DE∥BC 得 △ADE ∽ △ABC，AD:AB = 1:(1+2) = 1:3，故 DE:BC = 1:3。' },
+  { id:'q194', k:'k31', ty:'c', lv:3, q:'两个相似三角形面积比为 1:4，则对应高的比为（ ）', o:['1:2','1:4','1:8','1:16'], a:0, sol:'面积比 = 相似比平方，故相似比为 1:2；对应高之比等于相似比，也是 1:2。' },
+
+  // k32 锐角三角函数
+  { id:'q195', k:'k32', ty:'c', lv:1, q:'cos30° 的值是（ ）', o:['1/2','√2/2','√3/2','√3'], a:2, sol:'特殊角：sin30° = 1/2，cos30° = √3/2，tan30° = √3/3。' },
+  { id:'q196', k:'k32', ty:'f', lv:2, q:'直角三角形中 ∠A 的对边为 5、邻边为 12，则 tanA = ____', a:'5/12', acc:['5/12'], sol:'tanA = 对边 ÷ 邻边 = 5/12；此时斜边为 13，sinA = 5/13。' },
+  { id:'q197', k:'k32', ty:'c', lv:2, q:'若 ∠A 为锐角且 sinA = 1/2，则 ∠A =（ ）', o:['30°','45°','60°','90°'], a:0, sol:'sin30° = 1/2，锐角范围内解唯一，∠A = 30°。' },
+  { id:'q198', k:'k32', ty:'c', lv:3, q:'计算 2sin30° + tan45° - cos60° 的值是（ ）', o:['1','1.5','2','2.5'], a:1, sol:'2 × 1/2 + 1 - 1/2 = 1 + 1 - 0.5 = 1.5。' },
+
+  // k33 解直角三角形
+  { id:'q199', k:'k33', ty:'c', lv:1, q:'坡角越大，坡度（ ）', o:['越大','越小','不变','无法判断'], a:0, sol:'坡度 i = tanα，tan 在锐角范围内随角度增大而增大。' },
+  { id:'q200', k:'k33', ty:'f', lv:2, q:'直角三角形斜边为 10，∠A = 30°，则 ∠A 的对边长为 ____', a:'5', acc:['5','5m'], sol:'对边 = 斜边 × sin30° = 10 × 1/2 = 5。' },
+  { id:'q201', k:'k33', ty:'c', lv:2, q:'同一时刻，1 m 竹竿影长 1.5 m，旗杆影长 12 m，则旗杆高为（ ）', o:['6 m','8 m','18 m','24 m'], a:1, sol:'平行投影下物高与影长成比例：h/12 = 1/1.5，h = 8 m。' },
+  { id:'q202', k:'k33', ty:'c', lv:3, q:'某斜坡坡度 i = 1:2.4，沿水平方向前进 12 m，则上升高度为（ ）', o:['2.4 m','5 m','10 m','12 m'], a:1, sol:'i = h/l = 1/2.4 = 5/12，h = 12 × 5/12 = 5 m。' },
+
+  // k34 投影与视图
+  { id:'q203', k:'k34', ty:'c', lv:1, q:'正方体的三视图都是（ ）', o:['圆','正方形','矩形','三角形'], a:1, sol:'正方体六个面都是全等正方形，从正面、左面、上面看都是正方形。' },
+  { id:'q204', k:'k34', ty:'f', lv:2, q:'竖直放置的圆柱，其俯视图是 ____（填图形名称）', a:'圆', acc:['圆','圆形'], sol:'从上往下看圆柱看到的是上底面，为圆；主视图和左视图是矩形。' },
+  { id:'q205', k:'k34', ty:'c', lv:2, q:'三视图中，主视图反映物体的（ ）', o:['长和宽','长和高','宽和高','长宽高'], a:1, sol:'长对正、高平齐、宽相等：主视图反映长和高，俯视图反映长和宽，左视图反映宽和高。' },
+  { id:'q206', k:'k34', ty:'c', lv:3, q:'一个几何体的主视图和左视图都是矩形，俯视图是圆，该几何体是（ ）', o:['球','圆柱','圆锥','正方体'], a:1, sol:'主视图、左视图为矩形说明侧面是柱面，俯视图为圆说明底面是圆，故为竖直放置的圆柱。' },
+
+  /* ===== 综合挑战题（跨知识点） ===== */
+  { id:'q207', k:'k03', ty:'f', lv:3, q:'给某班同学分书：每人 3 本剩 8 本，每人 5 本差 6 本，该班有 ____ 人', a:'7', acc:['7','7人'], sol:'设 x 人，书数不变：3x + 8 = 5x - 6 → 2x = 14 → x = 7，共 29 本书。' },
+  { id:'q208', k:'k14', ty:'f', lv:3, q:'若 x² + x - 1 = 0，则 x³ + 2x² + 1 = ____', a:'2', acc:['2'], sol:'由 x² + x = 1，原式 = x(x²+x) + (x²+1) = x + x² + 1 = (x²+x) + 1 = 2。整体代入避免求根。' },
+  { id:'q209', k:'k17', ty:'c', lv:3, q:'一个直角三角形的三边是三个连续偶数，则斜边长为（ ）', o:['6','8','10','12'], a:2, sol:'设三边 2n-2, 2n, 2n+2，由 (2n-2)² + (2n)² = (2n+2)² 解得 n = 4，三边 6, 8, 10。' },
+  { id:'q210', k:'k20', ty:'f', lv:3, q:'直线 y = kx + b 经过 (1, 2) 与 (-1, 4)，则 k = ____', a:'-1', acc:['-1'], sol:'两点代入得 k + b = 2、-k + b = 4，两式相减 2k = -2，k = -1，b = 3。' },
+  { id:'q211', k:'k23', ty:'c', lv:3, q:'一个两位数，十位数字比个位数字小 3，两数字的平方和为 17，这个两位数是（ ）', o:['14','25','36','41'], a:0, sol:'设十位 a、个位 a+3：a² + (a+3)² = 17 → 2a² + 6a - 8 = 0 → a = 1（舍去负根），两位数为 14。' },
+  { id:'q212', k:'k25', ty:'c', lv:3, q:'一条弦把圆分成度数之比为 1:3 的两条弧，则劣弧所对的圆周角为（ ）', o:['30°','45°','60°','90°'], a:1, sol:'劣弧占 1/4 圆周即 90° 圆心角，圆周角等于圆心角的一半，为 45°。' },
+  { id:'q213', k:'k27', ty:'c', lv:3, q:'连续抛一枚均匀硬币 3 次，恰有 2 次正面朝上的概率是（ ）', o:['1/4','3/8','1/2','2/3'], a:1, sol:'共 2³ = 8 种等可能结果，恰 2 次正面的有 正正反、正反正、反正正 共 3 种，P = 3/8。' },
+  { id:'q214', k:'k29', ty:'c', lv:3, q:'抛物线 y = ax² + bx + c 开口向下，且对称轴在 y 轴右侧，则 b（ ）', o:['大于 0','小于 0','等于 0','符号不定'], a:0, sol:'a < 0，对称轴 x = -b/(2a) > 0；因 2a < 0，需 -b < 0 即 b > 0。' },
+  { id:'q215', k:'k31', ty:'c', lv:3, q:'△ABC 中 DE∥BC，若 S△ADE : S四边形DBCE = 1:3，则 AD:AB =（ ）', o:['1:2','1:3','1:4','1:9'], a:0, sol:'S△ADE : S△ABC = 1:4，面积比等于相似比平方，故相似比（即 AD:AB）= 1:2。' },
+  { id:'q216', k:'k32', ty:'c', lv:3, q:'在 Rt△ABC 中 ∠C = 90°，若 sinA = 3/5，则 cosB =（ ）', o:['3/5','4/5','5/3','1/2'], a:0, sol:'∠A + ∠B = 90°，所以 cosB = sinA = 3/5；也可由 cosB = 邻边/斜边 = BC/AB = sinA。' },
+  { id:'q217', k:'k32', ty:'f', lv:3, q:'已知 tanα = 2（α 为锐角），则 (sinα + cosα)/(sinα - cosα) = ____', a:'3', acc:['3'], sol:'分子分母同除以 cosα 得 (tanα + 1)/(tanα - 1) = 3/1 = 3。' },
+  { id:'q218', k:'k33', ty:'f', lv:3, q:'等腰三角形两边长为 4 和 9，则它的周长为 ____', a:'22', acc:['22'], sol:'若腰为 4，则 4+4=8<9 不能构成三角形；只能腰 9 底 4，周长 9+9+4 = 22。' },
+  { id:'q219', k:'k15', ty:'f', lv:3, q:'若 1/x - 1/y = 3，则 (2x + 3xy - 2y)/(x - 2xy - y) = ____', a:'3/5', acc:['3/5','0.6'], sol:'由 (y-x)/(xy) = 3 得 x - y = -3xy。分子 2(x-y) + 3xy = -3xy，分母 (x-y) - 2xy = -5xy，比值 = 3/5。' },
+  { id:'q220', k:'k09', ty:'c', lv:3, q:'若关于 x 的不等式组 x > 2 且 x < a 无解，则 a 满足（ ）', o:['a > 2','a ≥ 2','a ≤ 2','a < 2'], a:2, sol:'x > 2 与 x < a 要有公共部分需 a > 2；无解则 a ≤ 2（a = 2 时两区间无交集）。' }
+];
+
+</script>
+<script>
+/* 初中数学学习小程序 —— 交互逻辑 */
+(function () {
+  const D = window.MATH_DATA;
+  const K = D.knowledge, B = D.bank.concat(window.MATH_EXTRA_BANK || []), F = D.formulas, CATS = D.cats;
+  const KM = {}; K.forEach(k => KM[k.id] = k);
+  const QM = {}; B.forEach(q => QM[q.id] = q);
+  const LS_KEY = 'math_mini_app_v1';
+  const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+  /* ---------------- 状态 ---------------- */
+  const DEFAULT = {
+    mastered: [], wrong: {}, stats: { total: 0, correct: 0, days: {} },
+    sessions: [], lastActive: '', streak: 0, theme: 'light'
+  };
+  function load() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return Object.assign({}, DEFAULT);
+      const o = JSON.parse(raw);
+      return Object.assign({}, DEFAULT, o, {
+        stats: Object.assign({}, DEFAULT.stats, o.stats || {})
+      });
+    } catch (e) { return Object.assign({}, DEFAULT); }
+  }
+  function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
+  let S = load();
+
+  const UI = {
+    tab: 'home', view: { name: 'home' }, history: [],
+    grade: 7, openCh: {}, kpQuery: '', fQuery: '', fCat: '全部',
+    quiz: null, result: null, timerId: null, toastId: null
+  };
+
+  /* ---------------- 工具 ---------------- */
+  const $ = id => document.getElementById(id);
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function dstr(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function today() { return dstr(new Date()); }
+  function yesterday() { const d = new Date(); d.setDate(d.getDate() - 1); return dstr(d); }
+  function shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; }
+    return r;
+  }
+  function normalize(s) {
+    return String(s == null ? '' : s)
+      .replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/\s+/g, '').replace(/^[xX]=/, '')
+      .replace(/(cm|m|M|米|元|°|度)$/, '');
+  }
+  function catColor(c) { const x = CATS.find(v => v.n === c); return x ? x.color : '#5B6BF0'; }
+  function catIcon(c) { const x = CATS.find(v => v.n === c); return x ? x.icon : '◆'; }
+  function gradeName(g) { return g === 7 ? '七年级' : g === 8 ? '八年级' : '九年级'; }
+  function fmtSec(s) { return pad(Math.floor(s / 60)) + ':' + pad(s % 60); }
+  function toast(msg) {
+    const t = $('toast'); if (!t) return;
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(UI.toastId);
+    UI.toastId = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+  function touchActive() {
+    const t = today();
+    if (S.lastActive === t) return;
+    S.streak = (S.lastActive === yesterday()) ? (S.streak || 0) + 1 : 1;
+    S.lastActive = t; save();
+  }
+  function recordAnswer(q, ok) {
+    S.stats.total++;
+    if (ok) S.stats.correct++;
+    const t = today();
+    if (!S.stats.days[t]) S.stats.days[t] = { n: 0, c: 0 };
+    S.stats.days[t].n++;
+    if (ok) S.stats.days[t].c++;
+    if (ok) { if (S.wrong[q.id]) delete S.wrong[q.id]; }
+    else { const w = S.wrong[q.id] || { n: 0 }; S.wrong[q.id] = { n: w.n + 1, ts: Date.now() }; }
+    touchActive(); save();
+  }
+  function accuracy() { return S.stats.total ? Math.round(S.stats.correct / S.stats.total * 100) : 0; }
+  function masteryPct() { return Math.round(S.mastered.length / K.length * 100); }
+  function wrongList() {
+    return Object.keys(S.wrong)
+      .map(id => ({ q: QM[id], w: S.wrong[id] }))
+      .filter(x => x.q).sort((a, b) => b.w.ts - a.w.ts);
+  }
+  function ringSVG(pct, size, stroke, color) {
+    const r = (size - stroke) / 2, c = 2 * Math.PI * r;
+    const off = c * (1 - pct / 100);
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' +
+      '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="' + stroke + '"/>' +
+      '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + stroke + '" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"/></svg>';
+  }
+  function greet() {
+    const h = new Date().getHours();
+    return h < 6 ? '夜深了，注意休息' : h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+  }
+
+  /* ---------------- 导航 ---------------- */
+  function switchTab(t) { UI.tab = t; UI.view = { name: t }; UI.history = []; stopTimer(); render(); }
+  function go(name, p) { UI.history.push(UI.view); UI.view = { name: name, p: p }; render(); }
+  function back() { UI.view = UI.history.pop() || { name: UI.tab }; stopTimer(); render(); }
+  function render(keepScroll) {
+    const v = UI.view, n = v.name;
+    document.body.dataset.theme = S.theme;
+    const sub = n !== UI.tab || UI.history.length > 0;
+    const titles = { home: '初中数学 · 学习助手', learn: '知识体系', practice: '练习与测验', profile: '我的',
+      kp: '知识点详情', quiz: '答题中', result: '本次成绩', formula: '公式速查', wrong: '错题本', catlist: '分类练习' };
+    $('nav-title').textContent = titles[n] || '初中数学';
+    $('nav-left').innerHTML = UI.history.length
+      ? '<button class="nav-btn" data-act="back" aria-label="返回">‹</button>'
+      : '<div style="width:32px;height:32px;border-radius:10px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;">√</div>';
+    $('nav-right').innerHTML = '<button class="nav-btn" data-act="theme" aria-label="切换主题">' +
+      (S.theme === 'dark' ? '☀' : '☾') + '</button>';
+    $('status-time').textContent = pad(new Date().getHours()) + ':' + pad(new Date().getMinutes());
+
+    let html = '';
+    switch (n) {
+      case 'home': html = viewHome(); break;
+      case 'learn': html = viewLearn(); break;
+      case 'practice': html = viewPractice(); break;
+      case 'profile': html = viewProfile(); break;
+      case 'kp': html = viewKp(v.p); break;
+      case 'quiz': html = viewQuiz(); break;
+      case 'result': html = viewResult(); break;
+      case 'formula': html = viewFormula(); break;
+      case 'wrong': html = viewWrong(); break;
+      case 'catlist': html = viewCatlist(v.p); break;
+      default: html = viewHome();
+    }
+    $('scroll').innerHTML = '<div class="view">' + html + '</div>';
+    $('scroll').className = 'scroll' + (n === 'profile' ? '' : '');
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), el => {
+      el.classList.toggle('active', el.dataset.t === UI.tab);
+    });
+    if (!keepScroll) $('scroll').scrollTop = 0;
+    if (n === 'quiz') startTimer();
+  }
+
+  /* ---------------- 首页 ---------------- */
+  function viewHome() {
+    const pct = masteryPct(), wl = wrongList().length;
+    let h = '';
+    h += '<div class="hero">' +
+      '<div class="hero-ring"><div class="ring-wrap">' + ringSVG(pct, 72, 7, '#fff') +
+      '<div class="ring-txt">' + pct + '%<small>掌握度</small></div></div></div>' +
+      '<h2>' + greet() + '，同学</h2>' +
+      '<p>每天进步一点点，数学其实很有趣</p>' +
+      '<div class="hero-stats">' +
+        '<div><b>' + S.streak + '</b><span>连续学习（天）</span></div>' +
+        '<div><b>' + S.stats.total + '</b><span>累计做题</span></div>' +
+        '<div><b>' + S.mastered.length + '</b><span>掌握知识点</span></div>' +
+      '</div></div>';
+
+    h += '<div class="quick-grid">' +
+      quick('✦', '随机练习', '#5B6BF0', 'start', 'data-mode="random"') +
+      quick('∑', '公式速查', '#8C6BF6', 'go', 'data-to="formula"') +
+      quick('✕', '错题本', '#F0687A', 'go', 'data-to="wrong"') +
+      quick('◷', '限时测验', '#FF9E45', 'start', 'data-mode="exam"') +
+      '</div>';
+
+    h += '<div class="section-title">今日任务 <span class="more">坚持打卡，养成习惯</span></div>';
+    h += '<div class="card tight task-card" data-act="start" data-mode="daily" style="cursor:pointer">' +
+      '<div class="task-ic" style="background:rgba(91,107,240,.12);color:var(--primary)">✧</div>' +
+      '<div style="flex:1"><b>每日一练 · 10 道题</b><p>优先推荐你还没掌握的知识点</p></div>' +
+      '<span class="chip on">去完成 ›</span></div>';
+    if (wl > 0) {
+      h += '<div class="card tight task-card" data-act="go" data-to="wrong" style="cursor:pointer;margin-top:-4px">' +
+        '<div class="task-ic" style="background:rgba(240,92,99,.12);color:var(--bad)">↻</div>' +
+        '<div style="flex:1"><b>还有 ' + wl + ' 道错题待攻克</b><p>错题重做是提分最快的方式</p></div>' +
+        '<span class="chip warn">去复习 ›</span></div>';
+    }
+
+    h += '<div class="section-title">按专题学习 <span class="more">题库共 ' + B.length + ' 道</span></div><div class="cat-grid">';
+    CATS.forEach(c => {
+      const total = K.filter(k => k.cat === c.n).length;
+      h += '<div class="cat-box" data-act="cat" data-c="' + c.n + '" style="background:' + c.color + '">' +
+        '<i>' + c.icon + '</i>' + c.n + '<small>' + total + ' 个知识点</small></div>';
+    });
+    h += '</div>';
+
+    const rec = K.filter(k => S.mastered.indexOf(k.id) < 0).slice(0, 3);
+    if (rec.length) {
+      h += '<div class="section-title">推荐学习 <span class="more" data-act="tab" data-t="learn">全部 ›</span></div><div class="card tight">';
+      rec.forEach(k => {
+        h += '<div class="kp-mini" data-act="kp" data-k="' + k.id + '" style="cursor:pointer">' +
+          '<div class="km-ic" style="background:' + catColor(k.cat) + '">' + catIcon(k.cat) + '</div>' +
+          '<div class="km-body"><b>' + esc(k.t) + '</b><small>' + gradeName(k.g) + ' · ' + esc(k.c) + '</small></div>' +
+          '<span class="arrow">›</span></div>';
+      });
+      h += '</div>';
+    }
+    if (S.sessions.length) {
+      const s = S.sessions[0];
+      h += '<div class="section-title">最近一次成绩</div><div class="card tight spread">' +
+        '<div><b style="font-size:14px">' + esc(s.mode) + '</b><p class="muted tiny" style="margin:4px 0 0">答对 ' + s.correct + '/' + s.total + ' 题 · 用时 ' + fmtSec(s.sec) + '</p></div>' +
+        '<div style="font-size:22px;font-weight:800;color:var(--primary)">' + s.score + '<small class="muted" style="font-size:11px"> 分</small></div></div>';
+    }
+    return h;
+  }
+  function quick(icon, label, color, act, extra) {
+    return '<div class="quick" data-act="' + act + '" ' + extra + '>' +
+      '<div class="qi" style="background:' + color + '">' + icon + '</div><span>' + label + '</span></div>';
+  }
+
+  /* ---------------- 知识体系 ---------------- */
+  function chapterHTML(list, query, direct) {
+    const groups = {};
+    list.forEach(k => { (groups[k.c] = groups[k.c] || []).push(k); });
+    const keys = Object.keys(groups);
+    if (!keys.length) return '<div class="empty"><span class="ei">▤</span><b>没有找到相关知识点</b><p>换个关键词试试吧</p></div>';
+    let h = '';
+    keys.forEach((c, i) => {
+      const key = 'ch' + i;
+      const open = query ? true : !!UI.openCh[key];
+      const done = groups[c].filter(k => S.mastered.indexOf(k.id) >= 0).length;
+      h += '<div class="chapter' + (open ? ' open' : '') + '">' +
+        '<div class="ch-head" data-act="chapter" data-i="' + key + '">' +
+          '<div class="ch-num">' + (i + 1) + '</div><b>' + esc(c) + '</b>' +
+          '<span class="ch-count">' + done + '/' + groups[c].length + ' 已掌握</span>' +
+          '<span class="ch-arrow">›</span></div>' +
+        '<div class="ch-body">';
+      groups[c].forEach(k => {
+        h += '<div class="kp-row" data-act="' + (direct ? 'start" data-mode="kp' : 'kp') + '" data-k="' + k.id + '" style="cursor:pointer">' +
+          '<span class="dot' + (S.mastered.indexOf(k.id) >= 0 ? ' done' : '') + '"></span>' +
+          '<span>' + esc(k.t) + '</span>' +
+          '<span class="chip" style="font-size:9px;padding:2px 6px">' + k.cat + '</span>' +
+          '<span class="go">›</span></div>';
+      });
+      h += '</div></div>';
+    });
+    return h;
+  }
+  function viewLearn() {
+    let h = '<div class="search"><span class="si">⌕</span><input id="search-kp" placeholder="搜索知识点或章节，如「勾股」" value="' + esc(UI.kpQuery) + '"></div>';
+    h += '<div class="seg">' + [7, 8, 9].map(g =>
+      '<button data-act="grade" data-g="' + g + '" class="' + (UI.grade === g ? 'on' : '') + '">' + gradeName(g) + '</button>').join('') + '</div>';
+    h += '<div class="spread" style="margin:0 2px 10px"><span class="muted tiny">共 ' + K.filter(k => k.g === UI.grade).length + ' 个知识点 · 点击展开章节</span>' +
+      '<span class="chip ok">已掌握 ' + K.filter(k => k.g === UI.grade && S.mastered.indexOf(k.id) >= 0).length + '</span></div>';
+    h += '<div id="kp-list">' + filteredChapterHTML(false) + '</div>';
+    return h;
+  }
+  function filteredChapterHTML(direct) {
+    let list = K.filter(k => k.g === UI.grade);
+    if (UI.kpQuery.trim()) {
+      const q = UI.kpQuery.trim();
+      list = K.filter(k => (k.t + k.c + k.cat + k.s).indexOf(q) >= 0);
+    }
+    return chapterHTML(list, UI.kpQuery.trim(), direct);
+  }
+  function viewCatlist(p) {
+    const cat = p.cat;
+    const list = K.filter(k => k.cat === cat);
+    let h = '<div class="card tight" style="background:linear-gradient(135deg,' + catColor(cat) + '22,' + catColor(cat) + '08)">' +
+      '<div class="spread"><div><b style="font-size:15px">' + catIcon(cat) + ' ' + cat + '专题</b>' +
+      '<p class="muted tiny" style="margin:5px 0 0">共 ' + list.length + ' 个知识点、' + B.filter(q => list.some(k => k.id === q.k)).length + ' 道配套习题</p></div>' +
+      '<button class="btn btn-primary btn-sm" data-act="start" data-mode="cat" data-cat="' + cat + '">综合练习</button></div></div>';
+    h += '<div class="section-title">知识点清单</div>';
+    [7, 8, 9].forEach(g => {
+      const sub = list.filter(k => k.g === g);
+      if (!sub.length) return;
+      h += '<div class="formula-cat">' + gradeName(g) + '</div>';
+      sub.forEach(k => {
+        h += '<div class="chapter" style="margin-bottom:8px"><div class="ch-head" data-act="kp" data-k="' + k.id + '" style="cursor:pointer">' +
+          '<div class="ch-num">' + (S.mastered.indexOf(k.id) >= 0 ? '✓' : catIcon(cat)) + '</div>' +
+          '<b>' + esc(k.t) + '</b><span class="ch-count">' + esc(k.c) + '</span><span class="ch-arrow">›</span></div></div>';
+      });
+    });
+    return h;
+  }
+
+  /* ---------------- 知识点详情 ---------------- */
+  function viewKp(kid) {
+    const k = KM[kid]; if (!k) return '<div class="empty">知识点不存在</div>';
+    const done = S.mastered.indexOf(kid) >= 0;
+    let h = '<div class="kp-hero"><div class="chips">' +
+      '<span>' + gradeName(k.g) + '</span><span>' + esc(k.c) + '</span><span>' + k.cat + '</span></div>' +
+      '<h2>' + esc(k.t) + '</h2><p>' + esc(k.s) + '</p></div>';
+
+    h += '<div class="card"><div class="block-title"><i></i>核心要点</div>';
+    k.p.forEach((p, i) => { h += '<div class="point"><span class="pn">' + (i + 1) + '</span><span>' + esc(p) + '</span></div>'; });
+    h += '</div>';
+
+    h += '<div class="card"><div class="block-title"><i></i>公式与定理</div>';
+    k.f.forEach(f => { h += '<div class="formula-line">' + esc(f) + '</div>'; });
+    h += '</div>';
+
+    h += '<div class="card"><div class="block-title"><i></i>典型例题</div>' +
+      '<div class="example-q">' + esc(k.e.q) + '</div>';
+    k.e.st.forEach((s, i) => { h += '<div class="step"><span class="sn">' + (i + 1) + '</span><span>' + esc(s) + '</span></div>'; });
+    h += '<div class="answer-box">答案：' + esc(k.e.a) + '</div></div>';
+
+    const n = B.filter(q => q.k === kid).length;
+    h += '<div class="action-bar">' +
+      '<button class="btn ' + (done ? 'btn-ghost' : 'btn-primary') + '" data-act="master" data-k="' + kid + '">' +
+      (done ? '✓ 已掌握 · 点击取消' : '标记已学会') + '</button>' +
+      '<button class="btn btn-ghost" data-act="start" data-mode="kp" data-k="' + kid + '">练 ' + n + ' 题 ›</button></div>';
+    h += '<p class="muted tiny" style="text-align:center;margin-top:14px">配套习题 ' + n + ' 道 · 答对可自动清除错题记录</p>';
+    return h;
+  }
+
+  /* ---------------- 练习首页 ---------------- */
+  function viewPractice() {
+    const wl = wrongList().length;
+    const lvCount = [1, 2, 3].map(l => B.filter(q => q.lv === l).length);
+    const chipStyle = 'background:rgba(255,255,255,.2);color:#fff;border-color:transparent';
+    let h = '<div class="card" style="background:var(--grad);color:#fff;border:0">' +
+      '<div class="spread"><div><b style="font-size:16px">今天想练点什么？</b>' +
+      '<p style="margin:5px 0 0;font-size:11.5px;opacity:.85">选择合适的模式，边练边记，错题自动收录</p></div>' +
+      '<div style="font-size:30px;font-weight:800;opacity:.35">✎</div></div>' +
+      '<div class="row" style="gap:6px;flex-wrap:wrap;margin-top:13px">' +
+        '<span class="chip" style="' + chipStyle + '">题库 ' + B.length + ' 道</span>' +
+        '<span class="chip" style="' + chipStyle + '">基础 ' + lvCount[0] + '</span>' +
+        '<span class="chip" style="' + chipStyle + '">进阶 ' + lvCount[1] + '</span>' +
+        '<span class="chip" style="' + chipStyle + '">挑战 ' + lvCount[2] + '</span>' +
+      '</div></div>';
+    h += '<div class="section-title">练习模式</div>';
+    h += modeCard('✦', '#5B6BF0', '随机综合练习', '从全部 ' + B.length + ' 道题中随机抽 10 题', 'random');
+    h += modeCard('✧', '#2FAE8B', '每日一练', '优先推送未掌握知识点的 10 道题', 'daily');
+    h += modeCard('↻', '#F0687A', '错题重做', wl ? '共 ' + wl + ' 道错题，逐个击破' : '暂时没有错题，继续保持', 'wrong');
+    h += modeCard('◷', '#FF9E45', '限时测验', '15 题 · 10 分钟 · 模拟考场节奏', 'exam');
+
+    h += '<div class="section-title">难度进阶 <span class="more">按水平循序渐进</span></div>';
+    h += modeCard('●', '#5B6BF0', '基础巩固', '基础题 ' + lvCount[0] + ' 道 · 抽 10 题练手感', 'level', 1);
+    h += modeCard('◆', '#8C6BF6', '进阶提升', '进阶题 ' + lvCount[1] + ' 道 · 抽 10 题练方法', 'level', 2);
+    h += modeCard('★', '#F0687A', '挑战冲刺', '挑战题 ' + lvCount[2] + ' 道 · 抽 10 题练思维', 'level', 3);
+
+    h += '<div class="section-title">知识点专项 <span class="more">点知识点直接开练</span></div>';
+    h += '<div class="seg">' + [7, 8, 9].map(g =>
+      '<button data-act="grade" data-g="' + g + '" class="' + (UI.grade === g ? 'on' : '') + '">' + gradeName(g) + '</button>').join('') + '</div>';
+    h += '<div id="kp-list">' + filteredChapterHTML(true) + '</div>';
+    return h;
+  }
+  function modeCard(icon, color, title, desc, mode, lv) {
+    const disabled = mode === 'wrong' && !wrongList().length;
+    const act = 'data-act="start" data-mode="' + mode + '"' + (lv ? ' data-lv="' + lv + '"' : '');
+    return '<div class="mode-card" ' + (disabled ? '' : act) + ' style="cursor:' + (disabled ? 'default' : 'pointer') + ';opacity:' + (disabled ? '.55' : '1') + '">' +
+      '<div class="mode-ic" style="background:' + color + '">' + icon + '</div>' +
+      '<div style="flex:1"><b>' + title + '</b><p>' + desc + '</p></div><span class="arrow">›</span></div>';
+  }
+
+  /* ---------------- 组卷 ---------------- */
+  function buildQuiz(mode, p) {
+    let list = [], label = '', limit = 0;
+    p = p || {};
+    if (mode === 'random') { list = shuffle(B).slice(0, 10); label = '随机综合'; }
+    else if (mode === 'daily') {
+      const weak = B.filter(q => S.mastered.indexOf(q.k) < 0);
+      list = shuffle(weak).slice(0, 10);
+      if (list.length < 10) list = list.concat(shuffle(B.filter(q => list.indexOf(q) < 0)).slice(0, 10 - list.length));
+      label = '每日一练';
+    }
+    else if (mode === 'wrong') {
+      list = wrongList().map(x => x.q).slice(0, 12); label = '错题重做';
+    }
+    else if (mode === 'exam') { list = shuffle(B).slice(0, 15); label = '限时测验'; limit = 600; }
+    else if (mode === 'kp') {
+      const own = B.filter(q => q.k === p.k);
+      const k = KM[p.k];
+      const extra = shuffle(B.filter(q => q.k !== p.k && KM[q.k].cat === k.cat)).slice(0, Math.max(0, 6 - own.length));
+      list = shuffle(own.concat(extra)); label = k ? k.t : '专项练习';
+    }
+    else if (mode === 'cat') {
+      const ids = K.filter(x => x.cat === p.cat).map(x => x.id);
+      list = shuffle(B.filter(q => ids.indexOf(q.k) >= 0)).slice(0, 10); label = p.cat + '专题';
+    }
+    else if (mode === 'level') {
+      const n = +p.lv || 1;
+      list = shuffle(B.filter(q => q.lv === n)).slice(0, 10);
+      label = n === 1 ? '基础巩固' : n === 2 ? '进阶提升' : '挑战冲刺';
+    }
+    return { list: list, label: label, limit: limit, mode: mode, p: p };
+  }
+  function startQuiz(mode, p) {
+    const cfg = buildQuiz(mode, p);
+    if (!cfg.list.length) { toast('暂时没有可练习的题目'); return; }
+    stopTimer();
+    UI.quiz = {
+      list: cfg.list, label: cfg.label, limit: cfg.limit, mode: mode, p: cfg.p,
+      idx: 0, sel: null, fill: '', checked: false, answers: [],
+      startTs: Date.now(), elapsed: 0
+    };
+    go('quiz');
+  }
+  function stopTimer() { if (UI.timerId) { clearInterval(UI.timerId); UI.timerId = null; } }
+  function startTimer() {
+    stopTimer();
+    const z = UI.quiz; if (!z) return;
+    UI.timerId = setInterval(() => {
+      if (UI.view.name !== 'quiz' || !UI.quiz) { stopTimer(); return; }
+      const q = UI.quiz;
+      q.elapsed = Math.floor((Date.now() - q.startTs) / 1000);
+      const el = $('timer'); if (!el) return;
+      const left = q.limit ? q.limit - q.elapsed : q.elapsed;
+      el.textContent = (q.limit ? '剩余 ' : '用时 ') + fmtSec(Math.max(0, left));
+      if (q.limit && q.elapsed >= q.limit) { stopTimer(); finishQuiz(); toast('时间到，已自动交卷'); }
+    }, 1000);
+  }
+
+  /* ---------------- 答题 ---------------- */
+  function curQ() { return UI.quiz ? UI.quiz.list[UI.quiz.idx] : null; }
+  function viewQuiz() {
+    const z = UI.quiz;
+    if (!z) return '<div class="empty">练习已结束</div>';
+    const q = curQ(); if (!q) return '<div class="empty">练习已结束</div>';
+    const k = KM[q.k];
+    const streak = (function () { let n = 0; for (let i = z.answers.length - 1; i >= 0; i--) { if (z.answers[i].ok) n++; else break; } return n; })();
+    let h = '<div class="quiz-top"><span>第 <b>' + (z.idx + 1) + '</b> / ' + z.list.length + ' 题 · ' + esc(z.label) + '</span>' +
+      '<span id="timer">' + (z.limit ? '剩余 ' + fmtSec(z.limit - z.elapsed) : '用时 ' + fmtSec(z.elapsed)) + '</span></div>';
+    h += '<div class="progress"><i style="width:' + Math.round((z.idx + 1) / z.list.length * 100) + '%"></i></div>';
+    h += '<div class="q-meta"><span class="chip">' + (k ? esc(k.c) : '综合') + '</span>' +
+      '<span class="chip">' + (q.ty === 'c' ? '选择题' : '填空题') + '</span>' +
+      '<span class="chip' + (q.lv === 3 ? ' warn' : q.lv === 1 ? ' ok' : '') + '">' +
+        (q.lv === 3 ? '挑战' : q.lv === 2 ? '进阶' : '基础') + '</span>' +
+      (streak >= 2 ? '<span class="chip ok">连对 ' + streak + '</span>' : '') + '</div>';
+    h += '<div class="q-text">' + esc(q.q) + '</div>';
+
+    if (q.ty === 'c') {
+      q.o.forEach((o, i) => {
+        let cls = 'opt';
+        if (z.checked) {
+          if (i === q.a) cls += ' right';
+          else if (i === z.sel) cls += ' wrong';
+        } else if (i === z.sel) cls += ' sel';
+        h += '<button class="' + cls + '" data-act="opt" data-i="' + i + '" ' + (z.checked ? 'disabled' : '') + '>' +
+          '<span class="ol">' + LETTERS[i] + '</span><span>' + esc(o) + '</span></button>';
+      });
+    } else {
+      let cls = 'fill-input';
+      if (z.checked) cls += (z.answers[z.answers.length - 1].ok ? ' right' : ' wrong');
+      h += '<input class="' + cls + '" id="fill-input" placeholder="在此输入答案" value="' + esc(z.fill) + '" ' + (z.checked ? 'disabled' : '') + '>';
+      h += '<p class="muted tiny" style="margin:8px 2px 0">提示：只填最终结果，如 4、x=2、-2、10√3</p>';
+    }
+
+    if (z.checked) {
+      const last = z.answers[z.answers.length - 1];
+      const right = q.ty === 'c' ? LETTERS[q.a] + '．' + q.o[q.a] : q.a;
+      h += '<div class="feedback ' + (last.ok ? 'ok' : 'no') + '">' +
+        '<b>' + (last.ok ? '✓ 回答正确' : '✗ 答错了') + '</b>' +
+        (last.ok ? '' : '<div>正确答案：<strong>' + esc(right) + '</strong></div>') +
+        '<div class="sol">' + esc(q.sol) + '</div></div>';
+    }
+    const isLast = z.idx === z.list.length - 1;
+    h += '<div class="quiz-foot"><button class="btn btn-primary btn-block btn-lg" data-act="' +
+      (z.checked ? 'next' : 'submit') + '">' +
+      (z.checked ? (isLast ? '查看成绩 ›' : '下一题 ›') : '提交答案') + '</button></div>';
+    if (z.limit) h += '<p class="muted tiny" style="text-align:center;margin-top:10px">限时测验结束后未作答的题目按错计分</p>';
+    return h;
+  }
+  function submitAnswer() {
+    const z = UI.quiz, q = curQ(); if (!z || !q || z.checked) return;
+    let ok = false;
+    if (q.ty === 'c') {
+      if (z.sel === null) { toast('请先选择一个答案'); return; }
+      ok = z.sel === q.a;
+    } else {
+      const el = $('fill-input'); z.fill = el ? el.value : z.fill;
+      if (!normalize(z.fill)) { toast('请先填写答案'); return; }
+      ok = (q.acc || [q.a]).some(a => normalize(a) === normalize(z.fill));
+    }
+    z.checked = true;
+    z.answers.push({ qid: q.id, ok: ok });
+    recordAnswer(q, ok);
+    render(true);
+  }
+  function nextQuestion() {
+    const z = UI.quiz; if (!z || !z.checked) return;
+    if (z.idx >= z.list.length - 1) { finishQuiz(); return; }
+    z.idx++; z.sel = null; z.fill = ''; z.checked = false;
+    render(false);
+  }
+  function finishQuiz() {
+    const z = UI.quiz; if (!z) return;
+    stopTimer();
+    const sec = Math.floor((Date.now() - z.startTs) / 1000);
+    const correct = z.answers.filter(a => a.ok).length;
+    const total = z.list.length;
+    const score = Math.round(correct / total * 100);
+    const wrongIds = z.answers.filter(a => !a.ok).map(a => a.qid);
+    // 限时交卷时未作答的题目同样收进错题本（不计入做题统计）
+    const answeredIds = z.answers.map(a => a.qid);
+    const missedIds = z.list.map(q => q.id).filter(id => answeredIds.indexOf(id) < 0);
+    missedIds.forEach(id => { const w = S.wrong[id] || { n: 0 }; S.wrong[id] = { n: w.n + 1, ts: Date.now() }; });
+    wrongIds.push.apply(wrongIds, missedIds);
+    S.sessions.unshift({ mode: z.label, score: score, correct: correct, total: total, sec: sec, ts: Date.now() });
+    S.sessions = S.sessions.slice(0, 10); save();
+    UI.result = { mode: z.label, score: score, correct: correct, total: total, sec: sec, wrongIds: wrongIds, modeKey: z.mode, p: z.p };
+    UI.quiz = null;
+    // 替换当前页，避免返回时回到空答题页
+    UI.view = { name: 'result' };
+    render();
+  }
+
+  /* ---------------- 成绩页 ---------------- */
+  function viewResult() {
+    const r = UI.result; if (!r) return '<div class="empty">暂无成绩</div>';
+    const msg = r.score >= 90 ? '太棒了，几乎全对！' : r.score >= 70 ? '不错，继续保持！' : r.score >= 50 ? '还有提升空间，加油' : '别灰心，把错题弄懂就是进步';
+    let h = '<div class="result-head"><div class="big">' + r.score + '<small> 分</small></div>' +
+      '<p>' + esc(msg) + '</p></div>';
+    h += '<div class="card"><div class="result-grid">' +
+      '<div><b>' + r.correct + '/' + r.total + '</b><span>答对题数</span></div>' +
+      '<div><b>' + Math.round(r.correct / r.total * 100) + '%</b><span>正确率</span></div>' +
+      '<div><b>' + fmtSec(r.sec) + '</b><span>用时</span></div></div>' +
+      '<p class="muted tiny" style="text-align:center;margin:0">练习模式：' + esc(r.mode) + ' · 错题已自动收录到错题本</p></div>';
+    if (r.wrongIds.length) {
+      h += '<div class="section-title">本次错题 <span class="more">' + r.wrongIds.length + ' 道</span></div><div class="card tight">';
+      r.wrongIds.forEach(id => {
+        const q = QM[id]; if (!q) return;
+        const right = q.ty === 'c' ? LETTERS[q.a] + '．' + q.o[q.a] : q.a;
+        h += '<div class="wrong-review"><b>' + esc(q.q) + '</b><div style="color:var(--ok);margin-top:5px">正确答案：' + esc(right) + '</div>' +
+          '<div class="muted" style="margin-top:4px">' + esc(q.sol) + '</div></div>';
+      });
+      h += '</div>';
+    }
+    h += '<div class="action-bar" style="margin-top:18px">' +
+      '<button class="btn btn-ghost" data-act="tab" data-t="practice">返回练习</button>' +
+      '<button class="btn btn-primary" data-act="again">再来一组 ›</button></div>';
+    if (r.wrongIds.length) h += '<button class="btn btn-block" style="margin-top:9px" data-act="go" data-to="wrong">去错题本复习</button>';
+    return h;
+  }
+
+  /* ---------------- 公式速查 ---------------- */
+  function viewFormula() {
+    let h = '<div class="search"><span class="si">⌕</span><input id="search-f" placeholder="搜索公式名称或内容" value="' + esc(UI.fQuery) + '"></div>';
+    const cats = ['全部'].concat(F.map(f => f.cat).filter((v, i, a) => a.indexOf(v) === i));
+    h += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">' + cats.map(c =>
+      '<button class="chip' + (UI.fCat === c ? ' on' : '') + '" data-act="fcat" data-c="' + c + '">' + c + '</button>').join('') + '</div>';
+    h += '<div id="f-list">' + formulaListHTML() + '</div>';
+    return h;
+  }
+  function formulaListHTML() {
+    const q = UI.fQuery.trim();
+    const list = F.filter(f => (UI.fCat === '全部' || f.cat === UI.fCat) && (!q || (f.n + f.e + f.d + f.cat).indexOf(q) >= 0));
+    if (!list.length) return '<div class="empty"><span class="ei">∑</span><b>没有找到相关公式</b><p>换个关键词试试</p></div>';
+    let h = '', last = '';
+    list.forEach(f => {
+      if (f.cat !== last) { h += '<div class="formula-cat">' + f.cat + '</div>'; last = f.cat; }
+      h += '<div class="f-item"><div class="fn">' + esc(f.n) + '</div>' +
+        '<div class="fe mono">' + esc(f.e) + '</div><div class="fd">' + esc(f.d) + '</div></div>';
+    });
+    return h;
+  }
+
+  /* ---------------- 错题本 ---------------- */
+  function viewWrong() {
+    const wl = wrongList();
+    if (!wl.length) return '<div class="empty"><span class="ei">✓</span><b>错题本是空的</b>' +
+      '<p>做错的题会自动收录到这里，答对后自动移除</p>' +
+      '<button class="btn btn-primary btn-sm" data-act="start" data-mode="random">去做几道题</button></div>';
+    let h = '<div class="card tight spread"><div><b style="font-size:14px">共 ' + wl.length + ' 道错题</b>' +
+      '<p class="muted tiny" style="margin:4px 0 0">答对一次即可自动移出错题本</p></div>' +
+      '<button class="btn btn-primary btn-sm" data-act="start" data-mode="wrong">全部重做 ›</button></div>';
+    wl.forEach(x => {
+      const q = x.q;
+      const right = q.ty === 'c' ? LETTERS[q.a] + '．' + q.o[q.a] : q.a;
+      h += '<div class="wrong-item"><div class="spread" style="margin-bottom:6px">' +
+        '<span class="chip warn">错 ' + x.w.n + ' 次</span><span class="muted tiny">' + esc(KM[q.k].t) + '</span></div>' +
+        '<div class="wq">' + esc(q.q) + '</div>' +
+        (q.ty === 'c' ? '<div class="muted tiny" style="margin-top:6px">' + q.o.map((o, i) => LETTERS[i] + '．' + esc(o)).join('　') + '</div>' : '') +
+        '<div class="wa">正确答案：' + esc(right) + '</div><div class="ws">' + esc(q.sol) + '</div></div>';
+    });
+    h += '<button class="btn btn-block btn-danger" data-act="wrong-clear" style="margin-top:14px">清空错题本</button>';
+    return h;
+  }
+
+  /* ---------------- 我的 ---------------- */
+  function viewProfile() {
+    const total = S.stats.total, acc = accuracy();
+    let h = '<div class="profile-head"><div class="avatar">√</div><div>' +
+      '<b>数学探索者</b><span>已连续学习 ' + S.streak + ' 天 · 累计做题 ' + total + ' 道</span></div></div>';
+    h += '<div class="card"><div class="spread" style="margin-bottom:14px"><b style="font-size:14px">学习数据</b>' +
+      '<span class="chip ok">掌握度 ' + masteryPct() + '%</span></div><div class="stat-4">' +
+      '<div><b>' + total + '</b><span>累计做题</span></div>' +
+      '<div><b>' + acc + '%</b><span>正确率</span></div>' +
+      '<div><b>' + S.mastered.length + '</b><span>掌握知识点</span></div>' +
+      '<div><b>' + wrongList().length + '</b><span>待复习错题</span></div></div></div>';
+
+    // 近 7 天柱状图
+    const days = [], maxv = Math.max(1, ...[0, 1, 2, 3, 4, 5, 6].map(i => {
+      const d = new Date(); d.setDate(d.getDate() - (6 - i));
+      return (S.stats.days[dstr(d)] || {}).n || 0;
+    }));
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const rec = S.stats.days[dstr(d)] || { n: 0, c: 0 };
+      days.push({ label: (d.getMonth() + 1) + '/' + d.getDate(), n: rec.n, c: rec.c });
+    }
+    h += '<div class="card"><div class="spread"><b style="font-size:14px">近 7 天做题量</b><span class="muted tiny">柱状高度代表题量</span></div><div class="chart">';
+    days.forEach(d => {
+      const pct = Math.round(d.n / maxv * 100);
+      h += '<div class="bar-col"><span class="tiny muted" style="font-size:9px">' + (d.n || '') + '</span>' +
+        '<div class="bar' + (d.n ? '' : ' zero') + '" style="height:' + (d.n ? Math.max(6, pct * .72) : 3) + '%"></div>' +
+        '<span class="bl">' + d.label + '</span></div>';
+    });
+    h += '</div></div>';
+
+    h += '<div class="card"><div class="block-title"><i></i>各专题掌握度</div>';
+    CATS.forEach(c => {
+      const ks = K.filter(k => k.cat === c.n);
+      const done = ks.filter(k => S.mastered.indexOf(k.id) >= 0).length;
+      const pct = Math.round(done / ks.length * 100);
+      h += '<div style="margin-bottom:11px"><div class="spread" style="margin-bottom:5px">' +
+        '<span style="font-size:12px">' + c.icon + ' ' + c.n + '</span>' +
+        '<span class="muted tiny">' + done + '/' + ks.length + '</span></div>' +
+        '<div class="progress" style="margin:0;height:5px"><i style="width:' + pct + '%;background:' + c.color + '"></i></div></div>';
+    });
+    h += '</div>';
+
+    h += '<div class="section-title">学习工具</div><div class="card tight">';
+    h += menu('✕', '错题本', wrongList().length + ' 道', 'go', 'data-to="wrong"');
+    h += menu('∑', '公式速查', F.length + ' 条', 'go', 'data-to="formula"');
+    h += menu('◷', '历史成绩', S.sessions.length + ' 次', 'history', '');
+    h += '<div class="menu-item"><div class="mi">☾</div><b style="flex:1">深色模式</b>' +
+      '<div class="switch' + (S.theme === 'dark' ? ' on' : '') + '" data-act="toggle-dark"><i></i></div></div>';
+    h += menu('↻', '重置学习数据', '', 'reset', '');
+    h += menu('◆', '关于本小程序', '', 'about', '');
+    h += '</div>';
+    if (S.sessions.length) {
+      h += '<div id="history-box" style="display:none"><div class="section-title">最近测验记录</div><div class="card tight">';
+      S.sessions.slice(0, 5).forEach(s => {
+        h += '<div class="spread" style="padding:9px 0;border-bottom:1px solid var(--line)">' +
+          '<div><b style="font-size:12.5px">' + esc(s.mode) + '</b><p class="muted tiny" style="margin:3px 0 0">' +
+          new Date(s.ts).toLocaleDateString('zh-CN') + ' · ' + s.correct + '/' + s.total + ' 题 · ' + fmtSec(s.sec) + '</p></div>' +
+          '<b style="color:var(--primary);font-size:16px">' + s.score + '</b></div>';
+      });
+      h += '</div></div>';
+    }
+    h += '<p class="muted tiny" style="text-align:center;margin:18px 0 4px">数据保存在本机浏览器，不会上传</p>';
+    return h;
+  }
+  function menu(icon, title, val, act, extra) {
+    return '<div class="menu-item" data-act="' + act + '" ' + extra + ' style="cursor:pointer">' +
+      '<div class="mi">' + icon + '</div><b>' + title + '</b>' +
+      (val ? '<span class="mv">' + val + '</span>' : '') + '<span class="arrow">›</span></div>';
+  }
+
+  /* ---------------- 弹窗 ---------------- */
+  function modal(title, text, okText, okAct, danger) {
+    $('modal-host').innerHTML = '<div class="mask" data-act="mask"><div class="modal" data-stop="1">' +
+      '<h3>' + esc(title) + '</h3><p>' + text + '</p><div class="mbtns">' +
+      '<button class="btn" data-act="modal-close">取消</button>' +
+      '<button class="btn ' + (danger ? 'btn-danger' : 'btn-primary') + '" data-act="' + okAct + '">' + okText + '</button>' +
+      '</div></div></div>';
+  }
+  function closeModal() { $('modal-host').innerHTML = ''; }
+
+  /* ---------------- 事件 ---------------- */
+  document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-act]');
+    if (!el) return;
+    const a = el.dataset.act, d = el.dataset;
+    switch (a) {
+      case 'tab': switchTab(d.t); break;
+      case 'back': back(); break;
+      case 'go': go(d.to); break;
+      case 'theme': S.theme = (S.theme === 'dark' ? 'light' : 'dark'); save(); render(true); break;
+      case 'toggle-dark': S.theme = (S.theme === 'dark' ? 'light' : 'dark'); save(); render(true); break;
+      case 'grade': UI.grade = +d.g; UI.openCh = {}; render(true); break;
+      case 'chapter': UI.openCh[d.i] = !UI.openCh[d.i]; render(true); break;
+      case 'kp': go('kp', d.k); break;
+      case 'cat': go('catlist', { cat: d.c }); break;
+      case 'master': {
+        const i = S.mastered.indexOf(d.k);
+        if (i >= 0) { S.mastered.splice(i, 1); toast('已取消掌握标记'); }
+        else { S.mastered.push(d.k); touchActive(); toast('已标记掌握，继续保持！'); }
+        save(); render(true); break;
+      }
+      case 'start': startQuiz(d.mode, { k: d.k, cat: d.cat, lv: d.lv ? +d.lv : undefined }); break;
+      case 'again': startQuiz(UI.result.modeKey, UI.result.p); break;
+      case 'opt': {
+        if (!UI.quiz || UI.quiz.checked) break;
+        UI.quiz.sel = +d.i;
+        Array.prototype.forEach.call(document.querySelectorAll('.opt'), (o, i) => o.classList.toggle('sel', i === UI.quiz.sel));
+        break;
+      }
+      case 'submit': submitAnswer(); break;
+      case 'next': nextQuestion(); break;
+      case 'fcat': UI.fCat = d.c; render(true); break;
+      case 'wrong-clear': modal('清空错题本', '将删除全部错题记录，此操作不可撤销。已掌握的知识点和做题统计会保留。', '确认清空', 'wrong-clear-yes', true); break;
+      case 'wrong-clear-yes': S.wrong = {}; save(); closeModal(); render(); toast('错题本已清空'); break;
+      case 'reset': modal('重置学习数据', '将清空掌握标记、错题本、做题统计和测验记录，恢复初始状态。', '确认重置', 'reset-yes', true); break;
+      case 'reset-yes': S = Object.assign({}, DEFAULT, { stats: { total: 0, correct: 0, days: {} } }); save(); closeModal(); UI.history = []; UI.view = { name: 'home' }; UI.tab = 'home'; render(); toast('已重置，重新开始吧'); break;
+      case 'about': modal('关于本小程序', '覆盖七 / 八 / 九年级 ' + K.length + ' 个核心知识点、' + B.length + ' 道配套习题与 ' + F.length + ' 条常用公式。所有学习数据仅保存在本机浏览器。', '知道了', 'modal-close'); break;
+      case 'history': {
+        const box = $('history-box');
+        if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        break;
+      }
+      case 'modal-close': case 'mask': closeModal(); break;
+    }
+  });
+
+  document.addEventListener('input', function (e) {
+    if (e.target.id === 'search-kp') {
+      UI.kpQuery = e.target.value;
+      const box = $('kp-list'); if (box) box.innerHTML = filteredChapterHTML(UI.view.name === 'practice');
+    } else if (e.target.id === 'search-f') {
+      UI.fQuery = e.target.value;
+      const box = $('f-list'); if (box) box.innerHTML = formulaListHTML();
+    } else if (e.target.id === 'fill-input' && UI.quiz) {
+      UI.quiz.fill = e.target.value;
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.id === 'fill-input' && UI.quiz && !UI.quiz.checked) submitAnswer();
+  });
+
+  /* ---------------- 启动 ---------------- */
+  touchActive();
+  UI.openCh['ch0'] = true;
+  render();
+  window.__MATH_APP__ = { get state() { return S; }, get ui() { return UI; }, get bank() { return B; } };
+})();
+
+</script>
+</body>
+</html>
