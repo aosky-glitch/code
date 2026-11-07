@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#4F6BFF">
+<title>初中英语 · 每日进阶</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%234F6BFF'/%3E%3Ctext%20x='32'%20y='45'%20font-size='38'%20font-weight='bold'%20text-anchor='middle'%20fill='white'%3EA%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --primary:#4F6BFF; --primary-2:#7B8CFF; --primary-soft:#EEF1FF;
+  --mint:#00C2A8; --mint-soft:#E4F9F5; --orange:#FF9A4D; --orange-soft:#FFF1E5;
+  --danger:#FF5D7A; --danger-soft:#FFEDF1; --gold:#F7B731;
+  --ink:#1B2440; --sub:#7A86A6; --faint:#A8B1C8; --line:#EDF0F7;
+  --bg:#F3F6FC; --card:#FFFFFF;
+  --shadow:0 8px 24px rgba(31,45,90,.08); --shadow-lg:0 16px 40px rgba(31,45,90,.14);
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;font-family:var(--font);color:var(--ink);background:#E9EEF9}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select{font-family:inherit}
+svg{display:block}
+.app-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:64px;padding:24px;
+  background:radial-gradient(1000px 600px at 12% 8%,#DDE6FF 0%,transparent 60%),radial-gradient(900px 700px at 88% 92%,#D6F5EF 0%,transparent 60%),#EEF2FB}
+
+/* ---------- 手机外壳 ---------- */
+.phone{position:relative;width:400px;height:min(856px,94vh);background:var(--bg);border-radius:42px;
+  box-shadow:0 30px 80px rgba(28,40,90,.28),0 0 0 11px #121A31,0 0 0 13px #2B3654;overflow:hidden;display:flex;flex-direction:column;flex:none}
+.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px;font-size:13px;font-weight:700;letter-spacing:.3px;z-index:20;position:relative}
+.statusbar .sb-right{display:flex;align-items:center;gap:6px}
+.statusbar .sb-right svg{width:16px;height:14px;fill:var(--ink)}
+.statusbar .battery{width:22px;height:11px;border:1.6px solid var(--ink);border-radius:3px;position:relative;opacity:.9}
+.statusbar .battery::before{content:"";position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:14px;background:var(--ink);border-radius:1px}
+.statusbar .battery::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:5px;background:var(--ink);border-radius:0 2px 2px 0}
+.capsule{position:absolute;right:14px;top:52px;z-index:30;height:32px;border-radius:18px;background:rgba(255,255,255,.86);
+  border:1px solid rgba(0,0,0,.05);box-shadow:0 2px 10px rgba(0,0,0,.06);display:flex;align-items:center;padding:0 4px;gap:2px}
+.capsule i{width:28px;height:26px;display:flex;align-items:center;justify-content:center;color:#3A4560}
+.capsule i svg{width:16px;height:16px;stroke:#3A4560;fill:none;stroke-width:2}
+#pages{position:relative;flex:1;min-height:0}
+.page{position:absolute;inset:0;display:none;flex-direction:column;animation:fadeUp .28s ease both}
+.page.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:6px 18px 24px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.pad-top{padding-top:52px}
+
+/* ---------- 顶部标题 ---------- */
+.topbar{padding:8px 4px 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.topbar h1{margin:0;font-size:23px;font-weight:800;letter-spacing:-.5px;line-height:1.2}
+.topbar p{margin:5px 0 0;font-size:12.5px;color:var(--sub)}
+.topbar .tb-right{font-size:12px;color:var(--sub);flex:none}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:11.5px;font-weight:600;color:var(--sub);box-shadow:0 2px 8px rgba(31,45,90,.05)}
+
+/* ---------- 通用组件 ---------- */
+.card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:18px 4px 10px}
+.sec-head h2{margin:0;font-size:15.5px;font-weight:800;letter-spacing:-.2px}
+.sec-head .more{font-size:12px;color:var(--primary);font-weight:700}
+.row{display:flex;align-items:center}
+.between{display:flex;align-items:center;justify-content:space-between}
+.gap8{gap:8px}.gap12{gap:12px}
+.muted{color:var(--sub)}.faint{color:var(--faint)}
+.tiny{font-size:11px}.small{font-size:12px}.mid{font-size:13.5px}
+.bold{font-weight:800}.semi{font-weight:700}
+.tag{display:inline-block;padding:3px 9px;border-radius:8px;font-size:10.5px;font-weight:700;background:var(--primary-soft);color:var(--primary)}
+.tag.mint{background:var(--mint-soft);color:#009E88}
+.tag.orange{background:var(--orange-soft);color:#E07A25}
+.tag.danger{background:var(--danger-soft);color:#E4415F}
+.tag.gray{background:#F1F3F9;color:var(--sub)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;border-radius:14px;padding:0 18px;font-size:14px;font-weight:700;transition:transform .15s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 18px rgba(79,107,255,.32)}
+.btn-ghost{background:var(--primary-soft);color:var(--primary)}
+.btn-plain{background:#F2F4FA;color:var(--ink)}
+.btn-mint{background:linear-gradient(135deg,#00C2A8,#38D6B7);color:#fff;box-shadow:0 8px 18px rgba(0,194,168,.28)}
+.btn-sm{height:34px;padding:0 13px;font-size:12.5px;border-radius:11px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 13px;border-radius:11px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap;transition:.18s}
+.chip.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 5px 12px rgba(79,107,255,.28)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.divider{height:1px;background:var(--line);margin:12px 0}
+.empty{text-align:center;padding:52px 20px;color:var(--sub)}
+.empty .em-ic{width:76px;height:76px;margin:0 auto 16px;border-radius:26px;background:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:34px}
+.empty h3{margin:0 0 8px;font-size:15px;color:var(--ink);font-weight:800}
+.empty p{margin:0;font-size:12.5px;line-height:1.7}
+
+/* ---------- TabBar ---------- */
+.tabbar{height:76px;flex:none;background:rgba(255,255,255,.96);border-top:1px solid var(--line);display:flex;align-items:flex-start;padding:8px 6px 0;
+  box-shadow:0 -6px 22px rgba(31,45,90,.05);z-index:25;backdrop-filter:blur(12px)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#A6AFC6;transition:.2s;position:relative}
+.tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tab span{font-size:10px;font-weight:700;letter-spacing:.2px}
+.tab.active{color:var(--primary)}
+.tab.active svg{stroke-width:2.2}
+.tab.active::before{content:"";position:absolute;top:-8px;width:22px;height:3px;border-radius:0 0 4px 4px;background:var(--primary)}
+.tab .dot{position:absolute;top:3px;right:calc(50% - 18px);min-width:15px;height:15px;padding:0 3px;border-radius:9px;background:var(--danger);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
+.ic{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic text{fill:currentColor;stroke:none}
+.hero .streak .ic{width:14px;height:14px;color:#FFD7A0}
+.qi .ic{width:21px;height:21px}
+.goal-ic .ic{width:18px;height:18px}
+.mo-ic .ic{width:25px;height:25px;color:#fff}
+.pk-ic .ic{width:21px;height:21px}
+.bi .ic{width:27px;height:27px}
+.badge.got .ic{color:#D99A16}
+.em-ic .ic{width:36px;height:36px}
+.avatar .ic{width:30px;height:30px}
+.sr-ic .ic{width:17px;height:17px}
+.r-emoji .ic{width:52px;height:52px;color:var(--primary)}
+.wc-back .bc-tip .ic{width:13px;height:13px}
+.fb .ic{width:15px;height:15px}
+.explain h5 .ic{width:15px;height:15px}
+.wi-exp .ic{width:13px;height:13px}
+
+/* ---------- 首页 ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#4F6BFF 0%,#6E82FF 55%,#8C7BFF 100%);border-radius:24px;padding:20px;color:#fff;box-shadow:0 14px 30px rgba(79,107,255,.32);margin-bottom:16px}
+.hero::after{content:"";position:absolute;right:-40px;top:-55px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.11)}
+.hero::before{content:"";position:absolute;right:32px;bottom:-70px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero .hi{font-size:12px;opacity:.86;font-weight:600;position:relative;z-index:1}
+.hero h2{margin:8px 0 6px;font-size:22px;font-weight:800;letter-spacing:-.4px;position:relative;z-index:1}
+.hero .desc{font-size:12px;opacity:.88;line-height:1.6;position:relative;z-index:1}
+.hero-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:18px;position:relative;z-index:1}
+.streak{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.streak b{font-size:16px}
+.ring-wrap{display:flex;align-items:center;gap:12px}
+.ring{width:64px;height:64px;position:relative;flex:none}
+.ring svg{width:64px;height:64px;transform:rotate(-90deg)}
+.ring .track{stroke:rgba(255,255,255,.24)}
+.ring .bar{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+.ring-label{font-size:11px;opacity:.85;line-height:1.5}
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.goal-card{background:#fff;border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.goal-card .gc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.goal-ic{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.goal-card .num{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.goal-card .num small{font-size:11px;font-weight:600;color:var(--faint);margin-left:3px}
+.goal-card .lbl{font-size:11.5px;color:var(--sub);margin-top:4px}
+.pbar{height:6px;border-radius:6px;background:#EEF1F8;overflow:hidden;margin-top:11px}
+.pbar i{display:block;height:100%;border-radius:6px;transition:width .6s ease}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.quick{background:#fff;border-radius:16px;padding:13px 4px 11px;text-align:center;box-shadow:var(--shadow);transition:transform .15s}
+.quick:active{transform:scale(.95)}
+.quick .qi{width:40px;height:40px;margin:0 auto 8px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.quick span{font-size:10.5px;font-weight:700;color:var(--ink);display:block}
+.quote{background:linear-gradient(120deg,#FFF8EC,#FFF2E0);border:1px solid #FFE7C7;border-radius:18px;padding:15px 16px;position:relative}
+.quote .qm{position:absolute;right:14px;top:6px;font-size:44px;color:#FFD9A3;font-family:Georgia,serif;line-height:1}
+.quote .en{font-size:14px;font-weight:700;line-height:1.55;color:#8A5A1E;padding-right:26px;font-style:italic}
+.quote .cn{font-size:11.5px;color:#B4864E;margin-top:7px}
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.mini-stats .ms b{display:block;font-size:19px;font-weight:800;line-height:1.2}
+.mini-stats .ms span{font-size:10.5px;color:var(--sub)}
+.mini-stats .ms+.ms{border-left:1px solid var(--line)}
+
+/* ---------- 单词卡片 ---------- */
+.pack-scroll{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+.pack-scroll::-webkit-scrollbar{display:none}
+.pack{flex:none;width:150px;background:#fff;border-radius:17px;padding:13px;box-shadow:var(--shadow);border:2px solid transparent;transition:.2s;text-align:left}
+.pack.active{border-color:var(--primary);box-shadow:0 10px 22px rgba(79,107,255,.2)}
+.pack .pk-ic{font-size:20px;margin-bottom:8px}
+.pack h4{margin:0 0 4px;font-size:13px;font-weight:800}
+.pack p{margin:0;font-size:10.5px;color:var(--sub);line-height:1.5}
+.pack .pk-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:10px;color:var(--faint)}
+.pack .pk-mini{height:4px;border-radius:4px;background:#EEF1F8;overflow:hidden;margin-top:6px}
+.pack .pk-mini i{display:block;height:100%;background:var(--mint);border-radius:4px}
+.word-card{perspective:1400px;height:340px;margin:4px 0 14px;cursor:pointer}
+.wc-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.word-card.flipped .wc-inner{transform:rotateY(180deg)}
+.wc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;padding:22px;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;overflow:hidden}
+.wc-front{background:linear-gradient(150deg,#FFFFFF 0%,#F7F9FF 100%);border:1px solid #EDF0FB}
+.wc-back{transform:rotateY(180deg);background:linear-gradient(150deg,#4F6BFF,#7C7BFF);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.wc-front::after{content:"";position:absolute;right:-50px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(79,107,255,.05)}
+.wc-head{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.wc-index{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:1px}
+.speak{width:38px;height:38px;border-radius:13px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary);transition:.15s}
+.speak:active{transform:scale(.9)}
+.speak svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1}
+.wc-word{font-size:38px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;word-break:break-word}
+.wc-ph{font-size:14px;color:var(--sub);margin-top:9px;font-family:"Times New Roman",Georgia,serif}
+.wc-hint{margin-top:26px;font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px}
+.wc-hint svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.wc-foot{position:relative;z-index:1;display:flex;justify-content:center}
+.wc-back .bc-tag{align-self:flex-start;font-size:11px;font-weight:700;background:rgba(255,255,255,.2);padding:5px 11px;border-radius:9px}
+.wc-back .bc-mean{font-size:26px;font-weight:800;margin:18px 0 6px;line-height:1.35}
+.wc-back .bc-pos{font-size:12px;opacity:.8;font-style:italic}
+.wc-back .bc-ex{margin-top:24px;background:rgba(255,255,255,.14);border-radius:14px;padding:13px;font-size:13px;line-height:1.6}
+.wc-back .bc-ex .cn{font-size:11.5px;opacity:.82;margin-top:7px}
+.wc-back .bc-tip{font-size:11px;opacity:.9;margin-top:10px;line-height:1.6}
+.fb-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.fb{height:48px;border-radius:15px;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .15s;box-shadow:var(--shadow)}
+.fb:active{transform:scale(.95)}
+.fb.no{background:var(--danger-soft);color:#E4415F}
+.fb.vague{background:var(--orange-soft);color:#DD7A22}
+.fb.yes{background:var(--mint-soft);color:#009E88}
+.word-tools{display:flex;gap:9px;margin-bottom:14px}
+.word-tools .btn{flex:1;height:40px;font-size:12.5px;border-radius:13px}
+.word-progress{display:flex;align-items:center;gap:10px;margin:0 2px 12px}
+.word-progress .pbar{flex:1;margin:0;height:7px}
+.word-progress span{font-size:11px;color:var(--sub);font-weight:700;flex:none}
+
+/* ---------- 练习 ---------- */
+.module-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px}
+.module{border-radius:20px;padding:16px;color:#fff;position:relative;overflow:hidden;min-height:118px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s;box-shadow:var(--shadow)}
+.module:active{transform:scale(.97)}
+.module::after{content:"";position:absolute;right:-28px;top:-28px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.13)}
+.module .mo-ic{font-size:24px}
+.module h3{margin:0;font-size:15px;font-weight:800}
+.module p{margin:4px 0 0;font-size:10.5px;opacity:.85;line-height:1.5}
+.module .mo-go{font-size:11px;font-weight:700;background:rgba(255,255,255,.22);align-self:flex-start;padding:5px 10px;border-radius:9px;margin-top:10px}
+.m-blue{background:linear-gradient(140deg,#4F6BFF,#8C7BFF)}
+.m-mint{background:linear-gradient(140deg,#00BFA8,#3BD4B0)}
+.m-orange{background:linear-gradient(140deg,#FF9545,#FFB56B)}
+.m-pink{background:linear-gradient(140deg,#FF6488,#FF8FA8)}
+.grammar-card{cursor:pointer}
+.grammar-card .gh{display:flex;align-items:center;gap:10px}
+.grammar-card .gh .gi{width:36px;height:36px;border-radius:12px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.grammar-card h4{margin:0;font-size:14px;font-weight:800}
+.g-detail{margin-top:10px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;line-height:1.8;color:#4B5673}
+.g-detail li{margin-bottom:5px}
+.g-detail .ex{background:#F7F9FF;border-radius:10px;padding:8px 10px;margin-top:8px;font-size:12px;color:#44507A;font-style:italic}
+
+/* 答题界面 */
+.quiz-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.quiz-head .qh-left{display:flex;align-items:center;gap:10px}
+.back-ic{width:34px;height:34px;border-radius:11px;background:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.back-ic svg{width:17px;height:17px;stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.quiz-head .qh-title{font-size:14px;font-weight:800}
+.quiz-head .qh-count{font-size:12px;color:var(--sub);font-weight:700}
+.q-progress{height:6px;border-radius:6px;background:#E7EBF5;overflow:hidden;margin-bottom:16px}
+.q-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--mint));border-radius:6px;transition:width .35s}
+.q-card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.q-meta{display:flex;align-items:center;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.q-text{font-size:16px;font-weight:700;line-height:1.75;letter-spacing:.1px}
+.q-text .blank{display:inline-block;min-width:56px;border-bottom:2px solid var(--primary);text-align:center;color:var(--primary);font-weight:800}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.opt{display:flex;align-items:center;gap:11px;background:#fff;border:1.6px solid var(--line);border-radius:15px;padding:13px 14px;text-align:left;font-size:13.5px;line-height:1.5;transition:.18s;box-shadow:0 2px 8px rgba(31,45,90,.03)}
+.opt:active{transform:scale(.985)}
+.opt .ol{width:27px;height:27px;border-radius:9px;background:#F2F4FA;color:var(--sub);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none}
+.opt.sel{border-color:var(--primary);background:var(--primary-soft)}
+.opt.sel .ol{background:var(--primary);color:#fff}
+.opt.correct{border-color:var(--mint);background:var(--mint-soft)}
+.opt.correct .ol{background:var(--mint);color:#fff}
+.opt.wrong{border-color:var(--danger);background:var(--danger-soft)}
+.opt.wrong .ol{background:var(--danger);color:#fff}
+.opt.lock{pointer-events:none}
+.explain{margin-top:14px;border-radius:16px;padding:14px;font-size:12.5px;line-height:1.75;animation:fadeUp .25s both}
+.explain.ok{background:var(--mint-soft);color:#087E6D}
+.explain.bad{background:var(--danger-soft);color:#C33A57}
+.explain h5{margin:0 0 6px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.explain .ans{font-weight:800}
+.explain p{margin:6px 0 0}
+.passage{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:16px;font-size:13.5px;line-height:1.95;color:#3C4763;margin-bottom:14px;max-height:230px;overflow-y:auto;scrollbar-width:none}
+.passage::-webkit-scrollbar{display:none}
+.passage h4{margin:0 0 10px;font-size:14px;color:var(--ink);font-weight:800}
+.passage p{margin:0 0 10px}
+.passage .clz-num{color:var(--primary);font-weight:800}
+.result-card{text-align:center;padding:28px 18px}
+.result-card .r-emoji{font-size:52px;line-height:1}
+.result-card h2{margin:12px 0 6px;font-size:22px;font-weight:800}
+.result-card p{margin:0;font-size:12.5px;color:var(--sub);line-height:1.7}
+.result-ring{width:118px;height:118px;margin:18px auto;position:relative}
+.result-ring svg{width:118px;height:118px;transform:rotate(-90deg)}
+.result-ring .track{stroke:#EDF0F8}
+.result-ring .bar{stroke:url(#rgrad);stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.result-ring .txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.result-ring .txt b{font-size:28px;font-weight:800;line-height:1}
+.result-ring .txt span{font-size:10.5px;color:var(--sub);margin-top:3px}
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.res-stats div{background:#F7F9FE;border-radius:14px;padding:12px 6px}
+.res-stats b{display:block;font-size:19px;font-weight:800}
+.res-stats span{font-size:10.5px;color:var(--sub)}
+
+/* ---------- 错题本 ---------- */
+.wrong-item{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:15px;margin-bottom:12px;border-left:4px solid var(--danger)}
+.wi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.wi-q{font-size:13.5px;font-weight:700;line-height:1.65;margin-bottom:10px}
+.wi-ans{display:flex;gap:8px;flex-wrap:wrap;font-size:11.5px}
+.wi-ans span{padding:4px 9px;border-radius:8px;background:#F5F7FC;color:var(--sub)}
+.wi-ans span.bad{background:var(--danger-soft);color:#E4415F}
+.wi-ans span.good{background:var(--mint-soft);color:#009E88}
+.wi-exp{font-size:11.5px;color:var(--sub);line-height:1.7;background:#F8FAFE;border-radius:10px;padding:10px;margin-top:10px}
+.wi-foot{display:flex;gap:8px;margin-top:11px}
+.wi-foot .btn{flex:1;height:34px;font-size:12px;border-radius:11px}
+
+/* ---------- 我的 ---------- */
+.profile{background:linear-gradient(135deg,#4F6BFF,#8378FF);border-radius:22px;padding:20px;color:#fff;box-shadow:0 14px 30px rgba(79,107,255,.28);margin-bottom:14px;position:relative;overflow:hidden}
+.profile::after{content:"";position:absolute;right:-30px;top:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1)}
+.pf-top{display:flex;align-items:center;gap:13px;position:relative;z-index:1}
+.avatar{width:56px;height:56px;border-radius:19px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:27px;flex:none}
+.pf-top h3{margin:0;font-size:17px;font-weight:800}
+.pf-top p{margin:5px 0 0;font-size:11.5px;opacity:.85}
+.lv-wrap{margin-top:16px;position:relative;z-index:1}
+.lv-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:7px;opacity:.9}
+.lv-bar{height:8px;border-radius:8px;background:rgba(255,255,255,.25);overflow:hidden}
+.lv-bar i{display:block;height:100%;background:#fff;border-radius:8px;transition:width .7s}
+.pf-points{display:flex;gap:10px;margin-top:16px;position:relative;z-index:1}
+.pf-points div{flex:1;background:rgba(255,255,255,.16);border-radius:13px;padding:10px;text-align:center}
+.pf-points b{display:block;font-size:19px;font-weight:800}
+.pf-points span{font-size:10px;opacity:.85}
+.chart{display:flex;align-items:flex-end;justify-content:space-between;height:112px;gap:8px;padding-top:10px}
+.chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.chart .bar{width:100%;max-width:26px;border-radius:7px 7px 4px 4px;background:linear-gradient(180deg,var(--primary-2),var(--primary));min-height:4px;transition:height .6s}
+.chart .bar.today{background:linear-gradient(180deg,#FFC06B,var(--orange))}
+.chart .lb{font-size:10px;color:var(--sub);white-space:nowrap}
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.badge{text-align:center;padding:11px 4px;border-radius:15px;background:#F8FAFE;transition:.2s}
+.badge .bi{font-size:26px;line-height:1.2;filter:grayscale(1);opacity:.35}
+.badge.got .bi{filter:none;opacity:1}
+.badge.got{background:linear-gradient(160deg,#FFF8E9,#FFF1D8)}
+.badge b{display:block;font-size:10px;font-weight:800;margin-top:6px;color:var(--ink)}
+.badge span{display:block;font-size:9px;color:var(--faint);margin-top:2px;line-height:1.3}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}
+.setting-row:last-child{border-bottom:0}
+.setting-row .sr-l{display:flex;align-items:center;gap:10px}
+.setting-row .sr-ic{width:32px;height:32px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:15px}
+.setting-row b{font-size:13px;font-weight:700}
+.setting-row small{display:block;font-size:10.5px;color:var(--sub);margin-top:2px}
+.seg{display:flex;background:#F2F4FA;border-radius:10px;padding:3px;gap:2px}
+.seg button{padding:5px 9px;border-radius:8px;font-size:11px;font-weight:700;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--primary);box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.cal-day{aspect-ratio:1;border-radius:9px;background:#F4F6FC;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:var(--faint);font-weight:700}
+.cal-day.on{background:linear-gradient(140deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 4px 10px rgba(79,107,255,.25)}
+.cal-day.today{outline:2px solid var(--orange);outline-offset:1px}
+
+/* ---------- 弹层 / 提示 ---------- */
+#overlay{position:absolute;inset:0;z-index:60;pointer-events:none}
+.toast{position:absolute;left:50%;bottom:100px;transform:translate(-50%,14px);background:rgba(27,36,64,.94);color:#fff;padding:10px 16px;border-radius:13px;font-size:12.5px;font-weight:600;
+  box-shadow:0 10px 26px rgba(0,0,0,.2);opacity:0;transition:.3s;white-space:nowrap;max-width:88%;text-align:center;z-index:70}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.point-float{position:absolute;left:50%;top:45%;transform:translateX(-50%);font-size:30px;font-weight:800;color:var(--gold);
+  text-shadow:0 3px 12px rgba(247,183,49,.5);z-index:75;animation:floatUp 1.1s ease both;pointer-events:none}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}25%{opacity:1;transform:translate(-50%,-8px) scale(1.12)}100%{opacity:0;transform:translate(-50%,-70px) scale(1)}}
+.modal{position:absolute;inset:0;background:rgba(20,28,54,.45);display:flex;align-items:center;justify-content:center;padding:26px;z-index:80;opacity:0;pointer-events:none;transition:.25s;backdrop-filter:blur(3px)}
+.modal.show{opacity:1;pointer-events:auto}
+.modal-card{background:#fff;border-radius:24px;padding:22px;width:100%;max-width:330px;box-shadow:var(--shadow-lg);transform:scale(.9);transition:.28s;text-align:center}
+.modal.show .modal-card{transform:scale(1)}
+.modal-card .mc-ic{font-size:42px;line-height:1}
+.modal-card h3{margin:12px 0 7px;font-size:18px;font-weight:800}
+.modal-card p{margin:0;font-size:12.5px;color:var(--sub);line-height:1.75}
+.modal-card .mc-btns{display:flex;gap:9px;margin-top:20px}
+.modal-card .mc-btns .btn{flex:1}
+
+/* ---------- 桌面端介绍 ---------- */
+.desktop-intro{width:340px;color:#25325A;flex:none}
+.desktop-intro .di-logo{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.desktop-intro .di-logo .lg{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#4F6BFF,#8C7BFF);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 8px 18px rgba(79,107,255,.3)}
+.desktop-intro h1{margin:0;font-size:27px;font-weight:800;letter-spacing:-.6px}
+.desktop-intro .di-sub{font-size:12px;color:#6B78A0;margin-top:3px}
+.desktop-intro>p{font-size:13px;line-height:1.9;color:#5A6790;margin:0 0 22px}
+.di-list{display:flex;flex-direction:column;gap:12px}
+.di-item{display:flex;gap:12px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);border-radius:15px;padding:12px 14px;box-shadow:0 6px 18px rgba(31,45,90,.06)}
+.di-item .di-ic{width:32px;height:32px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.di-item b{font-size:13px;display:block;margin-bottom:3px}
+.di-item span{font-size:11.5px;color:#7A86A6;line-height:1.6}
+.di-tip{margin-top:20px;font-size:11.5px;color:#8590B0;line-height:1.8;border-left:3px solid #C9D3F5;padding-left:12px}
+@media(max-width:900px){.desktop-intro{display:none}.app-shell{padding:0;gap:0}.phone{width:100%;height:100dvh;border-radius:0;box-shadow:none}}
+@media(max-height:700px){.phone{height:96vh}}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="desktop-intro">
+    <div class="di-logo"><div class="lg">A</div><div><h1>每日进阶 · 初中英语</h1><div class="di-sub">Junior High English Learning App</div></div></div>
+    <p>一款面向初中生的移动端英语学习应用，把「背单词 → 学语法 → 做真题 → 攻错题 → 坚持打卡」串成完整闭环。所有学习进度自动保存在本机，随时接着学。</p>
+    <div class="di-list">
+      <div class="di-item"><div class="di-ic">📚</div><div><b>六册分层词库</b><span>七上到中考高频，约 90 个核心词，卡片翻转 + 真人发音 + 例句</span></div></div>
+      <div class="di-item"><div class="di-ic">✍️</div><div><b>语法精讲与刷题</b><span>10 个核心语法点、30+ 道选择题，即时判分与详细解析</span></div></div>
+      <div class="di-item"><div class="di-ic">📖</div><div><b>阅读与完形</b><span>原创初中难度短文，题目＋答案讲解，训练语篇理解</span></div></div>
+      <div class="di-item"><div class="di-ic">🎯</div><div><b>错题本与成就体系</b><span>错题自动归集、掌握后移除，积分等级、勋章、打卡日历</span></div></div>
+    </div>
+    <div class="di-tip">提示：右侧为可交互的手机模拟器。点击底部导航切换页面，单词卡点击可翻面，发音使用浏览器语音合成。数据保存在浏览器本地存储中。</div>
+  </aside>
+
+  <div class="phone">
+    <div class="statusbar">
+      <span id="clock">9:41</span>
+      <div class="sb-right">
+        <svg viewBox="0 0 18 14"><path d="M1 11h2v2H1zm3-3h2v5H4zm3-3h2v8H7zm3-4h2v12h-2zm3-2h2v14h-2z"/></svg>
+        <svg viewBox="0 0 18 14"><path d="M9 12.5a1.4 1.4 0 100-2.8 1.4 1.4 0 000 2.8zM4.6 8.2a6 6 0 018.8 0l1.3-1.4a8 8 0 00-11.4 0zM1.8 5.3a10 10 0 0114.4 0L17.5 4a12 12 0 00-17 0z"/></svg>
+        <div class="battery"></div>
+      </div>
+    </div>
+    <div class="capsule"><i><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="#3A4560" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="#3A4560" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="#3A4560" stroke="none"/></svg></i><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6" fill="#3A4560" stroke="none"/></svg></i></div>
+
+    <main id="pages">
+      <section class="page active" id="page-home"></section>
+      <section class="page" id="page-words"></section>
+      <section class="page" id="page-practice"></section>
+      <section class="page" id="page-wrong"></section>
+      <section class="page" id="page-me"></section>
+    </main>
+
+    <nav class="tabbar" id="tabbar"></nav>
+    <div id="overlay"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   数据层：词库 / 语法 / 题库 / 阅读材料 / 成就
+   ============================================================ */
+/* ---------- 1. 分层词库 ---------- */
+const PACKS = [
+{id:"p1",grade:"七年级上",title:"校园与朋友",icon:"🏫",desc:"开学第一课必备词",words:[
+ {w:"introduce",ph:"/ˌɪntrəˈdjuːs/",p:"v.",m:"介绍；引进",ex:"Let me introduce my new classmate to you.",ec:"让我把我的新同学介绍给你。",tip:"introduce A to B 把 A 介绍给 B"},
+ {w:"classmate",ph:"/ˈklɑːsmeɪt/",p:"n.",m:"同班同学",ex:"My classmates are all friendly to me.",ec:"我的同学对我都很友好。",tip:"class + mate，复合词"},
+ {w:"favourite",ph:"/ˈfeɪvərɪt/",p:"adj./n.",m:"最喜爱的（人或物）",ex:"Maths is my favourite subject.",ec:"数学是我最喜欢的科目。",tip:"美式拼作 favorite"},
+ {w:"country",ph:"/ˈkʌntri/",p:"n.",m:"国家；乡村",ex:"She comes from an English-speaking country.",ec:"她来自一个说英语的国家。",tip:"复数 countries"},
+ {w:"hobby",ph:"/ˈhɒbi/",p:"n.",m:"业余爱好",ex:"My hobby is collecting stamps.",ec:"我的爱好是集邮。",tip:"复数 hobbies"},
+ {w:"dictionary",ph:"/ˈdɪkʃənri/",p:"n.",m:"词典；字典",ex:"You can look up the word in a dictionary.",ec:"你可以在词典里查这个词。",tip:"look up 查阅（词典）"},
+ {w:"library",ph:"/ˈlaɪbrəri/",p:"n.",m:"图书馆",ex:"We often read books in the school library.",ec:"我们常在学校图书馆看书。",tip:"复数 libraries"},
+ {w:"playground",ph:"/ˈpleɪɡraʊnd/",p:"n.",m:"操场；游乐场",ex:"The boys are playing football on the playground.",ec:"男孩们正在操场上踢足球。",tip:""},
+ {w:"polite",ph:"/pəˈlaɪt/",p:"adj.",m:"有礼貌的",ex:"It is polite to say thank you.",ec:"说谢谢是有礼貌的。",tip:"反义词 impolite"},
+ {w:"borrow",ph:"/ˈbɒrəʊ/",p:"v.",m:"借入；借来",ex:"May I borrow your eraser?",ec:"我可以借你的橡皮吗？",tip:"borrow sth from sb；lend 是借出"},
+ {w:"remember",ph:"/rɪˈmembə(r)/",p:"v.",m:"记得；记住",ex:"Remember to close the window before you leave.",ec:"离开前记得关窗。",tip:"remember to do 记得去做；remember doing 记得做过"},
+ {w:"welcome",ph:"/ˈwelkəm/",p:"v./adj.",m:"欢迎；受欢迎的",ex:"Welcome to our school!",ec:"欢迎来到我们学校！",tip:"You are welcome. 不客气"},
+ {w:"together",ph:"/təˈɡeðə(r)/",p:"adv.",m:"一起；共同",ex:"Let's finish the project together.",ec:"让我们一起完成这个项目。",tip:""},
+ {w:"eraser",ph:"/ɪˈreɪzə(r)/",p:"n.",m:"橡皮擦",ex:"I need an eraser to correct the mistake.",ec:"我需要一块橡皮来改正错误。",tip:"英式常用 rubber"},
+ {w:"exercise",ph:"/ˈeksəsaɪz/",p:"n./v.",m:"练习；锻炼",ex:"Doing morning exercises keeps us healthy.",ec:"做早操让我们保持健康。",tip:"作「练习题」可数，作「运动」不可数"}
+]},
+{id:"p2",grade:"七年级下",title:"日常与爱好",icon:"🎨",desc:"描述生活与兴趣",words:[
+ {w:"usually",ph:"/ˈjuːʒuəli/",p:"adv.",m:"通常；经常",ex:"I usually get up at six thirty.",ec:"我通常六点半起床。",tip:"频度副词：always > usually > often > sometimes > seldom > never"},
+ {w:"practise",ph:"/ˈpræktɪs/",p:"v.",m:"练习；训练",ex:"She practises the piano every evening.",ec:"她每晚练钢琴。",tip:"practise doing sth；美式拼 practice"},
+ {w:"delicious",ph:"/dɪˈlɪʃəs/",p:"adj.",m:"美味的；可口的",ex:"The dumplings my grandma makes are delicious.",ec:"奶奶包的饺子很好吃。",tip:""},
+ {w:"restaurant",ph:"/ˈrestrɒnt/",p:"n.",m:"餐馆；饭店",ex:"We had dinner in a small restaurant.",ec:"我们在一家小餐馆吃了晚饭。",tip:""},
+ {w:"straight",ph:"/streɪt/",p:"adv./adj.",m:"笔直地；直的",ex:"Go straight along this road and turn left.",ec:"沿这条路直走然后左转。",tip:"go straight 直走"},
+ {w:"expensive",ph:"/ɪkˈspensɪv/",p:"adj.",m:"昂贵的",ex:"This coat is too expensive for me.",ec:"这件外套对我来说太贵了。",tip:"反义词 cheap / inexpensive"},
+ {w:"musician",ph:"/mjuˈzɪʃn/",p:"n.",m:"音乐家",ex:"The young musician plays the violin very well.",ec:"这位年轻的音乐家小提琴拉得很好。",tip:"music + -ian 表「人」"},
+ {w:"collect",ph:"/kəˈlekt/",p:"v.",m:"收集；采集",ex:"He has collected over two hundred model cars.",ec:"他已经收集了两百多辆汽车模型。",tip:"collection n. 收藏品"},
+ {w:"magazine",ph:"/ˌmæɡəˈziːn/",p:"n.",m:"杂志；期刊",ex:"I read a science magazine every month.",ec:"我每月读一本科学杂志。",tip:""},
+ {w:"seldom",ph:"/ˈseldəm/",p:"adv.",m:"很少；不常",ex:"He seldom eats fast food.",ec:"他很少吃快餐。",tip:"本身含否定意义，句子不再加 not"},
+ {w:"weekend",ph:"/ˌwiːkˈend/",p:"n.",m:"周末",ex:"What do you usually do at the weekend?",ec:"你周末通常做什么？",tip:"at the weekend（英）/ on the weekend（美）"},
+ {w:"feed",ph:"/fiːd/",p:"v.",m:"喂养；饲养",ex:"Don't forget to feed the cat.",ec:"别忘了喂猫。",tip:"feed sb sth 喂某人某物；过去式 fed"},
+ {w:"neighbourhood",ph:"/ˈneɪbəhʊd/",p:"n.",m:"街区；社区",ex:"There is a new park in our neighbourhood.",ec:"我们社区里有一个新公园。",tip:"美式拼 neighborhood"},
+ {w:"journey",ph:"/ˈdʒɜːni/",p:"n.",m:"旅行；旅程",ex:"The train journey took three hours.",ec:"这趟火车旅程花了三个小时。",tip:""},
+ {w:"homework",ph:"/ˈhəʊmwɜːk/",p:"n.",m:"家庭作业",ex:"I finished my homework before dinner.",ec:"晚饭前我完成了作业。",tip:"不可数名词，不能说 homeworks"}
+]},
+{id:"p3",grade:"八年级上",title:"健康与习惯",icon:"🍎",desc:"生活方式高频词",words:[
+ {w:"healthy",ph:"/ˈhelθi/",p:"adj.",m:"健康的",ex:"A balanced diet keeps you healthy.",ec:"均衡的饮食让你保持健康。",tip:"health n.；keep healthy 保持健康"},
+ {w:"although",ph:"/ɔːlˈðəʊ/",p:"conj.",m:"虽然；尽管",ex:"Although it rained, we still went hiking.",ec:"尽管下雨了，我们还是去徒步了。",tip:"不能与 but 连用，这是中考高频考点"},
+ {w:"hardly",ph:"/ˈhɑːdli/",p:"adv.",m:"几乎不",ex:"I hardly ever stay up late.",ec:"我几乎从不熬夜。",tip:"hardly ever 几乎从不；本身表否定"},
+ {w:"twice",ph:"/twaɪs/",p:"adv.",m:"两次；两倍",ex:"I go swimming twice a week.",ec:"我一周游两次泳。",tip:"once 一次，three times 三次"},
+ {w:"difference",ph:"/ˈdɪfrəns/",p:"n.",m:"差别；差异",ex:"Can you tell the difference between the two words?",ec:"你能说出这两个词的区别吗？",tip:"make a difference 有影响、起作用"},
+ {w:"medicine",ph:"/ˈmedsn/",p:"n.",m:"药；医学",ex:"Take this medicine three times a day.",ec:"这药一天吃三次。",tip:"take medicine 吃药，不用 eat"},
+ {w:"advice",ph:"/ədˈvaɪs/",p:"n.",m:"建议；劝告",ex:"My teacher gave me some useful advice.",ec:"老师给了我一些有用的建议。",tip:"不可数！一条建议 a piece of advice；动词 advise"},
+ {w:"balanced",ph:"/ˈbælənst/",p:"adj.",m:"均衡的",ex:"A balanced diet includes vegetables and fruit.",ec:"均衡的饮食包括蔬菜和水果。",tip:"a balanced diet 均衡饮食"},
+ {w:"enough",ph:"/ɪˈnʌf/",p:"adj./adv.",m:"足够的（地）",ex:"You don't get enough sleep.",ec:"你睡眠不足。",tip:"修饰形容词/副词时要后置：good enough"},
+ {w:"habit",ph:"/ˈhæbɪt/",p:"n.",m:"习惯",ex:"It's a good habit to read before bed.",ec:"睡前阅读是个好习惯。",tip:"get into the habit of 养成……的习惯"},
+ {w:"perhaps",ph:"/pəˈhæps/",p:"adv.",m:"也许；可能",ex:"Perhaps he has already left.",ec:"也许他已经离开了。",tip:"同义词 maybe，常放句首"},
+ {w:"illness",ph:"/ˈɪlnəs/",p:"n.",m:"疾病",ex:"He was absent because of illness.",ec:"他因病缺席。",tip:"ill adj.；because of + 名词"},
+ {w:"dentist",ph:"/ˈdentɪst/",p:"n.",m:"牙医",ex:"You should see a dentist twice a year.",ec:"你应该一年看两次牙医。",tip:"-ist 表示「从事某职业的人」"},
+ {w:"stomachache",ph:"/ˈstʌməkeɪk/",p:"n.",m:"胃痛；肚子疼",ex:"I have a stomachache after lunch.",ec:"午饭后我肚子疼。",tip:"have a + 身体部位 + ache：headache, toothache"},
+ {w:"relax",ph:"/rɪˈlæks/",p:"v.",m:"放松；休息",ex:"Listening to music helps me relax.",ec:"听音乐能帮我放松。",tip:"relaxing 令人放松的；relaxed 感到放松的"}
+]},
+{id:"p4",grade:"八年级下",title:"旅行与经历",icon:"✈️",desc:"过去经历与见闻",words:[
+ {w:"experience",ph:"/ɪkˈspɪəriəns/",p:"n./v.",m:"经历；经验；体验",ex:"Travelling alone was a wonderful experience.",ec:"独自旅行是一次很棒的经历。",tip:"作「经历」可数，作「经验」不可数"},
+ {w:"abroad",ph:"/əˈbrɔːd/",p:"adv.",m:"在国外；到国外",ex:"Have you ever been abroad?",ec:"你出过国吗？",tip:"go / study / live abroad，前面不加介词 to"},
+ {w:"souvenir",ph:"/ˌsuːvəˈnɪə(r)/",p:"n.",m:"纪念品",ex:"I bought some souvenirs for my friends.",ec:"我给朋友买了一些纪念品。",tip:""},
+ {w:"ancient",ph:"/ˈeɪnʃənt/",p:"adj.",m:"古代的；古老的",ex:"We visited an ancient temple in Xi'an.",ec:"我们参观了西安的一座古庙。",tip:"反义词 modern"},
+ {w:"scenery",ph:"/ˈsiːnəri/",p:"n.",m:"风景；景色",ex:"The scenery along the river is amazing.",ec:"沿河的风景美极了。",tip:"不可数名词，不能加 -s"},
+ {w:"flight",ph:"/flaɪt/",p:"n.",m:"航班；飞行",ex:"Our flight was delayed for two hours.",ec:"我们的航班延误了两小时。",tip:"fly v. → flight n."},
+ {w:"luggage",ph:"/ˈlʌɡɪdʒ/",p:"n.",m:"行李",ex:"Please take care of your luggage.",ec:"请照看好你的行李。",tip:"不可数；美式 baggage；一件行李 a piece of luggage"},
+ {w:"volunteer",ph:"/ˌvɒlənˈtɪə(r)/",p:"n./v.",m:"志愿者；自愿做",ex:"She volunteers at the animal centre every Sunday.",ec:"她每周日在动物中心做志愿者。",tip:""},
+ {w:"encourage",ph:"/ɪnˈkʌrɪdʒ/",p:"v.",m:"鼓励；支持",ex:"My parents encouraged me to try again.",ec:"父母鼓励我再试一次。",tip:"encourage sb to do sth"},
+ {w:"progress",ph:"/ˈprəʊɡres/",p:"n.",m:"进步；进展",ex:"You have made great progress in English.",ec:"你的英语进步很大。",tip:"不可数；make progress 取得进步"},
+ {w:"memory",ph:"/ˈmeməri/",p:"n.",m:"记忆；回忆",ex:"The trip left me with happy memories.",ec:"这趟旅行给我留下了快乐的回忆。",tip:"复数 memories；in memory of 纪念"},
+ {w:"camera",ph:"/ˈkæmərə/",p:"n.",m:"照相机",ex:"Don't forget to bring your camera.",ec:"别忘了带相机。",tip:"take photos 拍照"},
+ {w:"wonderful",ph:"/ˈwʌndəfl/",p:"adj.",m:"精彩的；极好的",ex:"We had a wonderful time in Beijing.",ec:"我们在北京玩得很开心。",tip:"have a wonderful time 玩得愉快"},
+ {w:"realize",ph:"/ˈriːəlaɪz/",p:"v.",m:"意识到；实现",ex:"I realized I had left my ticket at home.",ec:"我意识到把票落在家里了。",tip:"realize one's dream 实现梦想"},
+ {w:"suggest",ph:"/səˈdʒest/",p:"v.",m:"建议；提议",ex:"He suggested going there by train.",ec:"他建议坐火车去那儿。",tip:"suggest doing sth，不接 to do"}
+]},
+{id:"p5",grade:"九年级",title:"科技与环境",icon:"🌱",desc:"热点话题写作词",words:[
+ {w:"environment",ph:"/ɪnˈvaɪrənmənt/",p:"n.",m:"环境",ex:"We should protect the environment.",ec:"我们应该保护环境。",tip:"environmental adj. 环境的"},
+ {w:"pollution",ph:"/pəˈluːʃn/",p:"n.",m:"污染",ex:"Air pollution is a serious problem.",ec:"空气污染是个严重问题。",tip:"pollute v. 污染"},
+ {w:"recycle",ph:"/ˌriːˈsaɪkl/",p:"v.",m:"回收利用",ex:"We recycle paper and glass at school.",ec:"我们在学校回收纸和玻璃。",tip:"re- 前缀表示「再、重新」"},
+ {w:"invent",ph:"/ɪnˈvent/",p:"v.",m:"发明；创造",ex:"Who invented the telephone?",ec:"谁发明了电话？",tip:"invention n.；inventor n. 发明家；注意与 discover（发现）区别"},
+ {w:"discover",ph:"/dɪˈskʌvə(r)/",p:"v.",m:"发现",ex:"Scientists discovered a new kind of plant.",ec:"科学家发现了一种新植物。",tip:"discover 发现已存在的；invent 创造原本没有的"},
+ {w:"technology",ph:"/tekˈnɒlədʒi/",p:"n.",m:"科技；技术",ex:"Modern technology has changed our lives.",ec:"现代科技改变了我们的生活。",tip:""},
+ {w:"energy",ph:"/ˈenədʒi/",p:"n.",m:"能源；能量",ex:"Solar energy is clean and cheap.",ec:"太阳能既清洁又便宜。",tip:"save energy 节能"},
+ {w:"reduce",ph:"/rɪˈdjuːs/",p:"v.",m:"减少；降低",ex:"Riding bikes helps reduce pollution.",ec:"骑自行车有助于减少污染。",tip:"反义词 increase 增加"},
+ {w:"protect",ph:"/prəˈtekt/",p:"v.",m:"保护",ex:"We wear masks to protect ourselves.",ec:"我们戴口罩来保护自己。",tip:"protect ... from ... 保护……免受……"},
+ {w:"influence",ph:"/ˈɪnfluəns/",p:"n./v.",m:"影响",ex:"Friends can influence the way you think.",ec:"朋友会影响你的思维方式。",tip:"have an influence on 对……有影响"},
+ {w:"develop",ph:"/dɪˈveləp/",p:"v.",m:"发展；开发",ex:"Our city has developed rapidly in recent years.",ec:"我们城市近年来发展很快。",tip:"development n.；developed / developing 发达 / 发展中"},
+ {w:"electronic",ph:"/ˌɪlekˈtrɒnɪk/",p:"adj.",m:"电子的",ex:"Electronic books are getting popular.",ec:"电子书正变得流行。",tip:""},
+ {w:"climate",ph:"/ˈklaɪmət/",p:"n.",m:"气候",ex:"Climate change affects everyone.",ec:"气候变化影响着每个人。",tip:"climate change 气候变化，写作高频"},
+ {w:"solution",ph:"/səˈluːʃn/",p:"n.",m:"解决办法",ex:"We need to find a solution to this problem.",ec:"我们需要找到解决这个问题的办法。",tip:"a solution to ... ……的解决办法（用 to 不用 of）"},
+ {w:"reusable",ph:"/ˌriːˈjuːzəbl/",p:"adj.",m:"可重复使用的",ex:"Bring a reusable bag when you shop.",ec:"购物时带上可重复使用的袋子。",tip:"re-（再）+ use + -able（能……的）"}
+]},
+{id:"p6",grade:"中考冲刺",title:"高频核心动词",icon:"🔥",desc:"阅读与写作拉分词",words:[
+ {w:"achieve",ph:"/əˈtʃiːv/",p:"v.",m:"实现；达到",ex:"Work hard and you will achieve your goal.",ec:"努力就能实现目标。",tip:"achievement n. 成就"},
+ {w:"advantage",ph:"/ədˈvɑːntɪdʒ/",p:"n.",m:"优点；优势",ex:"Living near school has many advantages.",ec:"住在学校附近有很多好处。",tip:"反义词 disadvantage；take advantage of 利用"},
+ {w:"communicate",ph:"/kəˈmjuːnɪkeɪt/",p:"v.",m:"交流；沟通",ex:"We communicate with each other in English.",ec:"我们用英语互相交流。",tip:"communicate with sb 与某人交流"},
+ {w:"consider",ph:"/kənˈsɪdə(r)/",p:"v.",m:"考虑；认为",ex:"Please consider my suggestion carefully.",ec:"请认真考虑我的建议。",tip:"consider doing sth 考虑做某事"},
+ {w:"courage",ph:"/ˈkʌrɪdʒ/",p:"n.",m:"勇气",ex:"It takes courage to admit a mistake.",ec:"承认错误需要勇气。",tip:"encourage v. 鼓励"},
+ {w:"depend",ph:"/dɪˈpend/",p:"v.",m:"依靠；取决于",ex:"Whether we go depends on the weather.",ec:"我们是否出发取决于天气。",tip:"depend on 依靠 / 取决于"},
+ {w:"describe",ph:"/dɪˈskraɪb/",p:"v.",m:"描述；形容",ex:"Can you describe the man you saw?",ec:"你能描述一下你看到的那个人吗？",tip:"description n. 描述"},
+ {w:"effort",ph:"/ˈefət/",p:"n.",m:"努力",ex:"She made a great effort to learn English well.",ec:"她付出了很大努力学好英语。",tip:"make an effort to do 努力做某事"},
+ {w:"expect",ph:"/ɪkˈspekt/",p:"v.",m:"期待；预料",ex:"I didn't expect to see you here.",ec:"我没想到会在这里见到你。",tip:"expect sb to do 期望某人做某事"},
+ {w:"imagine",ph:"/ɪˈmædʒɪn/",p:"v.",m:"想象",ex:"Imagine living on the moon one day.",ec:"想象一下有一天住在月球上。",tip:"imagine doing sth 想象做某事"},
+ {w:"improve",ph:"/ɪmˈpruːv/",p:"v.",m:"改进；提高",ex:"Reading aloud can improve your pronunciation.",ec:"朗读能改善你的发音。",tip:"improvement n. 进步"},
+ {w:"include",ph:"/ɪnˈkluːd/",p:"v.",m:"包括；包含",ex:"The price includes breakfast.",ec:"这个价格包含早餐。",tip:"including prep. 包括……在内"},
+ {w:"increase",ph:"/ɪnˈkriːs/",p:"v.",m:"增加；增长",ex:"The number of readers has increased.",ec:"读者数量增加了。",tip:"反义词 decrease / reduce"},
+ {w:"mention",ph:"/ˈmenʃn/",p:"v.",m:"提到；说起",ex:"He mentioned the plan in his letter.",ec:"他在信里提到了这个计划。",tip:"Don't mention it. 不客气 / 别提了"},
+ {w:"provide",ph:"/prəˈvaɪd/",p:"v.",m:"提供；供给",ex:"The school provides free lunch for students.",ec:"学校为学生提供免费午餐。",tip:"provide sb with sth = provide sth for sb"},
+ {w:"require",ph:"/rɪˈkwaɪə(r)/",p:"v.",m:"需要；要求",ex:"This job requires a lot of patience.",ec:"这份工作需要很多耐心。",tip:"require sb to do 要求某人做某事"},
+ {w:"regret",ph:"/rɪˈɡret/",p:"v./n.",m:"后悔；遗憾",ex:"I regret not taking your advice.",ec:"我后悔没听你的建议。",tip:"regret doing 后悔做过；regret to do 遗憾地要做"},
+ {w:"succeed",ph:"/səkˈsiːd/",p:"v.",m:"成功",ex:"If you keep trying, you will succeed.",ec:"只要坚持，你就会成功。",tip:"succeed in doing；success n.；successful adj."}
+]}
+];
+
+/* ---------- 2. 语法精讲 ---------- */
+const GRAMMAR = [
+ {id:"g1",icon:"⏱️",tag:"时态",title:"一般现在时 vs 现在进行时",
+  points:["一般现在时表示经常性、习惯性动作或客观事实，常搭配 always / usually / often / every day。","主语为第三人称单数时，动词加 -s / -es；否定与疑问借助 does，动词还原。","现在进行时表示此刻正在发生，结构为 am / is / are + doing，常搭配 now / look / listen / at the moment。","表示状态、感觉、拥有的动词（know, like, have, belong）一般不用进行时。"],
+  examples:["He plays basketball every Saturday. 他每周六打篮球。","Look! The students are cleaning the classroom. 看！学生们正在打扫教室。"]},
+ {id:"g2",icon:"📜",tag:"时态",title:"一般过去时 vs 过去进行时",
+  points:["一般过去时表示过去发生并已结束的动作，常搭配 yesterday / last week / ... ago / in 2020。","过去进行时表示过去某一时刻正在进行的动作，结构 was / were + doing。","长动作被短动作打断时：长动作用过去进行时，短动作用一般过去时（when / while 引导）。","while 后通常接进行时，when 后常接一般过去时。"],
+  examples:["I was doing my homework when the phone rang. 电话响时我正在写作业。","They visited the museum last Sunday. 上周日他们参观了博物馆。"]},
+ {id:"g3",icon:"✅",tag:"时态",title:"现在完成时",
+  points:["结构：have / has + 过去分词，表示过去动作对现在造成的影响或从过去持续到现在。","常搭配 already, yet, just, ever, never, since, for, so far, in the past few years。","have been to 表示「去过（已回来）」，have gone to 表示「去了（还没回来）」。","瞬间动词（buy, borrow, die, leave, begin）不能与 for / since 连用，要换成延续性表达：buy → have, borrow → keep, leave → be away。"],
+  examples:["I have finished my homework, so I can watch TV now. 我已经写完作业了，现在可以看电视。","He has lived here for ten years. 他在这儿住了十年了。"]},
+ {id:"g4",icon:"🔁",tag:"语态",title:"被动语态",
+  points:["基本结构：be + 过去分词，时态通过 be 体现，过去分词不变。","一般现在时：am / is / are + done；一般过去时：was / were + done；一般将来时：will be + done。","含情态动词：can / must / should + be + done。","主动变被动：宾语提前作主语，谓语变 be done，原主语变 by 短语（可省略）。"],
+  examples:["English is spoken in many countries. 许多国家说英语。","The bridge was built in 1990. 这座桥建于 1990 年。"]},
+ {id:"g5",icon:"💬",tag:"从句",title:"宾语从句三要素",
+  points:["语序：一律用陈述句语序，即「连接词 + 主语 + 谓语」，不能倒装。","连接词：陈述句用 that（可省）；一般疑问句用 if / whether；特殊疑问句用原来的疑问词。","时态呼应：主句为过去时，从句一般要用相应的过去时态；但从句表客观真理时仍用一般现在时。","否定前移：think / believe / suppose 后的否定常移到主句，如 I don't think he is right."],
+  examples:["Could you tell me where the post office is? 你能告诉我邮局在哪儿吗？","The teacher said that the earth moves around the sun. 老师说地球绕着太阳转。"]},
+ {id:"g6",icon:"🔗",tag:"从句",title:"定语从句关系词",
+  points:["先行词指人：who / whom / that；指物：which / that；表所属用 whose。","只用 that 的常见情况：先行词被 all, everything, nothing, the only, the very, 序数词或最高级修饰。","关系代词在从句中作宾语时可省略：The book (that) I bought is interesting.","先行词是时间 / 地点 / 原因且从句成分完整时，用 when / where / why。"],
+  examples:["The girl who is singing is my sister. 正在唱歌的女孩是我姐姐。","This is the best film that I have ever seen. 这是我看过的最好的电影。"]},
+ {id:"g7",icon:"🚦",tag:"从句",title:"状语从句与主将从现",
+  points:["时间状语从句（when, before, after, until, as soon as）和条件状语从句（if, unless）中，主句用将来时，从句用一般现在时表将来。","because 与 so 不能同时用；although / though 与 but 不能同时用（中文习惯易错）。","so ... that + 句子；such + (a/an) + 形容词 + 名词 + that。","so that 引导目的状语从句，从句常含 can / could / will。"],
+  examples:["I will call you as soon as I arrive. 我一到就给你打电话。","Although he was tired, he kept working. 尽管很累，他还是继续工作。"]},
+ {id:"g8",icon:"⚖️",tag:"比较",title:"比较级与最高级",
+  points:["比较级用于两者，常与 than 连用；最高级用于三者及以上，前加 the，常与 in / of 短语连用。","修饰比较级可用 much, a lot, far, even, a little；不能用 very。","「越来越……」：比较级 + and + 比较级；「越……越……」：the + 比较级, the + 比较级。","「最……之一」：one of the + 最高级 + 复数名词。"],
+  examples:["This book is much more interesting than that one. 这本书比那本有趣得多。","Shanghai is one of the biggest cities in China. 上海是中国最大的城市之一。"]},
+ {id:"g9",icon:"🧩",tag:"非谓语",title:"动词不定式与动名词",
+  points:["只接 doing 的常见动词：enjoy, finish, practise, mind, avoid, suggest, keep, consider。","只接 to do 的常见动词：want, decide, hope, plan, agree, refuse, promise, expect。","接 sb to do：ask, tell, want, invite, encourage, allow, teach。","使役/感官动词 make, let, have, see, hear 后接省略 to 的不定式；被动语态中要还原 to。"],
+  examples:["My mother asked me to clean my room. 妈妈让我打扫房间。","He enjoys playing basketball after school. 他喜欢放学后打篮球。"]},
+ {id:"g10",icon:"🔢",tag:"一致",title:"主谓一致与易混词",
+  points:["there be 句型遵循就近原则；either ... or / neither ... nor / not only ... but also 也遵循就近原则。","「the number of + 复数名词」谓语用单数；「a number of + 复数名词」谓语用复数。","few / a few 修饰可数名词，little / a little 修饰不可数名词；带 a 表肯定，不带 a 表否定。","spend（人作主语，on sth / doing）、cost（物作主语）、pay（人作主语，for）、take（it takes sb + 时间 + to do）。"],
+  examples:["There is a book and two pens on the desk. 桌上有一本书和两支笔。","It took me two hours to finish the report. 完成报告花了我两小时。"]}
+];
+
+/* ---------- 3. 语法题库 ---------- */
+const QBANK = [
+ {id:"q01",tag:"时态",diff:"基础",q:"— Where is Tom? — He ____ football with his classmates on the playground.",opts:["plays","is playing","played","will play"],a:1,exp:"问「Tom 现在在哪」说明动作此刻正在进行，用现在进行时 is playing。Look / Listen / Where is ... now 都是进行时标志词。"},
+ {id:"q02",tag:"时态",diff:"基础",q:"My sister ____ to school by bike every day, but yesterday she ____ the bus.",opts:["goes; takes","goes; took","went; took","go; takes"],a:1,exp:"every day 表示习惯，用一般现在时 goes（第三人称单数加 -es）；yesterday 表示过去，用 take 的过去式 took。"},
+ {id:"q03",tag:"时态",diff:"中等",q:"I ____ my homework when the lights suddenly ____ out.",opts:["did; went","was doing; went","am doing; go","was doing; was going"],a:1,exp:"长动作「写作业」被短动作「停电」打断：长动作用过去进行时 was doing，短动作用一般过去时 went。when 引导的短动作不用进行时。"},
+ {id:"q04",tag:"时态",diff:"中等",q:"— ____ you ever ____ to the Great Wall? — Yes, I ____ there last summer.",opts:["Have; been; went","Have; gone; went","Did; go; have been","Have; been; have gone"],a:0,exp:"ever 是现在完成时标志，用 Have you ever been to（去过已回）；last summer 是明确的过去时间点，必须用一般过去时 went，不能与现在完成时连用。"},
+ {id:"q05",tag:"时态",diff:"中等",q:"Mr Green ____ in this school since he ____ to China in 2015.",opts:["taught; came","has taught; came","has taught; has come","teaches; comes"],a:1,exp:"since 引导的时间状语从句用一般过去时 came，主句表示从过去持续到现在，用现在完成时 has taught。"},
+ {id:"q06",tag:"时态",diff:"较难",q:"Hurry up! The film ____ for ten minutes.",opts:["has begun","has been on","began","is beginning"],a:1,exp:"begin 是瞬间动词，不能与 for ten minutes 这类时间段连用，须换成延续性表达 be on，故用 has been on。同类：buy→have，borrow→keep，die→be dead。"},
+ {id:"q07",tag:"语态",diff:"基础",q:"English ____ widely ____ in the world today.",opts:["is; speaking","is; spoken","was; spoken","speaks; /"],a:1,exp:"英语是「被说」，用被动语态；today 表示现在，用一般现在时的被动 is + spoken（speak 的过去分词）。"},
+ {id:"q08",tag:"语态",diff:"中等",q:"A new library ____ in our town last year, and more books ____ next month.",opts:["built; will buy","was built; will be bought","is built; are bought","was built; bought"],a:1,exp:"last year 用一般过去时被动 was built；书是「被购买」且 next month 表将来，用 will be bought。"},
+ {id:"q09",tag:"语态",diff:"中等",q:"The classroom must ____ clean every day.",opts:["keep","be kept","be keeping","kept"],a:1,exp:"情态动词的被动结构为 must + be + 过去分词，故为 must be kept。教室是「被保持干净」。"},
+ {id:"q10",tag:"从句",diff:"中等",q:"Could you tell me ____? I want to send a letter.",opts:["where is the post office","where the post office is","where was the post office","the post office is where"],a:1,exp:"宾语从句必须用陈述句语序：连接词 + 主语 + 谓语，故选 where the post office is。这是中考最常考的语序题。"},
+ {id:"q11",tag:"从句",diff:"中等",q:"The teacher told us that the sun ____ in the east.",opts:["rose","rises","will rise","was rising"],a:1,exp:"宾语从句表示客观真理时，无论主句是什么时态，从句都用一般现在时 rises。"},
+ {id:"q12",tag:"从句",diff:"中等",q:"I don't know ____ he will come to the party tomorrow.",opts:["that","if","what","which"],a:1,exp:"「是否」用 if 或 whether 引导宾语从句；that 用于陈述内容，what / which 需在从句中充当成分，此处从句成分完整。"},
+ {id:"q13",tag:"从句",diff:"中等",q:"The boy ____ is standing at the gate is my cousin.",opts:["which","whom","who","whose"],a:2,exp:"先行词 the boy 指人，且关系词在从句中作主语，用 who（也可用 that）。whom 只能作宾语，whose 表所属。"},
+ {id:"q14",tag:"从句",diff:"较难",q:"This is the most exciting match ____ I have ever watched.",opts:["which","who","what","that"],a:3,exp:"先行词被最高级 the most exciting 修饰时，定语从句关系词只能用 that，不用 which。"},
+ {id:"q15",tag:"从句",diff:"中等",q:"We will go hiking ____ it doesn't rain tomorrow.",opts:["if","although","because","until"],a:0,exp:"此处是条件状语从句，用 if；同时体现「主将从现」——主句 will go 用将来时，从句 doesn't rain 用一般现在时。"},
+ {id:"q16",tag:"从句",diff:"中等",q:"____ he is only twelve, he can speak three languages.",opts:["Because; so","Although; but","Although; /","Though; but"],a:2,exp:"英语中 although / though 不能与 but 连用，because 不能与 so 连用，二者只能留一个，故选 C 这种「只用 although」的形式。"},
+ {id:"q17",tag:"从句",diff:"中等",q:"The box is ____ heavy ____ nobody can carry it.",opts:["too; to","so; that","such; that","enough; to"],a:1,exp:"so + 形容词/副词 + that + 句子；such 后接名词短语。heavy 是形容词，且后接完整句子，故用 so ... that。"},
+ {id:"q18",tag:"比较",diff:"基础",q:"This story is ____ interesting than that one, so I like it better.",opts:["very","much more","more much","much"],a:1,exp:"than 前必须用比较级 more interesting；修饰比较级要用 much / a lot / even，不能用 very，且 much 放在比较级前面。"},
+ {id:"q19",tag:"比较",diff:"中等",q:"Beijing is one of ____ cities in China.",opts:["the largest","largest","larger","the larger"],a:0,exp:"「one of the + 最高级 + 复数名词」表示「最……之一」，最高级前必须加 the。"},
+ {id:"q20",tag:"比较",diff:"中等",q:"The ____ you work, the ____ progress you will make.",opts:["hard; great","harder; greater","hardest; greatest","hardly; greater"],a:1,exp:"「the + 比较级, the + 比较级」表示「越……越……」，两个空都要用比较级。"},
+ {id:"q21",tag:"非谓语",diff:"基础",q:"My parents often encourage me ____ questions in class.",opts:["ask","asking","to ask","asked"],a:2,exp:"encourage sb to do sth 是固定搭配，同类还有 ask / tell / invite / allow / want sb to do sth。"},
+ {id:"q22",tag:"非谓语",diff:"基础",q:"She finished ____ the book and then went out for a walk.",opts:["read","to read","reading","reads"],a:2,exp:"finish 后只接动名词 doing。同类：enjoy, practise, mind, avoid, suggest, keep, consider。"},
+ {id:"q23",tag:"非谓语",diff:"中等",q:"It ____ me half an hour ____ to school by bus every day.",opts:["spends; going","takes; to go","costs; to go","pays; going"],a:1,exp:"It takes sb + 时间 + to do sth 是固定句型。spend 的主语必须是人（sb spends time doing/on sth），cost 主语是物且多指金钱。"},
+ {id:"q24",tag:"一致",diff:"中等",q:"There ____ a pen and two books on the desk just now.",opts:["is","are","was","were"],a:2,exp:"there be 遵循就近原则，靠近动词的 a pen 是单数，故用单数；just now 表示过去，用 was。"},
+ {id:"q25",tag:"一致",diff:"中等",q:"____ of the students in our class ____ girls.",opts:["The number; is","A number; are","The number; are","A number; is"],a:1,exp:"a number of + 复数名词意为「许多」，谓语用复数 are；the number of 意为「……的数量」，谓语用单数。"},
+ {id:"q26",tag:"代词",diff:"基础",q:"There is ____ in the box. It's empty.",opts:["something","anything","nothing","everything"],a:2,exp:"由后句「它是空的」可知盒子里什么都没有，用 nothing。anything 常用于疑问句和否定句。"},
+ {id:"q27",tag:"代词",diff:"中等",q:"Hurry up! There is ____ time left. We must run.",opts:["a little","little","a few","few"],a:1,exp:"time 是不可数名词，排除 a few / few；由「必须跑」可知时间几乎没有了，表否定用 little（几乎没有），a little 表「还有一点」。"},
+ {id:"q28",tag:"情态动词",diff:"中等",q:"— Whose bag is this? — It ____ be Lily's. Her name is on it.",opts:["must","can't","needn't","might not"],a:0,exp:"有明确证据（名字在上面）时，肯定推测用 must be「一定是」；否定推测用 can't be「不可能是」。"},
+ {id:"q29",tag:"介词冠词",diff:"基础",q:"We usually have ____ breakfast at seven, and then go to ____ school.",opts:["the; the","/; /","a; the","/; the"],a:1,exp:"三餐名词前不加冠词；go to school 表示「去上学」也不加冠词（go to the school 指去学校那个地点办事）。"},
+ {id:"q30",tag:"句式",diff:"中等",q:"____ exciting news it is! We won the game.",opts:["What an","What","How","How an"],a:1,exp:"感叹句中心词是不可数名词 news，用 What + 形容词 + 不可数名词，不加 an。若为可数单数才用 What an exciting game!"},
+ {id:"q31",tag:"句式",diff:"中等",q:"He used to ____ up late, but now he is used to ____ up early.",opts:["get; get","getting; getting","get; getting","getting; get"],a:2,exp:"used to do 表示「过去常常做」；be used to doing 表示「习惯于做」。两个结构含义不同，是中考经典易混点。"},
+ {id:"q32",tag:"句式",diff:"中等",q:"— You have never been to London, ____? — ____, I went there last year.",opts:["have you; No","haven't you; Yes","have you; Yes","haven't you; No"],a:2,exp:"never 表否定，反意疑问句后半用肯定 have you；回答按事实——去过就用 Yes（译作「不，我去过」）。"}
+];
+
+/* ---------- 4. 阅读与完形 ---------- */
+const READINGS = [
+{id:"r1",type:"reading",title:"The Library Card",level:"七年级 · 记叙文",
+ passage:"<p>Lucy was eleven years old and she loved stories very much. Every Saturday afternoon, she went to the small library near her home. One day, the librarian, Mrs White, gave her a yellow card. \"Now you can borrow books yourself,\" she said with a smile.</p><p>Lucy was so excited. She chose a book about a brave girl and took it home. That evening, she read until her mother turned off the light. From then on, she borrowed two books every week. She learned about far-away countries, clever animals and the stars in the sky.</p><p>Ten years later, Lucy became a writer. On the first page of her first book, she wrote: \"For Mrs White, who gave me a key to the whole world.\"</p>",
+ glossary:[["librarian","图书管理员"],["borrow","借入"],["brave","勇敢的"],["far-away","遥远的"]],
+ questions:[
+  {q:"How often did Lucy go to the library at first?",opts:["Every day","Once a week","Twice a week","Once a month"],a:1,exp:"首段写 Every Saturday afternoon，即每周一次，故选 Once a week。注意区分后文「每周借两本书」。"},
+  {q:"What did Mrs White give Lucy?",opts:["A story book","A yellow library card","A key to her house","Some money"],a:1,exp:"第一段明确说 gave her a yellow card，并说「现在你可以自己借书了」，即借书证。"},
+  {q:"What does the underlined sentence in the last paragraph mean?",opts:["Mrs White lost her key.","The card helped Lucy learn about the world.","Lucy became a librarian.","Mrs White wrote a book for Lucy."],a:1,exp:"这是比喻说法：借书证让 Lucy 通过阅读认识了整个世界，所以说是「一把通往世界的钥匙」，与全文主旨呼应。"},
+  {q:"What is the best title for the passage?",opts:["A Kind Writer","A Small Yellow Card","A Busy Saturday","Mrs White's Library"],a:1,exp:"全文围绕那张黄色借书证展开，它改变了 Lucy 的人生，是贯穿始终的线索，故 A Small Yellow Card 最贴切。"}
+ ]},
+{id:"r2",type:"reading",title:"Turn Off the Lights for One Hour",level:"八年级 · 说明文",
+ passage:"<p>At 8:30 p.m. on the last Saturday of March, millions of people around the world turn off their lights for one hour. The activity is called Earth Hour. It started in Sydney, Australia, in 2007, when 2.2 million homes and businesses switched off their lights to show they cared about climate change.</p><p>The idea is simple. Saving electricity means burning less coal, and burning less coal means producing fewer greenhouse gases. One hour alone cannot solve the problem, but it reminds people that small actions, when done together, can make a real difference.</p><p>Today, more than 190 countries take part. Famous buildings such as the Eiffel Tower and the Sydney Opera House go dark. Organizers hope the hour will encourage people to form greener habits all year round: using reusable bags, riding bikes instead of driving, and turning off computers at night.</p>",
+ glossary:[["switch off","关掉"],["climate change","气候变化"],["greenhouse gas","温室气体"],["take part","参与"]],
+ questions:[
+  {q:"When did Earth Hour first take place?",opts:["In 2007 in Sydney","In 2017 in Paris","On the last Sunday of March","At 8:30 a.m. every day"],a:0,exp:"第一段：It started in Sydney, Australia, in 2007。注意时间是晚上 8:30、三月的最后一个周六。"},
+  {q:"Why does saving electricity help the environment?",opts:["Because lights are expensive.","Because less coal is burnt and fewer greenhouse gases are produced.","Because people will sleep better.","Because buildings look more beautiful at night."],a:1,exp:"第二段给出因果链：省电 → 少烧煤 → 少排放温室气体。这是典型的细节因果题。"},
+  {q:"What does the writer think of the one-hour activity?",opts:["It is useless.","It can solve climate change completely.","It is meaningful because it reminds people to act.","It is only for famous buildings."],a:2,exp:"第二段 One hour alone cannot solve the problem, but it reminds people... 表明作者认为它的意义在于提醒与倡导，而非一举解决问题。"},
+  {q:"Which is NOT mentioned as a greener habit?",opts:["Using reusable bags","Riding bikes instead of driving","Turning off computers at night","Planting trees in spring"],a:3,exp:"末段列举了三个习惯：环保袋、骑车、夜间关电脑，没有提到植树，故选 D。此类题要逐项回原文比对。"}
+ ]},
+{id:"r3",type:"cloze",title:"A Rainy Morning",level:"八年级 · 完形填空",
+ passage:"<p>It was a rainy Monday morning. I stood at the bus stop 【1】 my umbrella, waiting for the school bus. Beside me was an old woman with a heavy bag. She looked 【2】 because she had no umbrella and her coat was getting wet.</p><p>I wanted to help, but I was 【3】 — the bus would arrive in two minutes and I didn't want to be late for class. Then I remembered what my mother often says: \"Kindness never 【4】 much, but it means a lot.\" So I moved my umbrella over her head.</p><p>She smiled and said thanks. When the bus came, she 【5】 me a small apple from her bag. On the bus, I found that my own shoulder was wet, 【6】 I didn't mind at all. That apple tasted 【7】 than any fruit I had ever eaten.</p><p>That day I learned a lesson: helping others doesn't 【8】 you anything, but it can warm your whole day.</p>",
+ glossary:[["shoulder","肩膀"],["mind","介意"],["kindness","善意"]],
+ questions:[
+  {q:"第 【1】 空",opts:["with","without","for","by"],a:0,exp:"带着伞站在车站，用介词 with 表伴随「拿着、带着」。下文说自己有伞，故不是 without。"},
+  {q:"第 【2】 空",opts:["happy","excited","worried","proud"],a:2,exp:"没有伞、衣服被淋湿，情绪应是「着急、发愁」的 worried，其余三项均为积极情绪，与语境不符。"},
+  {q:"第 【3】 空",opts:["glad","afraid","free","ready"],a:1,exp:"由后文「怕上课迟到」可知「我」犹豫了，afraid 在此表示「担心、顾虑」，符合心理描写。"},
+  {q:"第 【4】 空",opts:["costs","spends","pays","takes"],a:0,exp:"主语是 Kindness（事物），表示「花费不多」用 cost。spend / pay 主语是人，take 常用于 It takes sb ... to do 句型。"},
+  {q:"第 【5】 空",opts:["bought","lent","handed","showed"],a:2,exp:"从包里拿出一个苹果递给我，hand sb sth「递给某人某物」最贴切；bought  buying 需有购买场景，lent 是借出。"},
+  {q:"第 【6】 空",opts:["so","but","because","if"],a:1,exp:"前句「肩膀湿了」与后句「一点也不介意」是转折关系，用 but。"},
+  {q:"第 【7】 空",opts:["sweeter","sweet","sweetly","the sweetest"],a:0,exp:"空后有 than，必须用比较级 sweeter。taste 是系动词，后接形容词。"},
+  {q:"第 【8】 空",opts:["bring","teach","cost","save"],a:2,exp:"呼应前文 Kindness never costs much，句意为「帮助别人不花费你什么」，故用 cost。这是完形中常见的首尾呼应。"}
+ ]}
+];
+
+/* ---------- 5. 每日一句 ---------- */
+const QUOTES = [
+ {en:"Every small step counts.",cn:"每一小步都算数。"},
+ {en:"Practice makes progress, not perfect.",cn:"练习带来进步，而不必完美。"},
+ {en:"Don't be afraid of making mistakes.",cn:"别害怕犯错，它们是你进步的证据。"},
+ {en:"Words are the keys to a bigger world.",cn:"单词是通往更大世界的钥匙。"},
+ {en:"You don't have to be great to start.",cn:"不必很厉害才能开始，开始了才会很厉害。"},
+ {en:"A little every day adds up.",cn:"每天一点点，日积月累。"},
+ {en:"Read more, worry less, learn faster.",cn:"多读一点，少焦虑一点，学得更快一点。"},
+ {en:"The secret of getting ahead is getting started.",cn:"领先的秘诀，就是先开始。"},
+ {en:"Mistakes are proof that you are trying.",cn:"错误证明你正在努力。"},
+ {en:"Believe you can and you're halfway there.",cn:"相信自己能做到，你就已经成功了一半。"},
+ {en:"Slow is smooth, and smooth is fast.",cn:"慢就是稳，稳就是快。"},
+ {en:"Today's effort is tomorrow's confidence.",cn:"今天的努力，是明天的底气。"}
+];
+
+/* ---------- 6. 成就 ---------- */
+const BADGES = [
+ {id:"b1",icon:"🌱",name:"启程",desc:"完成首次打卡"},
+ {id:"b2",icon:"📖",name:"开卷",desc:"学习第一个单词"},
+ {id:"b3",icon:"🎯",name:"首战",desc:"完成第一次练习"},
+ {id:"b4",icon:"🔥",name:"坚持",desc:"连续打卡 7 天"},
+ {id:"b5",icon:"💯",name:"满分",desc:"单次练习全对"},
+ {id:"b6",icon:"🧠",name:"百词",desc:"累计学习 100 词次"},
+ {id:"b7",icon:"⚡",name:"刷题王",desc:"累计答对 50 题"},
+ {id:"b8",icon:"🧹",name:"清零",desc:"清空全部错题"},
+ {id:"b9",icon:"🏆",name:"学霸",desc:"积分达到 500"},
+ {id:"b10",icon:"🌟",name:"满勤",desc:"完成 10 次每日目标"},
+ {id:"b11",icon:"🔍",name:"纠错",desc:"重做错题答对"},
+ {id:"b12",icon:"🎓",name:"毕业",desc:"学完 6 个词包"}
+];
+
+const LEVELS = [0,60,150,300,500,750,1050,1400,1800,2300];
+
+
+/* ============================================================
+   应用层：状态、渲染、交互
+   ============================================================ */
+/* ============================ 状态 ============================ */
+const KEY = "jhs_english_v1";
+const DEFAULT_STATE = {
+  points:0, streak:0, lastCheckin:"", checkinDates:[],
+  wordStats:{}, favorites:[], wrong:[],
+  practiceTotal:0, practiceCorrect:0,
+  today:{date:"",words:0,questions:0}, goal:{words:10,questions:10},
+  badges:[], daily:[], goalDone:0, wordTotal:0, cleared:0
+};
+let S = load();
+let ui = {
+  tab:"home",
+  words:{pack:0, mode:"all", idx:0, flipped:false, done:false, session:0},
+  practice:{view:"home", openG:null, quiz:null, result:null, filter:"all", readOpen:true},
+  wrong:{filter:"all"},
+  modal:null
+};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const o = JSON.parse(raw); return Object.assign({}, DEFAULT_STATE, o, {
+      today:Object.assign({},DEFAULT_STATE.today,o.today||{}),
+      goal:Object.assign({},DEFAULT_STATE.goal,o.goal||{})
+    }); }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function pad(n){ return String(n).padStart(2,"0"); }
+function todayStr(d){ const x=d||new Date(); return x.getFullYear()+"-"+pad(x.getMonth()+1)+"-"+pad(x.getDate()); }
+function dayGap(a,b){ return Math.round((Date.parse(b+"T00:00:00")-Date.parse(a+"T00:00:00"))/86400000); }
+function qs(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* 跨天重置 + 自动打卡 */
+function initDay(){
+  const t = todayStr();
+  if(S.today.date !== t){ S.today = {date:t, words:0, questions:0}; }
+  if(S.lastCheckin !== t){
+    const gap = S.lastCheckin ? dayGap(S.lastCheckin, t) : 999;
+    S.streak = (gap === 1) ? S.streak + 1 : 1;
+    S.lastCheckin = t;
+    if(!S.checkinDates.includes(t)) S.checkinDates.push(t);
+    if(!S.badges.includes("b1")) S.badges.push("b1");
+    addPoints(10, false);
+    save();
+    setTimeout(()=>{ toast("打卡成功！连续学习 "+S.streak+" 天，+10 积分"); }, 700);
+  }
+}
+function addPoints(n, quiet){
+  S.points += n;
+  if(!quiet) floatPoint("+"+n);
+  checkBadges(); save();
+}
+function levelInfo(){
+  let lv = 1;
+  for(let i=0;i<LEVELS.length;i++) if(S.points >= LEVELS[i]) lv = i+1;
+  const cur = LEVELS[lv-1]||0, next = LEVELS[lv]|| (LEVELS[LEVELS.length-1]+600);
+  const pct = Math.min(100, Math.round((S.points-cur)/Math.max(1,next-cur)*100));
+  return {lv,cur,next,pct};
+}
+function goalPct(){
+  const w = Math.min(1, S.today.words / S.goal.words);
+  const q = Math.min(1, S.today.questions / S.goal.questions);
+  return Math.round((w+q)/2*100);
+}
+function checkGoal(){
+  if(S.today.words >= S.goal.words && S.today.questions >= S.goal.questions && S.today.tag !== "done"){
+    S.today.tag = "done"; S.goalDone++; addPoints(20,false);
+    toast("今日目标完成！额外 +20 积分");
+    unlock("b10", S.goalDone>=10);
+  }
+}
+function recordDaily(kind,n){
+  const t = todayStr();
+  let d = S.daily.find(x=>x.date===t);
+  if(!d){ d={date:t,w:0,q:0}; S.daily.push(d); }
+  d[kind]+=n;
+  if(S.daily.length>60) S.daily.shift();
+}
+function unlock(id,cond){
+  if(cond && !S.badges.includes(id)){
+    S.badges.push(id);
+    const b = BADGES.find(x=>x.id===id);
+    setTimeout(()=>toast("解锁成就「"+b.name+"」"), 1200);
+  }
+}
+function checkBadges(){
+  unlock("b1", S.streak>=1);
+  unlock("b2", S.wordTotal>=1);
+  unlock("b3", S.practiceTotal>=1);
+  unlock("b4", S.streak>=7);
+  unlock("b6", S.wordTotal>=100);
+  unlock("b7", S.practiceCorrect>=50);
+  unlock("b9", S.points>=500);
+  unlock("b12", PACKS.every(p=>p.words.every(w=>S.wordStats[wKey(p.id,w.w)] && S.wordStats[wKey(p.id,w.w)].seen>0)));
+}
+
+/* ============================ 通用 UI ============================ */
+const ICONS = {
+ home:'<path d="M3 10.6 12 3l9 7.6V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+ words:'<path d="M12 6.2C9.8 4.4 6.8 4 4 5v14c2.8-1 5.8-.6 8 1.2 2.2-1.8 5.2-2.2 8-1.2V5c-2.8-1-5.8-.6-8 1.2z"/><path d="M12 6.2v14"/>',
+ pen:'<path d="M4 20h4.2L19 9.2 14.8 5 4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/>',
+ wrong:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+ me:'<circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-4.2 3.4-7 7.5-7s7.5 2.8 7.5 7"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>',
+ vol:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>',
+ flip:'<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 4v4h-4"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 20v-4h4"/>'
+};
+const TABS = [
+ {k:"home",n:"首页",i:ICONS.home},{k:"words",n:"背单词",i:ICONS.words},
+ {k:"practice",n:"练习",i:ICONS.pen},{k:"wrong",n:"错题本",i:ICONS.wrong},{k:"me",n:"我的",i:ICONS.me}
+];
+/* ---- 矢量图标：把 emoji 统一替换为 SVG，避免依赖系统 emoji 字体 ---- */
+const ICO = {
+ book:'<path d="M12 6.2C9.8 4.4 6.8 4 4 5v14c2.8-1 5.8-.6 8 1.2 2.2-1.8 5.2-2.2 8-1.2V5c-2.8-1-5.8-.6-8 1.2z"/><path d="M12 6.2v14"/>',
+ pen:'<path d="M4 20h4.2L19 9.2 14.8 5 4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/>',
+ read:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+ target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+ flame:'<path d="M12 2.5c1.2 4-2.5 5.5-2.5 9 0 1.3.8 2.2 1.8 2.6-.6-2.6.7-3.8.7-3.8s3.5 2.7 3.5 6A3.5 3.5 0 0 1 12 20a3.5 3.5 0 0 1-3.5-3.5c0-1.8.8-3.2 1.7-4.2C9.1 9.5 8.8 6 12 2.5z"/>',
+ school:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5v-4.5"/><path d="M22 9v6"/>',
+ palette:'<path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.8-1.8 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-5-4-10.5-9-10.5z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.6" r="1"/><circle cx="15" cy="8" r="1"/>',
+ apple:'<path d="M12 7.5C9 5.5 5 6.5 4 9.5c-1.5 4.5 1.5 9.5 4.5 10.5 1.3.4 2.2 0 3.5 0s2.2.4 3.5 0c3-1 6-6 4.5-10.5-1-3-5-4-8-2z"/><path d="M12 7.5c0-2 1-3.5 3-4"/>',
+ plane:'<path d="M21 3L3 10.5l7 2.5 2.5 7L21 3z"/><path d="M10 13L21 3"/>',
+ leaf:'<path d="M20 4C10 4 4 8 4 15a5 5 0 0 0 5 5c7 0 11-6 11-16z"/><path d="M4 20c3-6 7-9 12-11"/>',
+ grid:'<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>',
+ star:'<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/>',
+ starFill:'<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z" fill="currentColor" stroke="none"/>',
+ trophy:'<path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/><path d="M12 15v3M8 21h8M10 18h4"/>',
+ flag:'<path d="M5 21V4M5 4h12l-2 4 2 4H5"/>',
+ hundred:'<circle cx="12" cy="12" r="9"/><text x="12" y="15.5" text-anchor="middle" font-size="8.5" font-weight="800">100</text>',
+ bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.8 10.6c.8.7 1.3 1.6 1.3 2.9h5c0-1.3.5-2.2 1.3-2.9A6 6 0 0 0 12 3z"/>',
+ bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+ broom:'<path d="M14 3l7 7-5 5-7-7z"/><path d="M9 8L3.5 20.5 16 15"/><path d="M3.5 20.5l3-3"/>',
+ search:'<circle cx="11" cy="11" r="6"/><path d="M15.5 15.5L21 21"/>',
+ cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5v-4.5"/>',
+ sparkle:'<path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/><path d="M19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/>',
+ check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.5L16 9.5"/>',
+ x:'<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+ question:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.8.4-1 1-1 1.8"/><circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none"/>',
+ warn:'<path d="M12 3L2 20h20z"/><path d="M12 9v5M12 17.2v.1"/>',
+ muscle:'<path d="M6 12a3 3 0 0 1 3-3h3l3-2 3 2v6a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M15 7l3-2"/>',
+ medal:'<circle cx="12" cy="14" r="6"/><path d="M8 3l2 6M16 3l-2 6"/>',
+ wave:'<path d="M8 11V5.5a1.3 1.3 0 0 1 2.6 0V10M10.6 10V4.5a1.3 1.3 0 0 1 2.6 0V10M13.2 10V6a1.3 1.3 0 0 1 2.6 0v7c0 4-2.5 7-6 7-2.5 0-4-1.5-5-3.5L3 13a1.4 1.4 0 0 1 2.4-1.4L8 15"/>',
+ party:'<path d="M3 21l7-14 7 7z"/><path d="M14 4l1 2M19 6l2 1M17 10l2-1M20 12l1 2"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ refresh:'<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 4v4h-4"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 20v-4h4"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+ link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7L11 7"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7L13 17"/>'
+};
+const EMO = {
+ "🏫":"school","🎨":"palette","🍎":"apple","✈":"plane","🌱":"leaf","🔥":"flame",
+ "📚":"book","✍":"pen","📖":"read","🎯":"target","💡":"bulb","⭐":"star",
+ "★":"starFill","☆":"star",
+ "😵":"x","🤔":"question","😎":"check","✅":"check","❌":"x",
+ "🎉":"party","✨":"sparkle","🏆":"trophy","💯":"hundred","🧠":"bulb",
+ "⚡":"bolt","🧹":"broom","🌟":"star","🔍":"search","🎓":"cap",
+ "🏅":"medal","⚠":"warn","💪":"muscle","👋":"wave","📜":"read",
+ "🔁":"refresh","💬":"chat","🔗":"link","🚦":"target","⚖":"check",
+ "🧩":"grid","🔢":"grid","⏱":"clock"
+};
+const EMO_N = {};
+for(const k in EMO) EMO_N[k.replace(/[\uFE0F\u200D]/g,"")] = EMO[k];
+function emojify(html){
+  return String(html).replace(/[\u{1F000}-\u{1FAFF}\u{2300}-\u{23FF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]+/gu,function(m){
+    const key = EMO_N[m.replace(/[\uFE0F\u200D]/g,"")];
+    return key ? '<svg class="ic" viewBox="0 0 24 24">'+(ICO[key]||ICO.star)+'</svg>' : '';
+  });
+}
+function renderTabs(){
+  qs("tabbar").innerHTML = TABS.map(t=>{
+    const badge = t.k==="wrong" && S.wrong.length ? '<span class="dot">'+S.wrong.length+'</span>' : '';
+    return '<button class="tab '+(ui.tab===t.k?"active":"")+'" data-act="tab" data-k="'+t.k+'">'+badge+'<svg viewBox="0 0 24 24">'+t.i+'</svg><span>'+t.n+'</span></button>';
+  }).join("");
+}
+function toast(msg){
+  const ov = qs("overlay");
+  let el = ov.querySelector(".toast");
+  if(!el){ el=document.createElement("div"); el.className="toast"; ov.appendChild(el); }
+  el.textContent = msg; el.classList.add("show");
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove("show"), 2200);
+}
+function floatPoint(txt){
+  const ov=qs("overlay"), el=document.createElement("div");
+  el.className="point-float"; el.textContent=txt; ov.appendChild(el);
+  setTimeout(()=>el.remove(),1200);
+}
+function showModal(cfg){
+  ui.modal = cfg;
+  const ov=qs("overlay");
+  let m=ov.querySelector(".modal");
+  if(!m){ m=document.createElement("div"); m.className="modal"; ov.appendChild(m); }
+  m.innerHTML = emojify('<div class="modal-card"><div class="mc-ic">'+cfg.icon+'</div><h3>'+cfg.title+'</h3><p>'+cfg.text+'</p>'+
+   '<div class="mc-btns"><button class="btn btn-plain" data-act="modal-cancel">'+cfg.cancel+'</button>'+
+   '<button class="btn btn-primary" data-act="modal-ok">'+cfg.ok+'</button></div></div>');
+  requestAnimationFrame(()=>m.classList.add("show"));
+}
+function hideModal(){
+  ui.modal=null;
+  const m=qs("overlay").querySelector(".modal"); if(m) m.classList.remove("show");
+}
+function speak(word){
+  if(!("speechSynthesis" in window)){ toast("当前浏览器不支持语音朗读"); return; }
+  try{
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(word);
+    u.lang="en-US"; u.rate=.85; u.pitch=1;
+    const vs=window.speechSynthesis.getVoices();
+    const en=vs.find(v=>/en(-|_)/i.test(v.lang)); if(en) u.voice=en;
+    window.speechSynthesis.speak(u);
+  }catch(e){ toast("语音朗读暂不可用"); }
+}
+function topbar(title,sub){
+  return '<div class="topbar"><div><h1>'+title+'</h1>'+(sub?'<p>'+sub+'</p>':'')+'</div></div>';
+}
+function ringSVG(pct,size){
+  const r=(size-8)/2, c=2*Math.PI*r, off=c*(1-pct/100);
+  return '<svg viewBox="0 0 '+size+' '+size+'"><circle class="track" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke-width="7"/>'+
+   '<circle class="bar" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke-width="7" stroke-dasharray="'+c+'" stroke-dashoffset="'+off+'"/></svg>';
+}
+
+/* ============================ 首页 ============================ */
+function renderHome(){
+  const t=new Date();
+  const hour=t.getHours();
+  const greet = hour<11?"早上好":hour<14?"中午好":hour<18?"下午好":"晚上好";
+  const q = QUOTES[(t.getDate()+t.getMonth())%QUOTES.length];
+  const pct = goalPct();
+  const wp = Math.min(100, S.today.words/S.goal.words*100);
+  const qp = Math.min(100, S.today.questions/S.goal.questions*100);
+  const acc = S.practiceTotal? Math.round(S.practiceCorrect/S.practiceTotal*100):0;
+  let h = '<div class="scroll" data-sc="home">'+topbar("每日进阶","初中英语 · 每天进步一点点")+'';
+  h += '<div class="hero"><div class="hi">'+greet+' 👋 · '+(t.getMonth()+1)+'月'+t.getDate()+'日</div>'+
+    '<h2>今天也要加油呀！</h2><div class="desc">已坚持 '+S.streak+' 天 · 累计 '+S.points+' 积分 · Lv.'+levelInfo().lv+'</div>'+
+    '<div class="hero-bottom"><div class="streak">🔥 连续 <b>'+S.streak+'</b> 天</div>'+
+    '<div class="ring-wrap"><div class="ring-label">今日目标<br><b>'+S.today.words+'词 / '+S.today.questions+'题</b></div>'+
+    '<div class="ring">'+ringSVG(pct,64)+'<div class="pct">'+pct+'%</div></div></div></div></div>';
+  h += '<div class="goal-grid">'+
+    '<div class="goal-card"><div class="gc-top"><span class="lbl">今日背词</span><div class="goal-ic" style="background:#EEF1FF">📚</div></div>'+
+    '<div class="num">'+S.today.words+'<small>/ '+S.goal.words+' 词</small></div><div class="pbar"><i style="width:'+wp+'%;background:linear-gradient(90deg,#4F6BFF,#8C7BFF)"></i></div></div>'+
+    '<div class="goal-card"><div class="gc-top"><span class="lbl">今日答题</span><div class="goal-ic" style="background:#E4F9F5">✍️</div></div>'+
+    '<div class="num">'+S.today.questions+'<small>/ '+S.goal.questions+' 题</small></div><div class="pbar"><i style="width:'+qp+'%;background:linear-gradient(90deg,#00C2A8,#38D6B7)"></i></div></div></div>';
+  h += '<div class="sec-head"><h2>开始学习</h2><span class="more">选择一项，马上开始 →</span></div><div class="quick-grid">'+
+    '<button class="quick" data-act="go" data-k="words"><div class="qi" style="background:#EEF1FF">📚</div><span>背单词</span></button>'+
+    '<button class="quick" data-act="go" data-k="grammar"><div class="qi" style="background:#E4F9F5">✍️</div><span>语法练习</span></button>'+
+    '<button class="quick" data-act="go" data-k="reading"><div class="qi" style="background:#FFF1E5">📖</div><span>阅读训练</span></button>'+
+    '<button class="quick" data-act="go" data-k="wrong"><div class="qi" style="background:#FFEDF1">🎯</div><span>攻错题</span></button></div>';
+  h += '<div class="sec-head"><h2>每日一句</h2><span class="tiny faint">Daily Quote</span></div>'+
+    '<div class="quote"><div class="qm">“</div><div class="en">'+q.en+'</div><div class="cn">'+q.cn+'</div></div>';
+  h += '<div class="sec-head"><h2>学习概览</h2></div><div class="card"><div class="mini-stats">'+
+    '<div class="ms"><b>'+S.wordTotal+'</b><span>累计学词次</span></div>'+
+    '<div class="ms"><b>'+S.practiceTotal+'</b><span>累计答题</span></div>'+
+    '<div class="ms"><b>'+acc+'%</b><span>正确率</span></div></div></div>';
+  h += '</div>';
+  return h;
+}
+
+/* ============================ 背单词 ============================ */
+function wKey(pid,w){ return pid+":"+w; }
+function wordList(){
+  const p = PACKS[ui.words.pack];
+  const all = p.words.map(w=>Object.assign({},w,{_k:wKey(p.id,w.w)}));
+  if(ui.words.mode==="weak") return all.filter(w=>{ const s=S.wordStats[w._k]; return !s || s.box<3; });
+  if(ui.words.mode==="fav") return all.filter(w=>S.favorites.includes(w._k));
+  return all;
+}
+function renderWords(){
+  const p = PACKS[ui.words.pack];
+  const list = wordList();
+  const studied = p.words.filter(w=>S.wordStats[wKey(p.id,w.w)] && S.wordStats[wKey(p.id,w.w)].seen>0).length;
+  let h = '<div class="scroll" data-sc="words">'+topbar("单词速记","点击卡片翻面 · 真人发音 · 三档反馈")+'';
+  h += '<div class="chips">'+
+    '<button class="chip '+(ui.words.mode==="all"?"active":"")+'" data-act="wmode" data-k="all">📖 顺序学习</button>'+
+    '<button class="chip '+(ui.words.mode==="weak"?"active":"")+'" data-act="wmode" data-k="weak">🎯 薄弱复习</button>'+
+    '<button class="chip '+(ui.words.mode==="fav"?"active":"")+'" data-act="wmode" data-k="fav">⭐ 我的收藏</button></div>';
+  h += '<div class="sec-head" style="margin-top:4px"><h2>选择词包</h2><span class="tiny faint">'+PACKS.length+' 册 / 共 '+PACKS.reduce((a,b)=>a+b.words.length,0)+' 词</span></div>';
+  h += '<div class="pack-scroll">'+PACKS.map((pk,i)=>{
+    const done = pk.words.filter(w=>S.wordStats[wKey(pk.id,w.w)] && S.wordStats[wKey(pk.id,w.w)].seen>0).length;
+    return '<button class="pack '+(i===ui.words.pack?"active":"")+'" data-act="pack" data-k="'+i+'">'+
+      '<div class="pk-ic">'+pk.icon+'</div><h4>'+pk.title+'</h4><p>'+pk.desc+'</p>'+
+      '<div class="pk-mini"><i style="width:'+Math.round(done/pk.words.length*100)+'%"></i></div>'+
+      '<div class="pk-foot"><span>'+pk.grade+'</span><span>'+done+'/'+pk.words.length+'</span></div></button>';
+  }).join("")+'</div>';
+
+  if(!list.length){
+    h += '<div class="empty"><div class="em-ic">'+(ui.words.mode==="fav"?"⭐":"🎉")+'</div>'+
+      '<h3>'+(ui.words.mode==="fav"?"还没有收藏的单词":"这个模式下的词都掌握啦")+'</h3>'+
+      '<p>'+(ui.words.mode==="fav"?"在单词卡下方点「收藏」，就能把难词存进来。":"切换到「顺序学习」再过一遍，或换一个词包吧。")+'</p></div></div>';
+    return h;
+  }
+  if(ui.words.done || ui.words.idx>=list.length){
+    h += '<div class="card result-card" style="margin-top:16px"><div class="r-emoji">🎉</div><h2>本轮完成！</h2>'+
+      '<p>刚才过了 '+ui.words.session+' 个单词<br>再来一轮巩固一下，记忆会更牢哦</p>'+
+      '<div class="res-stats"><div><b>'+ui.words.session+'</b><span>本轮词数</span></div><div><b>'+studied+'</b><span>本包已学</span></div><div><b>+'+ui.words.session*2+'</b><span>获得积分</span></div></div>'+
+      '<button class="btn btn-primary btn-block" data-act="wrestart">再学一轮</button>'+
+      '<button class="btn btn-plain btn-block" style="margin-top:9px" data-act="wmode" data-k="weak">复习薄弱词</button></div></div>';
+    return h;
+  }
+  const w = list[Math.min(ui.words.idx,list.length-1)];
+  const st = S.wordStats[w._k];
+  const fav = S.favorites.includes(w._k);
+  const prog = Math.round(ui.words.idx/list.length*100);
+  h += '<div class="word-progress"><span>'+Math.min(ui.words.idx+1,list.length)+' / '+list.length+'</span><div class="pbar"><i style="width:'+prog+'%;background:linear-gradient(90deg,#4F6BFF,#00C2A8)"></i></div><span>'+p.grade+'</span></div>';
+  h += '<div class="word-card '+(ui.words.flipped?"flipped":"")+'" data-act="flip"><div class="wc-inner">'+
+    '<div class="wc-face wc-front"><div class="wc-head"><span class="wc-index">WORD '+(ui.words.idx+1)+' / '+list.length+'</span>'+
+      '<button class="speak" data-act="speak" data-w="'+esc(w.w)+'"><svg viewBox="0 0 24 24">'+ICONS.vol+'</svg></button></div>'+
+    '<div class="wc-body"><div class="wc-word">'+w.w+'</div><div class="wc-ph">'+w.ph+'</div>'+
+      '<div class="wc-hint"><svg viewBox="0 0 24 24">'+ICONS.flip+'</svg>轻点卡片查看释义</div></div>'+
+    '<div class="wc-foot">'+(st?'<span class="tag '+(st.box>=3?"mint":st.box===2?"orange":"gray")+'">'+(st.box>=3?"已掌握":st.box===2?"模糊":"需巩固")+'</span>':'<span class="tag gray">新词</span>')+'</div></div>'+
+    '<div class="wc-face wc-back"><div class="bc-tag">'+w.p+' · '+p.grade+'</div>'+
+      '<div class="bc-mean">'+w.m+'</div><div class="bc-pos">'+w.w+' '+w.ph+'</div>'+
+      '<div class="bc-ex">'+w.ex+'<div class="cn">'+w.ec+'</div></div>'+
+      (w.tip?'<div class="bc-tip">💡 '+w.tip+'</div>':'')+'</div></div></div>';
+  h += '<div class="fb-row">'+
+    '<button class="fb no" data-act="fb" data-k="1">😵 不认识</button>'+
+    '<button class="fb vague" data-act="fb" data-k="2">🤔 模糊</button>'+
+    '<button class="fb yes" data-act="fb" data-k="3">😎 认识</button></div>';
+  h += '<div class="word-tools"><button class="btn btn-plain" data-act="fav">'+ (fav?"★ 已收藏":"☆ 收藏") +'</button>'+
+    '<button class="btn btn-ghost" data-act="wskip">跳过 →</button></div>';
+  h += '<div class="card" style="padding:13px"><div class="between"><span class="small semi">本轮进度</span><span class="small muted">已学 '+ui.words.session+' 词 · 每词 +2 积分</span></div></div>';
+  h += '</div>';
+  return h;
+}
+
+/* ============================ 题库索引 ============================ */
+const ALL_Q = {};
+QBANK.forEach(x=>{ ALL_Q[x.id] = {id:x.id,q:x.q,opts:x.opts,a:x.a,exp:x.exp,tag:x.tag,diff:x.diff,title:"语法专项 · "+x.tag,passage:null}; });
+READINGS.forEach(r=>{
+  r.questions.forEach((q,i)=>{
+    ALL_Q[r.id+"-"+i] = {id:r.id+"-"+i,q:q.q,opts:q.opts,a:q.a,exp:q.exp,
+      tag:r.type==="cloze"?"完形填空":"阅读理解",diff:r.level,title:r.title,
+      passage:r.passage,glossary:r.glossary};
+  });
+});
+const TAGS = [...new Set(QBANK.map(q=>q.tag))];
+function shuffle(a){ const b=a.slice(); for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+function letter(i){ return String.fromCharCode(65+i); }
+
+/* ============================ 启动练习 ============================ */
+function startQuiz(mode, extra){
+  let items=[], title="", passage=null, glossary=null;
+  if(mode==="grammar"){
+    const tag = ui.practice.filter;
+    const pool = tag==="all" ? QBANK.slice() : QBANK.filter(q=>q.tag===tag);
+    items = shuffle(pool).slice(0,Math.min(10,pool.length)).map(q=>q.id);
+    title = tag==="all" ? "语法综合练习" : "语法专项 · "+tag;
+  }else if(mode==="reading" || mode==="cloze"){
+    const r = READINGS.find(x=>x.id===extra);
+    if(!r){ toast("素材加载失败"); return; }
+    items = r.questions.map((_,i)=>r.id+"-"+i);
+    title = r.title; passage=r.passage; glossary=r.glossary;
+  }else if(mode==="wrong"){
+    const ids = (extra==="one" ? [ui.practice.oneQ] : S.wrong.map(w=>w.qid)).filter(id=>ALL_Q[id]);
+    if(!ids.length){ toast("没有可重做的错题"); return; }
+    items = shuffle(ids); title = "错题重做";
+  }
+  if(!items.length){ toast("题目不足，换个模块试试"); return; }
+  ui.practice.quiz = {title,items,idx:0,sel:null,answered:false,correct:0,wrong:0,gained:0,
+    mode,extra:extra||null,passage,glossary,readOpen:!!passage,results:{}};
+  ui.practice.view="quiz";
+  switchTab("practice",true);
+}
+function gradeAnswer(qid, sel, mode){
+  const q = ALL_Q[qid];
+  const ok = sel===q.a;
+  S.practiceTotal++; S.today.questions++; recordDaily("q",1);
+  if(ok){ S.practiceCorrect++; addPoints(5,false); }
+  else { addPoints(1,true); addWrong(qid,sel); }
+  checkGoal(); checkBadges(); save();
+  if(mode==="wrong" && ok){
+    const w = S.wrong.find(x=>x.qid===qid);
+    if(w){
+      w.right = (w.right||0)+1;
+      if(w.right>=2){
+        S.wrong = S.wrong.filter(x=>x.qid!==qid);
+        S.cleared++; toast("这道题已掌握，移出错题本"); unlock("b11",true);
+      }
+    }
+    save();
+  }
+  if(!S.wrong.length) unlock("b8", S.cleared>0);
+  return ok;
+}
+function addWrong(qid,sel){
+  const w = S.wrong.find(x=>x.qid===qid);
+  if(w){ w.times++; w.sel=sel; w.added=todayStr(); }
+  else S.wrong.unshift({qid,sel,times:1,added:todayStr(),right:0});
+}
+
+/* ============================ 练习页 ============================ */
+function renderPractice(){
+  if(ui.practice.view==="quiz") return renderQuiz();
+  if(ui.practice.view==="result") return renderResult();
+  let h = '<div class="scroll" data-sc="practice">'+topbar("练习中心","讲练结合 · 每道题都有详细解析")+'';
+  h += '<div class="module-grid">'+
+    '<button class="module m-blue" data-act="mstart" data-k="grammar"><div class="mo-ic">✍️</div><div><h3>语法专项</h3><p>'+QBANK.length+' 道精选题 · 覆盖 '+TAGS.length+' 个考点</p></div><div class="mo-go">开始刷题 →</div></button>'+
+    '<button class="module m-mint" data-act="ropen" data-k="r1"><div class="mo-ic">📖</div><div><h3>阅读理解</h3><p>2 篇原创短文 · 细节与主旨题</p></div><div class="mo-go">选篇目 →</div></button>'+
+    '<button class="module m-orange" data-act="ropen" data-k="r3"><div class="mo-ic">🧩</div><div><h3>完形填空</h3><p>8 空语篇题 · 考逻辑与搭配</p></div><div class="mo-go">选篇目 →</div></button>'+
+    '<button class="module m-pink" data-act="mstart" data-k="wrong"><div class="mo-ic">🎯</div><div><h3>错题重做</h3><p>'+(S.wrong.length? "当前有 "+S.wrong.length+" 题待攻克":"错题本还是空的")+'</p></div><div class="mo-go">'+(S.wrong.length?"立即重做 →":"先去刷题 →")+'</div></button></div>';
+  h += '<div class="sec-head"><h2>按考点刷</h2><span class="tiny faint">选考点后点上方语法专项</span></div><div class="chips">'+
+    '<button class="chip '+(ui.practice.filter==="all"?"active":"")+'" data-act="qfilter" data-k="all">全部</button>'+
+    TAGS.map(t=>'<button class="chip '+(ui.practice.filter===t?"active":"")+'" data-act="qfilter" data-k="'+t+'">'+t+'</button>').join("")+'</div>';
+  h += '<div class="sec-head"><h2>语法精讲</h2><span class="tiny faint">'+GRAMMAR.length+' 个核心考点</span></div>';
+  h += GRAMMAR.map((g,i)=>{
+    const open = ui.practice.openG===g.id;
+    return '<div class="card grammar-card" style="padding:14px" data-act="gopen" data-k="'+g.id+'">'+
+      '<div class="gh"><div class="gi" style="font-size:12px;font-weight:800;color:var(--primary)">'+pad(i+1)+'</div><div style="flex:1"><h4>'+g.title+'</h4><div class="tiny faint" style="margin-top:3px">'+g.tag+' · '+g.points.length+' 条要点</div></div>'+
+      '<span class="tag '+(open?"":"gray")+'">'+(open?"收起":"展开")+'</span></div>'+
+      (open?'<div class="g-detail"><ul style="margin:0;padding-left:18px">'+g.points.map(p=>'<li>'+p+'</li>').join("")+'</ul>'+
+        g.examples.map(e=>'<div class="ex">'+e+'</div>').join("")+'</div>':'')+'</div>';
+  }).join("");
+  h += '<div class="sec-head"><h2>阅读素材</h2><span class="tiny faint">点开可预览原文</span></div>';
+  h += READINGS.map(r=>{
+    const open = ui.practice.openR===r.id;
+    return '<div class="card" style="padding:14px"><div data-act="ropen" data-k="'+r.id+'"><div class="between"><div><h4 style="margin:0;font-size:14px;font-weight:800">'+r.title+'</h4>'+
+      '<div class="tiny faint" style="margin-top:4px">'+r.level+' · '+r.questions.length+' 题 · '+(r.type==="cloze"?"完形填空":"阅读理解")+'</div></div>'+
+      '<span class="tag '+(open?"":"gray")+'">'+(open?"收起":"预览")+'</span></div></div>'+
+      (open?'<div class="passage" style="margin-top:12px;box-shadow:none;background:#F8FAFE;padding:13px"><h4>'+r.title+'</h4>'+r.passage+'</div>'+
+        '<div class="row gap8" style="flex-wrap:wrap;margin:8px 0 10px">'+r.glossary.map(g=>'<span class="tag gray">'+g[0]+' '+g[1]+'</span>').join("")+'</div>'+
+        '<button class="btn btn-primary btn-block btn-sm" data-act="rstart" data-k="'+r.id+'">开始答题（'+r.questions.length+' 题）→</button>':'')+'</div>';
+  }).join("");
+  h += '</div>';
+  return h;
+}
+function renderQuiz(){
+  const Q = ui.practice.quiz;
+  const q = ALL_Q[Q.items[Q.idx]];
+  const total = Q.items.length;
+  let h = '<div class="scroll" data-sc="practice">'+
+    '<div class="quiz-head"><div class="qh-left"><button class="back-ic" data-act="qback"><svg viewBox="0 0 24 24">'+ICONS.back+'</svg></button>'+
+    '<div><div class="qh-title">'+Q.title+'</div><div class="tiny faint">'+q.tag+' · '+q.diff+'</div></div></div>'+
+    '<div class="qh-count">'+(Q.idx+1)+' / '+total+'</div></div>'+
+    '<div class="q-progress"><i style="width:'+Math.round((Q.idx+1)/total*100)+'%"></i></div>';
+  if(Q.passage){
+    h += '<button class="btn btn-plain btn-block btn-sm" style="margin-bottom:12px" data-act="qtoggle">'+(Q.readOpen?"▲ 收起原文":"▼ 查看原文 / 生词表")+'</button>';
+    if(Q.readOpen){
+      h += '<div class="passage"><h4>'+Q.title+'</h4>'+Q.passage+'</div>'+
+        '<div class="row gap8" style="flex-wrap:wrap;margin:-4px 0 14px">'+Q.glossary.map(g=>'<span class="tag gray">'+g[0]+' '+g[1]+'</span>').join("")+'</div>';
+    }
+  }
+  const qt = q.q.replace(/【(\d+)】/g,'<span class="blank">$1</span>');
+  h += '<div class="q-card"><div class="q-meta"><span class="tag">'+q.tag+'</span><span class="tag gray">'+q.diff+'</span>'+
+    (Q.results[Q.idx]==="ok"?'<span class="tag mint">回答正确</span>':Q.results[Q.idx]==="bad"?'<span class="tag danger">回答错误</span>':'')+'</div>'+
+    '<div class="q-text">'+qt+'</div><div class="opts">'+q.opts.map((o,i)=>{
+      let cls="opt";
+      if(Q.answered){
+        if(i===q.a) cls+=" correct";
+        else if(i===Q.sel) cls+=" wrong";
+        cls+=" lock";
+      }else if(Q.sel===i) cls+=" sel";
+      return '<button class="'+cls+'" data-act="opt" data-k="'+i+'"><span class="ol">'+letter(i)+'</span><span>'+o+'</span></button>';
+    }).join("")+'</div></div>';
+  if(Q.answered){
+    const ok = Q.results[Q.idx]==="ok";
+    h += '<div class="explain '+(ok?"ok":"bad")+'"><h5>'+(ok?"✅ 回答正确，继续保持！":"❌ 再看看解析")+'</h5>'+
+      '<div>正确答案：<span class="ans">'+letter(q.a)+'. '+q.opts[q.a]+'</span></div><p>'+q.exp+'</p>'+
+      (!ok?'<p style="margin-top:8px;font-weight:700">已自动加入错题本，记得稍后重做哦。</p>':'')+'</div>';
+    h += '<button class="btn btn-primary btn-block" style="margin-top:14px" data-act="qnext">'+
+      (Q.idx===total-1?"查看本轮结果 →":"下一题 →")+'</button>';
+  }else{
+    h += '<div class="tiny faint" style="text-align:center;margin-top:2px">选择一个答案后立即判分并给出解析</div>';
+  }
+  h += '</div>';
+  return h;
+}
+function renderResult(){
+  const R = ui.practice.result;
+  const pct = Math.round(R.correct/R.total*100);
+  const emoji = pct===100?"🏆":pct>=80?"🎉":pct>=60?"💪":"📚";
+  const word = pct===100?"太棒了，全对！":pct>=80?"表现很出色":pct>=60?"继续加油":"错题是最好的老师";
+  let h = '<div class="scroll" data-sc="practice">'+topbar("本轮结果","每一次练习都算数")+
+    '<div class="card result-card" style="margin-top:8px"><div class="r-emoji">'+emoji+'</div><h2>'+word+'</h2>'+
+    '<p>'+R.title+' · 共 '+R.total+' 题</p>'+
+    '<div class="result-ring"><svg viewBox="0 0 118 118"><defs><linearGradient id="rgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4F6BFF"/><stop offset="100%" stop-color="#00C2A8"/></linearGradient></defs>'+
+    '<circle class="track" cx="59" cy="59" r="50" fill="none" stroke-width="10"/>'+
+    '<circle class="bar" cx="59" cy="59" r="50" fill="none" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="'+(314*(1-pct/100))+'"/></svg>'+
+    '<div class="txt"><b>'+pct+'%</b><span>正确率</span></div></div>'+
+    '<div class="res-stats"><div><b>'+R.correct+'</b><span>答对</span></div><div><b>'+(R.total-R.correct)+'</b><span>答错</span></div><div><b>+'+R.gained+'</b><span>积分</span></div></div>'+
+    '<button class="btn btn-primary btn-block" data-act="qagain">再来一组</button>'+
+    '<div class="row gap8" style="margin-top:9px"><button class="btn btn-plain" style="flex:1" data-act="qback">返回练习中心</button>'+
+    '<button class="btn btn-ghost" style="flex:1" data-act="tab" data-k="wrong">看错题本</button></div></div></div>';
+  return h;
+}
+
+/* ============================ 错题本 ============================ */
+function qCat(q){ return (q.tag==="阅读理解"||q.tag==="完形填空") ? q.tag : "语法"; }
+function renderWrong(){
+  const all = S.wrong.filter(w=>ALL_Q[w.qid]);
+  const f = ui.wrong.filter;
+  const list = f==="all" ? all : all.filter(w=>qCat(ALL_Q[w.qid])===f);
+  const times = all.reduce((a,b)=>a+b.times,0);
+  let h = '<div class="scroll" data-sc="wrong">'+topbar("错题本","把每一道错题变成得分点")+'';
+  h += '<div class="card"><div class="mini-stats"><div class="ms"><b style="color:var(--danger)">'+all.length+'</b><span>待攻克</span></div>'+
+    '<div class="ms"><b>'+times+'</b><span>累计答错</span></div><div class="ms"><b style="color:var(--mint)">'+S.cleared+'</b><span>已掌握</span></div></div>'+
+    (all.length?'<button class="btn btn-mint btn-block" style="margin-top:14px" data-act="wrongredo">开始错题重做（'+all.length+' 题）→</button>':'')+'</div>';
+  h += '<div class="chips"><button class="chip '+(f==="all"?"active":"")+'" data-act="wfilter" data-k="all">全部</button>'+
+    ["语法","阅读理解","完形填空"].map(t=>'<button class="chip '+(f===t?"active":"")+'" data-act="wfilter" data-k="'+t+'">'+t+'</button>').join("")+'</div>';
+  if(!list.length){
+    h += '<div class="empty"><div class="em-ic">✨</div><h3>'+(all.length?"这个分类下没有错题":"错题本是空的")+'</h3>'+
+      '<p>'+(all.length?"换个分类看看，或者去练习中心继续刷题。":f==="all"?"去练习中心做几道题，答错的会自动收进这里。":"")+'</p>'+
+      '<button class="btn btn-primary btn-sm" style="margin-top:16px" data-act="tab" data-k="practice">去练习</button></div></div>';
+    return h;
+  }
+  h += list.map(w=>{
+    const q=ALL_Q[w.qid];
+    const cat = qCat(q)==="语法" ? "语法 · "+q.tag : q.tag;
+    return '<div class="wrong-item"><div class="wi-top"><span class="tag danger">'+cat+' · '+q.diff+'</span>'+
+      '<span class="tiny faint">错 '+w.times+' 次 · '+w.added.slice(5)+'</span></div>'+
+      '<div class="wi-q">'+q.q.replace(/【(\d+)】/g,'（$1）')+'</div>'+
+      '<div class="wi-ans"><span class="bad">你的答案 '+letter(w.sel)+'. '+q.opts[w.sel]+'</span>'+
+      '<span class="good">正确答案 '+letter(q.a)+'. '+q.opts[q.a]+'</span></div>'+
+      '<div class="wi-exp">💡 '+q.exp+'</div>'+
+      '<div class="wi-foot"><button class="btn btn-ghost" data-act="wredo" data-k="'+w.qid+'">重做此题</button>'+
+      '<button class="btn btn-plain" data-act="wmaster" data-k="'+w.qid+'">已掌握，移除</button></div></div>';
+  }).join("");
+  h += '</div>';
+  return h;
+}
+
+/* ============================ 我的 ============================ */
+function renderMe(){
+  const lv = levelInfo();
+  const acc = S.practiceTotal? Math.round(S.practiceCorrect/S.practiceTotal*100):0;
+  const now = new Date(), y=now.getFullYear(), m=now.getMonth();
+  const days = new Date(y,m+1,0).getDate(), first = new Date(y,m,1).getDay();
+  let cal='';
+  for(let i=0;i<first;i++) cal+='<div></div>';
+  for(let d=1;d<=days;d++){
+    const ds = y+"-"+pad(m+1)+"-"+pad(d);
+    const on = S.checkinDates.includes(ds);
+    cal += '<div class="cal-day '+(on?"on":"")+' '+(d===now.getDate()?"today":"")+'">'+d+'</div>';
+  }
+  let bars='', max=1;
+  const last7=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(now.getTime()-i*86400000), ds=todayStr(d);
+    const rec=S.daily.find(x=>x.date===ds)||{w:0,q:0};
+    last7.push({ds,v:rec.w+rec.q,lb:i===0?"今":["日","一","二","三","四","五","六"][d.getDay()]});
+  }
+  last7.forEach(x=>{ if(x.v>max) max=x.v; });
+  bars = last7.map(x=>'<div class="col"><div class="bar '+(x.lb==="今"?"today":"")+'" style="height:'+Math.max(4,Math.round(x.v/max*84))+'px"></div><div class="lb">'+x.lb+'</div></div>').join("");
+  let h = '<div class="scroll" data-sc="me">'+topbar("我的","坚持的每一步都看得见")+'';
+  h += '<div class="profile"><div class="pf-top"><div class="avatar">🎓</div><div><h3>英语小达人</h3><p>初中英语 · 每日进阶</p></div></div>'+
+    '<div class="lv-wrap"><div class="lv-row"><span>Lv.'+lv.lv+' · 进阶中</span><span>'+S.points+' / '+lv.next+'</span></div>'+
+    '<div class="lv-bar"><i style="width:'+lv.pct+'%"></i></div></div>'+
+    '<div class="pf-points"><div><b>'+S.streak+'</b><span>连续打卡（天）</span></div><div><b>'+S.points+'</b><span>总积分</span></div><div><b>'+S.badges.length+'</b><span>已获勋章</span></div></div></div>';
+  h += '<div class="card"><div class="mini-stats"><div class="ms"><b>'+S.wordTotal+'</b><span>累计学词次</span></div>'+
+    '<div class="ms"><b>'+S.practiceTotal+'</b><span>累计答题</span></div><div class="ms"><b>'+acc+'%</b><span>正确率</span></div></div></div>';
+  h += '<div class="sec-head"><h2>近 7 天学习量</h2><span class="tiny faint">背词 + 答题</span></div>'+
+    '<div class="card"><div class="chart">'+bars+'</div></div>';
+  h += '<div class="sec-head"><h2>'+(m+1)+' 月打卡日历</h2><span class="tiny faint">'+S.checkinDates.length+' 天已打卡</span></div>'+
+    '<div class="card"><div class="calendar"><div class="lb tiny faint" style="text-align:center">日</div><div class="lb tiny faint" style="text-align:center">一</div><div class="lb tiny faint" style="text-align:center">二</div><div class="lb tiny faint" style="text-align:center">三</div><div class="lb tiny faint" style="text-align:center">四</div><div class="lb tiny faint" style="text-align:center">五</div><div class="lb tiny faint" style="text-align:center">六</div>'+cal+'</div></div>';
+  h += '<div class="sec-head"><h2>成就墙</h2><span class="tiny faint">'+S.badges.length+' / '+BADGES.length+'</span></div>'+
+    '<div class="card"><div class="badge-grid">'+BADGES.map(b=>{
+      const got=S.badges.includes(b.id);
+      return '<div class="badge '+(got?"got":"")+'" title="'+b.desc+'"><div class="bi">'+b.icon+'</div><b>'+b.name+'</b><span>'+b.desc+'</span></div>';
+    }).join("")+'</div></div>';
+  h += '<div class="sec-head"><h2>学习设置</h2></div><div class="card">'+
+    '<div class="setting-row"><div class="sr-l"><div class="sr-ic">📚</div><div><b>每日背词目标</b><small>当前 '+S.goal.words+' 词 / 天</small></div></div>'+
+    '<div class="seg">'+[5,10,20].map(v=>'<button class="'+(S.goal.words===v?"on":"")+'" data-act="goal" data-t="w" data-v="'+v+'">'+v+'</button>').join("")+'</div></div>'+
+    '<div class="setting-row"><div class="sr-l"><div class="sr-ic">✍️</div><div><b>每日答题目标</b><small>当前 '+S.goal.questions+' 题 / 天</small></div></div>'+
+    '<div class="seg">'+[5,10,20].map(v=>'<button class="'+(S.goal.questions===v?"on":"")+'" data-act="goal" data-t="q" data-v="'+v+'">'+v+'</button>').join("")+'</div></div>'+
+    '<div class="setting-row"><div class="sr-l"><div class="sr-ic">🧹</div><div><b>清空学习数据</b><small>积分、打卡、进度、错题将全部重置</small></div></div>'+
+    '<button class="btn btn-plain btn-sm" data-act="reset">重置</button></div></div>';
+  h += '<div class="tiny faint" style="text-align:center;padding:8px 20px 20px;line-height:1.8">数据保存在本浏览器本地，不会上传服务器<br>初中英语 · 每日进阶 v1.0</div>';
+  h += '</div>';
+  return h;
+}
+
+/* ============================ 渲染调度 ============================ */
+function render(reset){
+  const map = {home:renderHome,words:renderWords,practice:renderPractice,wrong:renderWrong,me:renderMe};
+  const page = qs("page-"+ui.tab);
+  const old = page.querySelector(".scroll");
+  const top = reset ? 0 : (old?old.scrollTop:0);
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  page.innerHTML = emojify((map[ui.tab]||renderHome)());
+  const sc=page.querySelector(".scroll"); if(sc) sc.scrollTop=top;
+  page.classList.add("active");
+  renderTabs();
+}
+function switchTab(k, silent){
+  ui.tab=k;
+  render(true);
+  if(k==="practice" && !silent && ui.practice.view!=="quiz"){ /* 保持当前视图 */ }
+}
+
+/* ============================ 事件 ============================ */
+document.addEventListener("click", function(e){
+  const el = e.target.closest("[data-act]");
+  if(!el) return;
+  const act = el.dataset.act, k = el.dataset.k;
+  switch(act){
+    case "tab":
+      if(k==="practice" && ui.practice.view==="result") ui.practice.view="home";
+      switchTab(k); break;
+    case "go":
+      if(k==="words"){ switchTab("words"); }
+      else if(k==="grammar"){ ui.practice.view="home"; ui.practice.filter="all"; switchTab("practice"); }
+      else if(k==="reading"){ ui.practice.view="home"; ui.practice.openR="r1"; switchTab("practice"); }
+      else if(k==="wrong"){ switchTab("wrong"); }
+      break;
+    /* --- 单词 --- */
+    case "pack":
+      ui.words.pack=+k; ui.words.idx=0; ui.words.flipped=false; ui.words.done=false; ui.words.session=0; render(); break;
+    case "wmode":
+      ui.words.mode=k; ui.words.idx=0; ui.words.flipped=false; ui.words.done=false; ui.words.session=0; render(); break;
+    case "flip":
+      ui.words.flipped=!ui.words.flipped;
+      el.querySelector(".wc-inner") && el.classList.toggle("flipped",ui.words.flipped);
+      break;
+    case "speak":
+      e.stopPropagation(); speak(el.dataset.w); break;
+    case "fb": {
+      const list=wordList(), w=list[ui.words.idx];
+      if(!w) break;
+      const box=+k;
+      const st=S.wordStats[w._k]||{seen:0,box:0,last:""};
+      st.seen++; st.box=box; st.last=todayStr();
+      S.wordStats[w._k]=st;
+      S.wordTotal++; S.today.words++; recordDaily("w",1);
+      addPoints(2,false); checkGoal(); save();
+      ui.words.session++;
+      ui.words.idx++;
+      ui.words.flipped=false;
+      if(ui.words.idx>=list.length) ui.words.done=true;
+      render();
+      break; }
+    case "fav": {
+      const list=wordList(), w=list[ui.words.idx]; if(!w) break;
+      const i=S.favorites.indexOf(w._k);
+      if(i>=0){ S.favorites.splice(i,1); toast("已取消收藏"); }
+      else { S.favorites.push(w._k); toast("已收藏"); }
+      save(); render(); break; }
+    case "wskip": {
+      const list=wordList(); ui.words.idx++; ui.words.flipped=false;
+      if(ui.words.idx>=list.length) ui.words.done=true;
+      render(); break; }
+    case "wrestart":
+      ui.words.idx=0; ui.words.flipped=false; ui.words.done=false; ui.words.session=0; render(true); break;
+    /* --- 练习 --- */
+    case "qfilter": ui.practice.filter=k; render(); break;
+    case "gopen": ui.practice.openG = ui.practice.openG===k?null:k; render(); break;
+    case "ropen": ui.practice.openR = ui.practice.openR===k?null:k; render(); break;
+    case "rstart": {
+      const r=READINGS.find(x=>x.id===k);
+      startQuiz(r.type==="cloze"?"cloze":"reading",k); break; }
+    case "mstart": startQuiz(k); break;
+    case "qtoggle": ui.practice.quiz.readOpen=!ui.practice.quiz.readOpen; render(); break;
+    case "opt": {
+      const Q=ui.practice.quiz; if(!Q || Q.answered) break;
+      Q.sel=+k; Q.answered=true;
+      const qid=Q.items[Q.idx];
+      const ok=gradeAnswer(qid,+k,Q.mode);
+      Q.results[Q.idx]=ok?"ok":"bad";
+      if(ok) Q.correct++; else Q.wrong++;
+      Q.gained += ok?5:1;
+      render();
+      const sc=qs("page-practice").querySelector(".scroll");
+      if(sc) setTimeout(()=>{ sc.scrollTop = sc.scrollHeight; },60);
+      break; }
+    case "qnext": {
+      const Q=ui.practice.quiz;
+      if(Q.idx>=Q.items.length-1){
+        unlock("b5", Q.correct===Q.items.length);
+        ui.practice.result={title:Q.title,total:Q.items.length,correct:Q.correct,gained:Q.gained,mode:Q.mode,extra:Q.extra};
+        ui.practice.view="result";
+        render(true);
+      }else{
+        Q.idx++; Q.sel=null; Q.answered=false; render(true);
+      }
+      break; }
+    case "qback": ui.practice.view="home"; ui.practice.quiz=null; render(true); break;
+    case "qagain": {
+      const R=ui.practice.result;
+      ui.practice.view="home"; render();
+      setTimeout(()=>startQuiz(R.mode,R.extra),30); break; }
+    /* --- 错题 --- */
+    case "wfilter": ui.wrong.filter=k; render(); break;
+    case "wrongredo": startQuiz("wrong"); break;
+    case "wredo": ui.practice.oneQ=k; startQuiz("wrong","one"); break;
+    case "wmaster": {
+      S.wrong=S.wrong.filter(x=>x.qid!==k); S.cleared++;
+      unlock("b11",true); unlock("b8",S.cleared>0);
+      save(); toast("已移出错题本"); render(); break; }
+    /* --- 我的 --- */
+    case "goal": {
+      if(el.dataset.t==="w") S.goal.words=+el.dataset.v; else S.goal.questions=+el.dataset.v;
+      S.today.tag = (S.today.words>=S.goal.words && S.today.questions>=S.goal.questions)?"done":"";
+      save(); toast("每日目标已更新"); render(); break; }
+    case "reset":
+      showModal({icon:"⚠️",title:"清空学习数据？",text:"积分、打卡记录、单词进度和错题本都会被删除，此操作无法撤销。",cancel:"再想想",ok:"确认清空",
+        onOk:()=>{ localStorage.removeItem(KEY); S=JSON.parse(JSON.stringify(DEFAULT_STATE));
+          ui.words={pack:0,mode:"all",idx:0,flipped:false,done:false,session:0};
+          ui.practice={view:"home",openG:null,quiz:null,result:null,filter:"all",openR:null};
+          initDay(); render(true); toast("已重置，重新开始吧"); }});
+      break;
+    case "modal-cancel": hideModal(); break;
+    case "modal-ok": { const fn=ui.modal&&ui.modal.onOk; hideModal(); if(fn) fn(); break; }
+  }
+});
+
+/* ============================ 启动 ============================ */
+function boot(){
+  initDay();
+  const tick=()=>{ const d=new Date(); qs("clock").textContent=pad(d.getHours())+":"+pad(d.getMinutes()); };
+  tick(); setInterval(tick,30000);
+  const di=document.querySelector(".desktop-intro");
+  if(di) di.innerHTML=emojify(di.innerHTML);
+  render(true);
+  if("speechSynthesis" in window) window.speechSynthesis.getVoices();
+}
+boot();
+</script>
+</body>
+</html>
